@@ -1,6 +1,5 @@
 // React
 import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
 // Third Party
 import {
@@ -14,6 +13,7 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import { Button } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 
 // Styles
 import styles from '@/Components/Calculator/QuoteBreakdown.module.css';

@@ -10,7 +10,6 @@ import {
     loadUserData,
     updateUserSettings,
 } from '@/Api/ApiCalls';
-
 import { ProjectName } from '@/App';
 
 describe('General API client functions', () => {

@@ -132,6 +132,7 @@ function EditRouteForm({
   // Enhance waypoint items when availableSystems loads
   useEffect(() => {
     if (availableSystems.length > 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setWaypointSystems((prev) =>
         prev.map((wp) => {
           if (wp.security !== undefined && wp.region !== undefined) return wp;

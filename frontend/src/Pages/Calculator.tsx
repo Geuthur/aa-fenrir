@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 // Third Party
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 
 import { loadRoutePresets, loadRouteSystems, loadUserData, updateUserSettings } from '@/Api/ApiCalls';
 import { queryKeys } from '@/Api/query';
@@ -29,6 +30,7 @@ const EMPTY_SYSTEM: EveSolarSystem = {
 };
 
 export default function Calculator() {
+    const { t } = useTranslation();
     const queryClient = useQueryClient();
     const [showContractModal, setShowContractModal] = useState(false);
     const [showConfigurePresetsModal, setShowConfigurePresetsModal] = useState(false);
@@ -93,6 +95,7 @@ export default function Calculator() {
             // Default to base rates with first available systems
             const oSys = availableSystems[0];
             const dSys = availableSystems[1] || availableSystems[0];
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setOrigin(oSys);
             setDestination(dSys);
             setOriginStation(oSys.defaultStation || `${oSys.name} - Upwell Citadel`);
@@ -234,8 +237,9 @@ export default function Calculator() {
         isRush,
         isCorpSubsidized,
         selectedShipId,
+        t,
         });
-    }, [effectiveCorridor, origin, destination, volumeM3, collateralIsk, isRush, isCorpSubsidized, selectedShipId]);
+    }, [effectiveCorridor, origin, destination, volumeM3, collateralIsk, isRush, isCorpSubsidized, selectedShipId, t]);
 
     const distanceLy = useMemo(() => calculateDistanceLy(origin, destination), [origin, destination]);
     const stargateJumps = useMemo(() => estimateStargateJumps(origin, destination), [origin, destination]);

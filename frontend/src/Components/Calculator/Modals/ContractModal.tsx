@@ -6,10 +6,12 @@ import { Check, Copy, Info, Shield } from 'lucide-react';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
+// Styles
+import styles from '@/Components/Calculator/Modals/ContractModal.module.css';
+
 import { formatIsk } from '@/Components/Calculator/calculator';
 import { FenrirModal } from '@/Components/Modals';
 import type { QuoteCalculation } from '@/types';
-import styles from '@/Components/Calculator/Modals/ContractModal.module.css';
 
 export interface ContractModalProps {
   /** The calculated courier quote details */

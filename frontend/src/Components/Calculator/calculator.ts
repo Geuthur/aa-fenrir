@@ -1,5 +1,4 @@
 import { JUMP_FREIGHTERS } from '@/Components/Fenrir/eveData';
-import { useTranslation } from 'react-i18next';
 import type { EveSolarSystem, FreightCorridor, JumpFreighterShip, QuoteCalculation } from '@/types';
 
 // 1 Light Year in meters (calibrated to EVE Online coordinates, yielding 53.437 LY for Jita -> 1DQ1-A)
@@ -59,6 +58,7 @@ export function calculateTransportQuote({
   isRush,
   isCorpSubsidized,
   selectedShipId = 'rhea',
+  t = (key: string) => key,
 }: {
   corridor: FreightCorridor | null;
   origin: EveSolarSystem;
@@ -68,8 +68,8 @@ export function calculateTransportQuote({
   isRush: boolean;
   isCorpSubsidized: boolean;
   selectedShipId?: string;
+  t?: (key: string) => string;
 }): QuoteCalculation {
-  const { t } = useTranslation();
   const warnings: string[] = [];
   const distanceLy = calculateDistanceLy(origin, destination);
   const stargateJumps = estimateStargateJumps(origin, destination);

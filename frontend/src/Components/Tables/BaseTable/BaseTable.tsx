@@ -36,7 +36,7 @@ import BasePages from "@/Components/Tables/BaseTable/BaseTablePages";
 
 const isNumber = <TData,>(cell: Cell<TData, unknown>) => typeof cell.getValue() === "number";
 
-export interface BaseTableProps<TData, TValue = any> {
+export interface BaseTableProps<TData, TValue = unknown> {
   isFetching?: boolean;
   isError?: boolean;
   debugTable?: boolean;
@@ -54,7 +54,7 @@ export interface BaseTableProps<TData, TValue = any> {
   itemLabel?: string;
 }
 
-const BaseTable = <TData, TValue = any>({
+const BaseTable = <TData, TValue = unknown>({
   isFetching = false,
   isError = false,
   debugTable = false,

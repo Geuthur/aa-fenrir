@@ -1,5 +1,5 @@
 // React
-import React, { useEffect, useState } from 'react';
+import React, { useRef } from 'react';
 
 // Third Party
 import { Modal as BsModal } from 'react-bootstrap';
@@ -37,18 +37,15 @@ export function FenrirModal({
   // Cache children while isShowing is true so that during the fade-out animation
   // (when isShowing becomes false and the parent may clear or reset the modal data),
   // the modal continues rendering the previous content until the exit animation finishes.
-  const [cachedChildren, setCachedChildren] = useState<React.ReactNode>(() =>
-    isShowing ? children : null
-  );
+  const lastChildrenRef = useRef<React.ReactNode>(isShowing ? children : null);
 
-  useEffect(() => {
-    if (isShowing) {
-      setCachedChildren(children);
-    }
-  }, [isShowing, children]);
+  if (isShowing) {
+    // eslint-disable-next-line react-hooks/refs
+    lastChildrenRef.current = children;
+  }
 
   const handleExited = (node: HTMLElement) => {
-    setCachedChildren(null);
+    lastChildrenRef.current = null;
     onExited?.(node);
   };
 
@@ -63,7 +60,8 @@ export function FenrirModal({
       restoreFocus={false}
       {...rest}
     >
-      {isShowing ? children : (cachedChildren ?? children)}
+      {/* eslint-disable-next-line react-hooks/refs */}
+      {isShowing ? children : (lastChildrenRef.current ?? children)}
     </BsModal>
   );
 }

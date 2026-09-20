@@ -6,10 +6,12 @@ import { SlidersHorizontal, Sparkles } from 'lucide-react';
 import { Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
+// Styles
+import styles from '@/Components/Calculator/Modals/ConfigurePresetsModal.module.css';
+
 import { getServiceBadge } from '@/Components/Calculator/calculator';
 import { FenrirModal } from '@/Components/Modals';
 import type { FreightCorridor } from '@/types';
-import styles from '@/Components/Calculator/Modals/ConfigurePresetsModal.module.css';
 
 export interface ConfigurePresetsModalProps {
   /** Whether the modal is open */

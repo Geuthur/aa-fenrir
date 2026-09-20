@@ -2,8 +2,8 @@
 import { useMemo, useState } from 'react';
 
 // Third Party
-import type { ColumnDef } from '@tanstack/react-table';
 import { createColumnHelper } from '@tanstack/react-table';
+import type { ColumnDef } from '@tanstack/react-table';
 import { CheckCircle, Clock, Search, Truck, XCircle } from 'lucide-react';
 import { Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';

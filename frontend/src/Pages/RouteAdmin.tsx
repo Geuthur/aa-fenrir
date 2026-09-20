@@ -219,7 +219,7 @@ export default function RouteAdmin() {
   };
 
   // Systems DataTable Column Definitions
-  const systemColumns: ColumnDef<RouteSystemItem, any>[] = useMemo(
+  const systemColumns = useMemo(
     () => [
       systemColumnHelper.accessor('name', {
         header: t('System'),
@@ -269,7 +269,7 @@ export default function RouteAdmin() {
           );
         },
       }),
-    ],
+    ] as ColumnDef<RouteSystemItem, unknown>[],
     [t]
   );
 

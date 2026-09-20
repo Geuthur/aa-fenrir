@@ -1,6 +1,7 @@
 // React
 import React from "react"
 import {  BrowserRouter, Navigate, Route, Routes } from "react-router-dom"
+
 // Third Party
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import i18n from "i18next";
@@ -13,10 +14,10 @@ import "@/App.css"
 
 import ErrorLoader from "@/Components/Loader/ErrorLoader"
 import AuthBase from "@/Pages/Base";
-import Settings from "@/Pages/Settings";
 import Calculator from "@/Pages/Calculator";
-import Queue from "./Pages/Queue";
+import Queue from "@/Pages/Queue";
 import RouteAdmin from "@/Pages/RouteAdmin";
+import Settings from "@/Pages/Settings";
 
 const queryClient = new QueryClient();
 export const AppName = "aa-fenrir";

@@ -63,14 +63,12 @@ export function CynoWaypointManager({
   useEffect(() => {
     const trimmed = searchTerm.trim();
     if (trimmed.length < 2) {
-      setSearchResults([]);
-      setIsSearching(false);
       return;
     }
 
-    setIsSearching(true);
-    setIsDropdownOpen(true);
     const timer = setTimeout(async () => {
+      setIsSearching(true);
+      setIsDropdownOpen(true);
       try {
         const data = await searchSolarSystems(trimmed);
         setSearchResults(data);
@@ -87,11 +85,15 @@ export function CynoWaypointManager({
   const addWaypoint = (sys: { id: number; name: string; security?: number; region?: string }) => {
     if (waypoints.some((w) => w.id === sys.id)) {
       setSearchTerm('');
+      setSearchResults([]);
+      setIsSearching(false);
       setIsDropdownOpen(false);
       return;
     }
     onChange([...waypoints, { id: sys.id, name: sys.name, security: sys.security, region: sys.region }]);
     setSearchTerm('');
+    setSearchResults([]);
+    setIsSearching(false);
     setIsDropdownOpen(false);
   };
 
@@ -158,7 +160,13 @@ export function CynoWaypointManager({
               type="text"
               placeholder={t('Search any solar system (e.g. Basgerin)...')}
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                if (e.target.value.trim().length < 2) {
+                  setSearchResults([]);
+                  setIsSearching(false);
+                }
+              }}
               onFocus={() => {
                 if (searchTerm.trim().length >= 2) setIsDropdownOpen(true);
               }}
