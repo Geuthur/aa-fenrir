@@ -143,3 +143,22 @@ class RoutePreset(models.Model):
         default=True,
         help_text=_("Indicates if alliance subsidy is enabled for this route"),
     )
+
+    assign_corp = models.ForeignKey(
+        "aafenrir.ContractHandler",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="+",
+        help_text=_("Contract handler corporation/alliance to assign contracts to"),
+    )
+
+    expiration_days = models.IntegerField(
+        default=7,
+        help_text=_("Days until courier contract expires"),
+    )
+
+    days_to_complete = models.IntegerField(
+        default=3,
+        help_text=_("Days to complete the contract"),
+    )

@@ -50,6 +50,10 @@ export interface FreightCorridor {
   description: string;
   danger_level: 'Safe' | 'Low' | 'Moderate' | 'Dangerous' | 'Cyno-Guarded' | 'Cyno Guarded' | 'cyno_guarded' | string;
   has_alliance_subsidy?: boolean;
+  assign_corp_id?: number | null;
+  assign_corp_name?: string;
+  expiration_days?: number;
+  days_to_complete?: number;
 }
 
 export interface JumpFreighterShip {

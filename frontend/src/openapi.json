@@ -125,6 +125,49 @@
         ]
       }
     },
+    "/aafenrir/api/contract/handlers/": {
+      "get": {
+        "operationId": "aafenrir_api_contract_get_contract_handlers",
+        "summary": "Get Contract Handlers",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ContractHandlerSchema"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Contracts"
+        ],
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    },
     "/aafenrir/api/contract/presets/": {
       "get": {
         "operationId": "aafenrir_api_contract_get_route_presets",
@@ -938,6 +981,25 @@
         "title": "UserData",
         "type": "object"
       },
+      "ContractHandlerSchema": {
+        "description": "Schema for ContractHandler (corporation / alliance).",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ],
+        "title": "ContractHandlerSchema",
+        "type": "object"
+      },
       "RoutePresetSchema": {
         "description": "Schema for RoutePreset.",
         "properties": {
@@ -1072,6 +1134,32 @@
             "default": true,
             "title": "Has Alliance Subsidy",
             "type": "boolean"
+          },
+          "assign_corp_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Assign Corp Id"
+          },
+          "assign_corp_name": {
+            "default": "",
+            "title": "Assign Corp Name",
+            "type": "string"
+          },
+          "expiration_days": {
+            "default": 7,
+            "title": "Expiration Days",
+            "type": "integer"
+          },
+          "days_to_complete": {
+            "default": 3,
+            "title": "Days To Complete",
+            "type": "integer"
           }
         },
         "required": [
@@ -1187,6 +1275,27 @@
             "default": true,
             "title": "Has Alliance Subsidy",
             "type": "boolean"
+          },
+          "assign_corp_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Assign Corp Id"
+          },
+          "expiration_days": {
+            "default": 7,
+            "title": "Expiration Days",
+            "type": "integer"
+          },
+          "days_to_complete": {
+            "default": 3,
+            "title": "Days To Complete",
+            "type": "integer"
           }
         },
         "required": [

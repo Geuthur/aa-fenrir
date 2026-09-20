@@ -55,6 +55,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/aafenrir/api/contract/handlers/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Contract Handlers */
+        get: operations["aafenrir_api_contract_get_contract_handlers"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/aafenrir/api/contract/presets/": {
         parameters: {
             query?: never;
@@ -284,6 +301,16 @@ export interface components {
             has_manage_access: boolean;
         };
         /**
+         * ContractHandlerSchema
+         * @description Schema for ContractHandler (corporation / alliance).
+         */
+        ContractHandlerSchema: {
+            /** Id */
+            id: number;
+            /** Name */
+            name: string;
+        };
+        /**
          * RoutePresetSchema
          * @description Schema for RoutePreset.
          */
@@ -364,6 +391,23 @@ export interface components {
              * @default true
              */
             has_alliance_subsidy: boolean;
+            /** Assign Corp Id */
+            assign_corp_id?: number | null;
+            /**
+             * Assign Corp Name
+             * @default
+             */
+            assign_corp_name: string;
+            /**
+             * Expiration Days
+             * @default 7
+             */
+            expiration_days: number;
+            /**
+             * Days To Complete
+             * @default 3
+             */
+            days_to_complete: number;
         };
         /**
          * CreateRoutePresetSchema
@@ -451,6 +495,18 @@ export interface components {
              * @default true
              */
             has_alliance_subsidy: boolean;
+            /** Assign Corp Id */
+            assign_corp_id?: number | null;
+            /**
+             * Expiration Days
+             * @default 7
+             */
+            expiration_days: number;
+            /**
+             * Days To Complete
+             * @default 3
+             */
+            days_to_complete: number;
         };
         /**
          * RouteSystemSchema
@@ -723,6 +779,37 @@ export interface operations {
                     "application/json": {
                         [key: string]: unknown;
                     };
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
+    aafenrir_api_contract_get_contract_handlers: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContractHandlerSchema"][];
                 };
             };
             /** @description Forbidden */

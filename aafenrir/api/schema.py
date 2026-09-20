@@ -138,6 +138,15 @@ class SolarSystemSchema(Schema):
     y_2d: float
 
 
+class ContractHandlerSchema(Schema):
+    """
+    Schema for ContractHandler (corporation / alliance).
+    """
+
+    id: int
+    name: str
+
+
 class RoutePresetSchema(Schema):
     """
     Schema for RoutePreset.
@@ -169,6 +178,10 @@ class RoutePresetSchema(Schema):
     danger_level: str
     description: str = ""
     has_alliance_subsidy: bool = True
+    assign_corp_id: int | None = None
+    assign_corp_name: str = ""
+    expiration_days: int = 7
+    days_to_complete: int = 3
 
 
 class CreateRoutePresetSchema(Schema):
@@ -194,6 +207,9 @@ class CreateRoutePresetSchema(Schema):
     cyno_waypoint_ids: list[int] = []
     danger_level: str = "safe"
     has_alliance_subsidy: bool = True
+    assign_corp_id: int | None = None
+    expiration_days: int = 7
+    days_to_complete: int = 3
 
 
 class ContractSchema(Schema):

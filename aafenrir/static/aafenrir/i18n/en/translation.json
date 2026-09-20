@@ -322,5 +322,22 @@
   "No Route Subsidy": "No Route Subsidy",
   "Subsidy disabled for this route": "Subsidy disabled for this route",
   "Alliance Member Subsidy:": "Alliance Member Subsidy:",
-  "Not available on this corridor": "Not available on this corridor"
+  "Not available on this corridor": "Not available on this corridor",
+  "In-Game Contract Assistant Settings": "In-Game Contract Assistant Settings",
+  "Assign To Corporation": "Assign To Corporation",
+  "-- Default / None --": "-- Default / None --",
+  "Contract Expiration (Days)": "Contract Expiration (Days)",
+  "Delivering Carrier & Contract Dispatch": "Delivering Carrier & Contract Dispatch",
+  "Contract Handler": "Contract Handler",
+  "Corridor: {{name}}": "Corridor: {{name}}",
+  "Standard Rate Transit": "Standard Rate Transit",
+  "Copy Corp": "Copy Corp",
+  "Delivery Window": "Delivery Window",
+  "1 Day (Rush)": "1 Day (Rush)",
+  "Max Capacity": "Max Capacity",
+  "Standard Freighter Transit": "Standard Freighter Transit",
+  "Deep Space Transport": "Deep Space Transport",
+  "Blockade Runner": "Blockade Runner",
+  "Copy corporation name to clipboard": "Copy corporation name to clipboard",
+  "{{days}} Days": "{{days}} Days"
 }

@@ -45,9 +45,12 @@ export function ContractModal({
     setTimeout(() => setCopiedField(null), 1500);
   };
 
-  const assigneeCorp = "Voices of War Inc.";
-  const expirationDays = 7;
-  const daysToComplete = quote.isRush ? 1 : (quote.corridor?.estimated_days || 3);
+  const assigneeCorp =
+    quote.corridor?.assign_corp_name || "Voices of War Inc.";
+  const expirationDays = quote.corridor?.expiration_days ?? 7;
+  const daysToComplete = quote.isRush
+    ? 1
+    : (quote.corridor?.days_to_complete || quote.corridor?.estimated_days || 3);
 
   return (
     <FenrirModal isOpen={isOpen} onClose={onClose} size="xl">

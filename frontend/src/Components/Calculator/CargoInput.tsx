@@ -267,7 +267,7 @@ export function CargoInput({
         <div
           className={`${styles.perkCard} ${
             isSubsidyDisabled
-              ? 'opacity-60 !border-dashed !border-slate-700/80 !bg-slate-900/40'
+              ? '!bg-rose-950/40 !border-rose-500/60 text-rose-200'
               : ''
           }`}
         >
@@ -275,7 +275,7 @@ export function CargoInput({
             <div
               className={`${styles.perkIconBox} ${
                 isSubsidyDisabled
-                  ? '!bg-slate-800/80 !text-slate-500 !border-slate-700/60'
+                  ? '!bg-rose-900/40 !text-rose-400 !border !border-rose-500/50'
                   : isCorpSubsidized
                   ? styles.perkIconEmeraldActive
                   : styles.perkIconInactive
@@ -284,18 +284,13 @@ export function CargoInput({
               <Users className={styles.perkIcon} />
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <div className={styles.perkTitle}>{t('Alliance Subsidy')}</div>
-                {isSubsidyDisabled && (
-                  <span className="text-[9px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-rose-950/60 text-rose-400 border border-rose-800/60">
-                    {t('No Route Subsidy')}
-                  </span>
-                )}
+              <div className={isSubsidyDisabled ? 'text-xs font-semibold text-rose-200' : styles.perkTitle}>
+                {t('Alliance Subsidy')}
               </div>
               <div
                 className={
                   isSubsidyDisabled
-                    ? 'text-[11px] text-slate-500 font-mono mt-0.5'
+                    ? 'text-[11px] text-rose-300/80 font-mono mt-0.5'
                     : styles.perkSubtitle
                 }
               >
@@ -310,7 +305,7 @@ export function CargoInput({
             checked={isSubsidyDisabled ? false : isCorpSubsidized}
             disabled={isSubsidyDisabled}
             onChange={(e) => !isSubsidyDisabled && setIsCorpSubsidized(e.target.checked)}
-            className={isSubsidyDisabled ? 'opacity-30 cursor-not-allowed' : styles.checkEmerald}
+            className={isSubsidyDisabled ? 'opacity-40 cursor-not-allowed' : styles.checkEmerald}
           />
         </div>
       </div>

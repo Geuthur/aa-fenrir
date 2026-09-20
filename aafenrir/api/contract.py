@@ -16,7 +16,7 @@ from eve_sde.models import SolarSystem
 from aafenrir import __title__
 from aafenrir.api import schema
 from aafenrir.helpers.permission import get_manage_permissions
-from aafenrir.models import Contract, RoutePreset, RouteSystem
+from aafenrir.models import Contract, ContractHandler, RoutePreset, RouteSystem
 
 
 class ContractApiEndpoints:
@@ -24,6 +24,27 @@ class ContractApiEndpoints:
 
     # pylint: disable=too-many-statements
     def __init__(self, api: NinjaAPI):
+        @api.get(
+            "contract/handlers/",
+            response={
+                HTTPStatus.OK: list[schema.ContractHandlerSchema],
+                HTTPStatus.FORBIDDEN: dict,
+            },
+            tags=self.tags,
+        )
+        def get_contract_handlers(request: WSGIRequest):
+            if not request.user.has_perm("aafenrir.basic_access"):
+                return HTTPStatus.FORBIDDEN, {"error": _("Permission Denied.")}
+
+            handlers = ContractHandler.objects.select_related("organization").all()
+            return HTTPStatus.OK, [
+                schema.ContractHandlerSchema(
+                    id=h.organization_id,
+                    name=str(h.organization.name),
+                )
+                for h in handlers
+            ]
+
         @api.get(
             "contract/presets/",
             response={
@@ -38,7 +59,10 @@ class ContractApiEndpoints:
 
             presets = (
                 RoutePreset.objects.select_related(
-                    "origin_system", "destination_system"
+                    "origin_system",
+                    "destination_system",
+                    "assign_corp",
+                    "assign_corp__organization",
                 )
                 .prefetch_related("cyno_waypoints")
                 .all()
@@ -90,6 +114,14 @@ class ContractApiEndpoints:
                         has_alliance_subsidy=bool(
                             getattr(p, "has_alliance_subsidy", True)
                         ),
+                        assign_corp_id=p.assign_corp_id,
+                        assign_corp_name=(
+                            str(p.assign_corp.organization.name)
+                            if p.assign_corp and p.assign_corp.organization
+                            else ""
+                        ),
+                        expiration_days=p.expiration_days,
+                        days_to_complete=p.days_to_complete,
                     )
                 )
             return HTTPStatus.OK, results
@@ -110,7 +142,10 @@ class ContractApiEndpoints:
             try:
                 p = (
                     RoutePreset.objects.select_related(
-                        "origin_system", "destination_system"
+                        "origin_system",
+                        "destination_system",
+                        "assign_corp",
+                        "assign_corp__organization",
                     )
                     .prefetch_related("cyno_waypoints")
                     .get(id=preset_id)
@@ -159,6 +194,14 @@ class ContractApiEndpoints:
                 ),
                 description="",
                 has_alliance_subsidy=bool(getattr(p, "has_alliance_subsidy", True)),
+                assign_corp_id=p.assign_corp_id,
+                assign_corp_name=(
+                    str(p.assign_corp.organization.name)
+                    if p.assign_corp and p.assign_corp.organization
+                    else ""
+                ),
+                expiration_days=p.expiration_days,
+                days_to_complete=p.days_to_complete,
             )
 
         @api.post(
@@ -217,6 +260,19 @@ class ContractApiEndpoints:
                     if data.has_alliance_subsidy is not None
                     else True
                 ),
+                assign_corp=(
+                    ContractHandler.objects.filter(
+                        organization_id=data.assign_corp_id
+                    ).first()
+                    if data.assign_corp_id
+                    else None
+                ),
+                expiration_days=(
+                    data.expiration_days if data.expiration_days is not None else 7
+                ),
+                days_to_complete=(
+                    data.days_to_complete if data.days_to_complete is not None else 3
+                ),
             )
 
             if data.cyno_waypoint_ids:
@@ -266,6 +322,14 @@ class ContractApiEndpoints:
                 has_alliance_subsidy=bool(
                     getattr(preset, "has_alliance_subsidy", True)
                 ),
+                assign_corp_id=preset.assign_corp_id,
+                assign_corp_name=(
+                    str(preset.assign_corp.organization.name)
+                    if preset.assign_corp and preset.assign_corp.organization
+                    else ""
+                ),
+                expiration_days=preset.expiration_days,
+                days_to_complete=preset.days_to_complete,
             )
 
         @api.put(
@@ -326,6 +390,20 @@ class ContractApiEndpoints:
             preset.danger_level = data.danger_level or "safe"
             if data.has_alliance_subsidy is not None:
                 preset.has_alliance_subsidy = bool(data.has_alliance_subsidy)
+
+            if data.assign_corp_id is not None:
+                if data.assign_corp_id == 0:
+                    preset.assign_corp = None
+                else:
+                    preset.assign_corp = ContractHandler.objects.filter(
+                        organization_id=data.assign_corp_id
+                    ).first()
+
+            if data.expiration_days is not None:
+                preset.expiration_days = data.expiration_days
+            if data.days_to_complete is not None:
+                preset.days_to_complete = data.days_to_complete
+
             preset.save()
 
             if data.cyno_waypoint_ids is not None:
@@ -375,6 +453,14 @@ class ContractApiEndpoints:
                 has_alliance_subsidy=bool(
                     getattr(preset, "has_alliance_subsidy", True)
                 ),
+                assign_corp_id=preset.assign_corp_id,
+                assign_corp_name=(
+                    str(preset.assign_corp.organization.name)
+                    if preset.assign_corp and preset.assign_corp.organization
+                    else ""
+                ),
+                expiration_days=preset.expiration_days,
+                days_to_complete=preset.days_to_complete,
             )
 
         @api.delete(

@@ -168,6 +168,24 @@
   @apply font-bold;
 }
 
+/* Delivering Carrier & Contract Info Card */
+.carrierCard {
+  @apply bg-slate-900/60 rounded-lg p-4 mb-4;
+  border: 1px solid rgba(6, 182, 212, 0.5);
+}
+
+.carrierTitle {
+  @apply text-xs font-mono uppercase tracking-wider text-slate-400 mb-3 flex items-center justify-between;
+}
+
+.carrierTitleLeft {
+  @apply flex items-center gap-1.5;
+}
+
+.carrierIcon {
+  @apply w-3.5 h-3.5 text-cyan-400;
+}
+
 /* Fuel & Routing Grid */
 .transitGrid {
   @apply grid grid-cols-1 md:grid-cols-2 gap-4;

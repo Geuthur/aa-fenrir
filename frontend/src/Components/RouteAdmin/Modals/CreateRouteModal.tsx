@@ -3,14 +3,14 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 
 // Third Party
 import { useQuery } from '@tanstack/react-query';
-import { Sparkles } from 'lucide-react';
+import { Shield, Sparkles } from 'lucide-react';
 import { Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 // Styles
 import styles from '@/Components/RouteAdmin/Modals/CreateRouteModal.module.css';
 
-import { loadRouteSystems } from '@/Api/ApiCalls';
+import { loadContractHandlers, loadRouteSystems } from '@/Api/ApiCalls';
 import type { components } from '@/Api/OpenApi';
 import { queryKeys } from '@/Api/query';
 import { FenrirModal } from '@/Components/Modals';
@@ -47,6 +47,9 @@ const INITIAL_FORM: components['schemas']['CreateRoutePresetSchema'] = {
   cyno_waypoint_ids: [],
   danger_level: 'cyno_guarded',
   has_alliance_subsidy: true,
+  assign_corp_id: null,
+  expiration_days: 7,
+  days_to_complete: 3,
 };
 
 /**
@@ -73,6 +76,13 @@ function CreateRouteForm({
   const { data: routeSystems = [] } = useQuery({
     queryKey: queryKeys.RouteSystems,
     queryFn: loadRouteSystems,
+    refetchOnWindowFocus: false,
+  });
+
+  // Fetch available ContractHandlers from backend
+  const { data: contractHandlers = [] } = useQuery({
+    queryKey: queryKeys.ContractHandlers,
+    queryFn: loadContractHandlers,
     refetchOnWindowFocus: false,
   });
 
@@ -573,6 +583,73 @@ function CreateRouteForm({
                 onChange={(e) => updateField('estimated_time', Number(e.target.value))}
                 className={styles.ratesInput}
               />
+            </div>
+          </div>
+
+          {/* EVE Contract Assistant Settings */}
+          <div className="mt-4 p-3.5 rounded-xl bg-slate-900/60 border border-slate-800 space-y-3">
+            <div className="flex items-center gap-2">
+              <Shield className="w-4 h-4 text-cyan-400" />
+              <h3 className="text-xs font-semibold text-slate-200 uppercase tracking-wider m-0">
+                {t('In-Game Contract Assistant Settings')}
+              </h3>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div>
+                <Form.Label className={styles.ratesBreakdownLabel}>
+                  {t('Assign To Corporation')}
+                </Form.Label>
+                <Form.Select
+                  value={formData.assign_corp_id || ''}
+                  onChange={(e) =>
+                    updateField(
+                      'assign_corp_id',
+                      e.target.value ? Number(e.target.value) : null
+                    )
+                  }
+                  className={styles.ratesInput}
+                >
+                  <option value="">{t('-- Default / None --')}</option>
+                  {contractHandlers.map((h) => (
+                    <option key={h.id} value={h.id}>
+                      {h.name}
+                    </option>
+                  ))}
+                </Form.Select>
+              </div>
+
+              <div>
+                <Form.Label className={styles.ratesBreakdownLabel}>
+                  {t('Contract Expiration (Days)')}
+                </Form.Label>
+                <Form.Control
+                  type="number"
+                  min="1"
+                  max="28"
+                  value={formData.expiration_days ?? 7}
+                  onChange={(e) =>
+                    updateField('expiration_days', Number(e.target.value))
+                  }
+                  className={styles.ratesInput}
+                />
+              </div>
+
+              <div>
+                <Form.Label className={styles.ratesBreakdownLabel}>
+                  {t('Days to Complete')}
+                </Form.Label>
+                <Form.Control
+                  type="number"
+                  min="1"
+                  max="14"
+                  value={formData.days_to_complete ?? 3}
+                  onChange={(e) =>
+                    updateField('days_to_complete', Number(e.target.value))
+                  }
+                  className={styles.ratesInput}
+                />
+              </div>
             </div>
           </div>
         </div>

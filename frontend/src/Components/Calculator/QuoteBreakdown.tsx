@@ -4,6 +4,7 @@ import { useState } from 'react';
 // Third Party
 import {
   AlertTriangle,
+  Building2,
   Calculator,
   Check,
   Clock,
@@ -32,11 +33,29 @@ export function QuoteBreakdown({
 }: QuoteBreakdownProps) {
   const { t } = useTranslation();
   const [rewardCopied, setRewardCopied] = useState(false);
+  const [corpCopied, setCorpCopied] = useState(false);
+  const [logoError, setLogoError] = useState(false);
+
+  const assigneeCorp =
+    quote.corridor?.assign_corp_name || 'Voices of War Inc.';
+  const corpId =
+    quote.corridor?.assign_corp_id ||
+    (assigneeCorp === 'Voices of War Inc.' ? 98702221 : null);
+  const expirationDays = quote.corridor?.expiration_days ?? 7;
+  const daysToComplete = quote.isRush
+    ? 1
+    : (quote.corridor?.days_to_complete || quote.corridor?.estimated_days || 3);
 
   const copyReward = () => {
     navigator.clipboard.writeText(quote.totalReward.toString());
     setRewardCopied(true);
     setTimeout(() => setRewardCopied(false), 1500);
+  };
+
+  const copyCorp = () => {
+    navigator.clipboard.writeText(assigneeCorp);
+    setCorpCopied(true);
+    setTimeout(() => setCorpCopied(false), 1500);
   };
 
   return (
@@ -184,6 +203,119 @@ export function QuoteBreakdown({
               <span className={styles.tariffValueSubsidized}>-{formatIsk(quote.subsidizedDiscount)}</span>
             </div>
           ) : null}
+        </div>
+      </div>
+
+      {/* Delivering Carrier & Contract Terms */}
+      <div className={styles.carrierCard}>
+        <div className={styles.carrierTitle}>
+          <div className={styles.carrierTitleLeft}>
+            <Building2 className={styles.carrierIcon} />
+            <span>{t('Delivering Carrier & Contract Dispatch')}</span>
+          </div>
+          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950/60 text-cyan-300 border border-cyan-500/30">
+            {t('Contract Handler')}
+          </span>
+        </div>
+
+        {/* Carrier Info Row */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-lg bg-slate-950/40 border border-slate-800/80">
+          <div className="flex items-center gap-3 min-w-0">
+            {corpId && !logoError ? (
+              <img
+                src={`https://images.evetech.net/corporations/${corpId}/logo?size=64`}
+                alt={assigneeCorp}
+                onError={() => setLogoError(true)}
+                className="w-12 h-12 rounded-lg border border-cyan-500/40 bg-slate-950 p-0.5 shadow shrink-0 object-contain"
+              />
+            ) : (
+              <div className="w-12 h-12 rounded-lg border border-cyan-500/40 bg-slate-800/80 flex items-center justify-center text-cyan-400 shrink-0">
+                <Building2 className="w-6 h-6" />
+              </div>
+            )}
+            <div className="min-w-0">
+              <div className="text-[10px] font-mono uppercase tracking-wider text-slate-400">
+                {t('Assign To (Private)')}
+              </div>
+              <div className="text-sm sm:text-base font-bold text-white tracking-wide truncate">
+                {assigneeCorp}
+              </div>
+              <div className="text-[11px] font-mono text-slate-400 mt-0.5">
+                {quote.corridor
+                  ? t('Corridor: {{name}}', { name: quote.corridor.name })
+                  : t('Standard Rate Transit')}
+              </div>
+            </div>
+          </div>
+
+          <Button
+            variant="outline-secondary"
+            size="sm"
+            onClick={copyCorp}
+            className={styles.copyRewardBtn}
+            title={t('Copy corporation name to clipboard')}
+          >
+            {corpCopied ? (
+              <>
+                <Check className={styles.copyCheckIcon} />
+                <span className={styles.copyTextCopied}>{t('Copied!')}</span>
+              </>
+            ) : (
+              <>
+                <Copy className={styles.copyIcon} />
+                <span>{t('Copy Corp')}</span>
+              </>
+            )}
+          </Button>
+        </div>
+
+        {/* Contract Parameters Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-3 pt-3 border-t border-slate-800/80 text-xs font-mono">
+          <div>
+            <span className="text-[10px] text-slate-500 uppercase block mb-0.5">
+              {t('Service Type')}
+            </span>
+            <span className="text-slate-200 font-medium truncate block">
+              {quote.corridor?.service_type === 'standard_freighter'
+                ? t('Standard Freighter Transit')
+                : quote.corridor?.service_type === 'deep_space_transport'
+                ? t('Deep Space Transport')
+                : quote.corridor?.service_type === 'blockade_runner'
+                ? t('Blockade Runner')
+                : t('Jump Freighter')}
+            </span>
+          </div>
+
+          <div>
+            <span className="text-[10px] text-slate-500 uppercase block mb-0.5">
+              {t('Delivery Window')}
+            </span>
+            <span className="text-cyan-300 font-bold block">
+              {quote.isRush ? (
+                <span className="text-amber-300">{t('1 Day (Rush)')}</span>
+              ) : (
+                t('{{days}} Days', { days: daysToComplete })
+              )}
+            </span>
+          </div>
+
+          <div>
+            <span className="text-[10px] text-slate-500 uppercase block mb-0.5">
+              {t('Expiration')}
+            </span>
+            <span className="text-slate-200 font-medium block">
+              {t('{{days}} Days', { days: expirationDays })}
+            </span>
+          </div>
+
+          <div>
+            <span className="text-[10px] text-slate-500 uppercase block mb-0.5">
+              {t('Max Capacity')}
+            </span>
+            <span className="text-slate-200 font-medium block truncate">
+              {formatM3(quote.corridor?.max_volume || 360000)}
+            </span>
+          </div>
         </div>
       </div>
 

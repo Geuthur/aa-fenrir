@@ -177,4 +177,20 @@ export async function searchSolarSystems(
   return data;
 }
 
+export interface ContractHandlerItem {
+  id: number;
+  name: string;
+}
+
+export async function loadContractHandlers(): Promise<ContractHandlerItem[]> {
+  const { data, error } = await apiClient.GET(
+    `/${ProjectName}/api/contract/handlers/` as never
+  );
+  if (error || !data) {
+    throw new Error("Failed to load contract handlers");
+  }
+  return data as unknown as ContractHandlerItem[];
+}
+
+
 

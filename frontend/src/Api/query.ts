@@ -6,4 +6,5 @@ export const queryKeys = {
     RoutePresets: ["RoutePresets"] as const,
     Contracts: ["Contracts"] as const,
     RouteSystems: ["RouteSystems"] as const,
+    ContractHandlers: ["ContractHandlers"] as const,
 };
