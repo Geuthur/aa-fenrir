@@ -36,14 +36,14 @@ import BasePages from "@/Components/Tables/BaseTable/BaseTablePages";
 
 const isNumber = <TData,>(cell: Cell<TData, unknown>) => typeof cell.getValue() === "number";
 
-export interface BaseTableProps<TData> {
+export interface BaseTableProps<TData, TValue = any> {
   isFetching?: boolean;
   isError?: boolean;
   debugTable?: boolean;
   striped?: boolean;
   hover?: boolean;
   data?: TData[];
-  columns: ColumnDef<TData, unknown>[];
+  columns: ColumnDef<TData, TValue>[];
   initialState?: InitialTableState;
   exportFileName?: string;
   variant?: "bootstrap" | "fenrir";
@@ -51,9 +51,10 @@ export interface BaseTableProps<TData> {
   className?: string;
   tableClassName?: string;
   pageSizeOptions?: number[];
+  itemLabel?: string;
 }
 
-const BaseTable = <TData,>({
+const BaseTable = <TData, TValue = any>({
   isFetching = false,
   isError = false,
   debugTable = false,
@@ -68,7 +69,8 @@ const BaseTable = <TData,>({
   className,
   tableClassName,
   pageSizeOptions = [10, 25, 50, 100],
-}: BaseTableProps<TData>) => {
+  itemLabel,
+}: BaseTableProps<TData, TValue>) => {
   const location = useLocation();
   const { t } = useTranslation();
 
@@ -103,7 +105,7 @@ const BaseTable = <TData,>({
     const pageCount = table.getPageCount();
 
     return (
-      <div className={`rounded-xl shadow-lg overflow-hidden !bg-slate-800/80 fenrir-gradient fenrir-border-500 ${className ?? ""}`}>
+      <div className={`mt-2 rounded-xl shadow-lg overflow-hidden !bg-slate-800/80 fenrir-gradient fenrir-border-500 ${className ?? ""}`}>
         <div className="overflow-x-auto">
           <table className={`w-full text-left text-xs font-mono ${tableClassName ?? ""}`}>
             <thead className="!bg-[#0b0f17] border-b !border-slate-300/60 !text-slate-400 uppercase text-[10px]">
@@ -194,11 +196,15 @@ const BaseTable = <TData,>({
             {totalCount > 0 && (
               <span className="text-[11px] !text-slate-500">
                 {pageSize >= 1000000
-                  ? t("Showing all {{total}} contracts", { total: totalCount })
-                  : t("Showing {{start}}-{{end}} of {{total}} contracts", {
+                  ? t("Showing all {{total}} {{items}}", {
+                      total: totalCount,
+                      items: itemLabel ?? t("contracts"),
+                    })
+                  : t("Showing {{start}}-{{end}} of {{total}} {{items}}", {
                       start: pageIndex * pageSize + 1,
                       end: Math.min((pageIndex + 1) * pageSize, totalCount),
                       total: totalCount,
+                      items: itemLabel ?? t("contracts"),
                     })}
               </span>
             )}

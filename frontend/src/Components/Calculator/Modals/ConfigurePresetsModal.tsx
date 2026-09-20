@@ -157,7 +157,7 @@ export function ConfigurePresetsModal({
                     </div>
 
                     <span className={`${styles.serviceBadge} ${badge.color}`}>
-                      {badge.label}
+                      {t(badge.label)}
                     </span>
                   </div>
                 );

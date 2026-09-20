@@ -1,7 +1,7 @@
 @reference "@/App.css";
 
 .routeCard {
-  @apply p-5 rounded-xl bg-[#111724] border border-slate-800 hover:border-slate-700 flex flex-col justify-between space-y-4 transition-all;
+  @apply mt-2 p-5 rounded-xl bg-[#111724] border border-slate-800 hover:border-slate-700 flex flex-col justify-between space-y-4 transition-all;
 }
 
 .routeLabel {

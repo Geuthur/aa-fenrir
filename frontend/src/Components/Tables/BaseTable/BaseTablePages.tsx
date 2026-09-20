@@ -31,7 +31,10 @@ const BasePages = <TData,>({
     <div className="d-flex justify-content-between">
       <ButtonGroup style={{ zIndex: 0 }}>
         <Button active variant="info">
-          {table.getState().pagination.pageIndex + 1} of {pageCount}
+          {t("Page {{page}} of {{total}}", {
+            page: table.getState().pagination.pageIndex + 1,
+            total: pageCount,
+          })}
         </Button>
         {isFetching ? (
           renderTooltip(

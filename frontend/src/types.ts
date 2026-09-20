@@ -42,9 +42,11 @@ export interface FreightCorridor {
   fee_per_lyorjump?: number;
   collateral_percent: number; // e.g. 1.0%
   min_reward: number; // Minimum ISK
+  estimated_time?: number; // minutes
   estimated_days: number;
   is_cyno_route: boolean;
   cyno_waypoints: string[];
+  cyno_waypoint_ids?: number[];
   description: string;
   danger_level: 'Safe' | 'Low' | 'Moderate' | 'Dangerous' | 'Cyno-Guarded' | 'Cyno Guarded' | 'cyno_guarded' | string;
 }

@@ -72,7 +72,7 @@ To set up the Scheduled Tasks add following code to your `local.py`
 ```python
 if "aafenrir" in INSTALLED_APPS:
     CELERYBEAT_SCHEDULE["AA Fenrir :: Test Task"] = {
-        "task": "aafenrir.tasks.fenrir_task",
+        "task": "aafenrir.tasks.aafenrir_task",
         "schedule": crontab(minute=0, hour="*/1"),
     }
 ```

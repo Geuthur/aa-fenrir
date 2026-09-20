@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 
 // Third Party
 import { useQuery } from '@tanstack/react-query';
-import { Sparkles } from 'lucide-react';
+import { Pencil } from 'lucide-react';
 import { Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
@@ -15,55 +15,69 @@ import type { components } from '@/Api/OpenApi';
 import { queryKeys } from '@/Api/query';
 import { FenrirModal } from '@/Components/Modals';
 import { CynoWaypointManager, type CynoWaypointItem } from '@/Components/RouteAdmin/CynoWaypointManager';
-import type { EveSolarSystem, SecurityClass } from '@/types';
+import type { EveSolarSystem, FreightCorridor, SecurityClass } from '@/types';
 
-export interface CreateRouteModalProps {
+export interface EditRouteModalProps {
+  /** The preset to edit, or null if modal is closed */
+  preset: FreightCorridor | null;
   /** Whether the modal is visible */
   isOpen: boolean;
   /** Callback to close the modal */
   onClose: () => void;
-  /** Callback to submit the new route preset data */
+  /** Callback to submit the updated route preset data */
   onSubmit: (data: components['schemas']['CreateRoutePresetSchema']) => void;
-  /** Whether the creation request is currently pending */
+  /** Whether the update request is currently pending */
   isPending: boolean;
 }
 
-const INITIAL_FORM: components['schemas']['CreateRoutePresetSchema'] = {
-  name: '',
-  origin_system_id: 0,
-  origin_system_station: '',
-  destination_system_id: 0,
-  destination_system_station: '',
-  service_type: 'jumpfreighter',
-  max_volume: 360000,
-  max_collateral: 15000000000,
-  base_fee: 30000000,
-  fee_per_m3: 850,
-  fee_per_ly: 3500000,
-  collateral_percent: 1,
-  min_reward: 50000000,
-  estimated_time: 2880, // 2 days in mins
-  is_cyno_route: true,
-  cyno_waypoint_ids: [],
-  danger_level: 'cyno_guarded',
-};
-
 /**
- * Inner form component for creating a route preset.
- * Managed with React key lifecycle to reset automatically on modal close.
+ * Inner form component for editing an existing route preset.
  */
-function CreateRouteForm({
+function EditRouteForm({
+  preset,
   onClose,
   onSubmit,
   isPending,
 }: {
+  preset: FreightCorridor;
   onClose: () => void;
   onSubmit: (data: components['schemas']['CreateRoutePresetSchema']) => void;
   isPending: boolean;
 }) {
   const { t } = useTranslation();
-  const [formData, setFormData] = useState(INITIAL_FORM);
-  const [waypointSystems, setWaypointSystems] = useState<CynoWaypointItem[]>([]);
+
+  // Normalize service_type for form select
+  const normalizedServiceType = useMemo(() => {
+    if (preset.service_type === 'jump_freighter') return 'jumpfreighter';
+    if (preset.service_type === 'standard_freighter') return 'freighter';
+    return preset.service_type || 'jumpfreighter';
+  }, [preset.service_type]);
+
+  const [formData, setFormData] = useState<components['schemas']['CreateRoutePresetSchema']>({
+    name: preset.name || '',
+    origin_system_id: Number(preset.origin_system_id || 0),
+    origin_system_station: preset.origin_station || '',
+    destination_system_id: Number(preset.destination_system_id || 0),
+    destination_system_station: preset.destination_station || '',
+    service_type: normalizedServiceType,
+    max_volume: Number(preset.max_volume || 0),
+    max_collateral: Number(preset.max_collateral || 0),
+    base_fee: Number(preset.base_fee || 0),
+    fee_per_m3: Number(preset.fee_per_m3 || 0),
+    fee_per_ly: Number(preset.fee_per_ly || 0),
+    collateral_percent:
+      preset.collateral_percent < 1
+        ? Math.round(preset.collateral_percent * 100)
+        : Number(preset.collateral_percent || 0),
+    min_reward: Number(preset.min_reward || 0),
+    estimated_time: Number(
+      preset.estimated_time || (preset.estimated_days ? Math.round(preset.estimated_days * 24 * 60) : 0)
+    ),
+    is_cyno_route: Boolean(preset.is_cyno_route),
+    cyno_waypoint_ids: preset.cyno_waypoint_ids || [],
+    danger_level: preset.danger_level || 'safe',
+  });
+
   const [originSearch, setOriginSearch] = useState('');
   const [destSearch, setDestSearch] = useState('');
   const [validationError, setValidationError] = useState<string | null>(null);
@@ -91,36 +105,94 @@ function CreateRouteForm({
     }));
   }, [routeSystems]);
 
-  // Ensure default origin & destination exist in availableSystems
+  const initialWaypoints: CynoWaypointItem[] = useMemo(() => {
+    if (!preset.cyno_waypoint_ids || preset.cyno_waypoint_ids.length === 0) {
+      return [];
+    }
+    return preset.cyno_waypoint_ids.map((id, index) => {
+      const fromAvailable = availableSystems.find((s) => s.id === id);
+      if (fromAvailable) {
+        return {
+          id: fromAvailable.id,
+          name: fromAvailable.name,
+          security: fromAvailable.security,
+          region: fromAvailable.region,
+        };
+      }
+      const name = preset.cyno_waypoints?.[index] || `System #${id}`;
+      return {
+        id,
+        name,
+      };
+    });
+  }, [preset.cyno_waypoint_ids, preset.cyno_waypoints, availableSystems]);
+
+  const [waypointSystems, setWaypointSystems] = useState<CynoWaypointItem[]>(initialWaypoints);
+
+  // Enhance waypoint items when availableSystems loads
+  useEffect(() => {
+    if (availableSystems.length > 0) {
+      setWaypointSystems((prev) =>
+        prev.map((wp) => {
+          if (wp.security !== undefined && wp.region !== undefined) return wp;
+          const match = availableSystems.find((s) => s.id === wp.id);
+          if (match) {
+            return {
+              ...wp,
+              name: match.name || wp.name,
+              security: match.security,
+              region: match.region,
+            };
+          }
+          return wp;
+        })
+      );
+    }
+  }, [availableSystems]);
+
+  // If origin/destination IDs are missing in preset but names exist, resolve them from availableSystems
   useEffect(() => {
     if (availableSystems.length > 0) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setFormData((prev) => {
-        const hasOrigin = availableSystems.some((s) => s.id === prev.origin_system_id);
-        const hasDest = availableSystems.some((s) => s.id === prev.destination_system_id);
-        if (!hasOrigin || !hasDest) {
-          const originSys = hasOrigin
-            ? availableSystems.find((s) => s.id === prev.origin_system_id)!
-            : availableSystems[0];
-          const destSys = hasDest
-            ? availableSystems.find((s) => s.id === prev.destination_system_id)!
-            : availableSystems[1] || availableSystems[0];
+        let updated = false;
+        let oId = prev.origin_system_id;
+        let dId = prev.destination_system_id;
+
+        if (!oId && preset.origin_system) {
+          const match = availableSystems.find(
+            (s) => s.name.toLowerCase() === preset.origin_system.toLowerCase()
+          );
+          if (match) {
+            oId = match.id;
+            updated = true;
+          }
+        }
+        if (!dId && preset.destination_system) {
+          const match = availableSystems.find(
+            (s) => s.name.toLowerCase() === preset.destination_system.toLowerCase()
+          );
+          if (match) {
+            dId = match.id;
+            updated = true;
+          }
+        }
+
+        if (updated) {
           return {
             ...prev,
-            origin_system_id: originSys.id,
-            origin_system_station: originSys.defaultStation || '',
-            destination_system_id: destSys.id,
-            destination_system_station: destSys.defaultStation || '',
+            origin_system_id: oId,
+            destination_system_id: dId,
           };
         }
         return prev;
       });
     }
-  }, [availableSystems]);
+  }, [availableSystems, preset.origin_system, preset.destination_system]);
 
-  const updateField = <K extends keyof typeof INITIAL_FORM>(
+  const updateField = <K extends keyof components['schemas']['CreateRoutePresetSchema']>(
     field: K,
-    value: (typeof INITIAL_FORM)[K]
+    value: components['schemas']['CreateRoutePresetSchema'][K]
   ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
@@ -162,7 +234,7 @@ function CreateRouteForm({
       return;
     }
     if (!formData.origin_system_id || !formData.destination_system_id) {
-      setValidationError(t('Origin and destination systems are required. Please configure available systems in Route Admin first.'));
+      setValidationError(t('Origin and destination systems are required.'));
       return;
     }
     setValidationError(null);
@@ -270,9 +342,9 @@ function CreateRouteForm({
           </div>
 
           {/* Origin & Destination Grid */}
-          <div className={`mt-4 grid grid-cols-1 md:grid-cols-2 gap-5`}>
+          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-5">
             {/* Origin System */}
-            <div className={`${styles.modalBody}`}>
+            <div className={styles.modalBody}>
               <Form.Label className={styles.routeLabel}>
                 {t('Origin Solar System')}
               </Form.Label>
@@ -296,11 +368,6 @@ function CreateRouteForm({
                 onChange={(e) => {
                   const id = Number(e.target.value);
                   if (id) selectOrigin(id);
-                }}
-                onClick={() => {
-                  if (filteredOrigins.length === 1 && formData.origin_system_id !== filteredOrigins[0].id) {
-                    selectOrigin(filteredOrigins[0].id);
-                  }
                 }}
                 className={"mt-1 " + styles.ratesSelect}
               >
@@ -334,7 +401,7 @@ function CreateRouteForm({
             </div>
 
             {/* Destination System */}
-            <div className={`${styles.modalBody}`}>
+            <div className={styles.modalBody}>
               <Form.Label className={styles.routeLabel}>
                 {t('Destination Solar System')}
               </Form.Label>
@@ -358,11 +425,6 @@ function CreateRouteForm({
                 onChange={(e) => {
                   const id = Number(e.target.value);
                   if (id) selectDestination(id);
-                }}
-                onClick={() => {
-                  if (filteredDests.length === 1 && formData.destination_system_id !== filteredDests[0].id) {
-                    selectDestination(filteredDests[0].id);
-                  }
                 }}
                 className={"mt-1 " + styles.ratesSelect}
               >
@@ -429,12 +491,12 @@ function CreateRouteForm({
 
             <div className="flex items-center pb-2">
               <label
-                htmlFor="is-cyno-route-modal-chk"
+                htmlFor="is-cyno-route-edit-chk"
                 className="flex items-center gap-2 cursor-pointer m-0 select-none"
               >
                 <input
                   type="checkbox"
-                  id="is-cyno-route-modal-chk"
+                  id="is-cyno-route-edit-chk"
                   checked={formData.is_cyno_route}
                   onChange={(e) => updateField('is_cyno_route', e.target.checked)}
                   className="w-4 h-4 rounded !bg-slate-900 !border-slate-700 accent-cyan-500 cursor-pointer m-0"
@@ -458,7 +520,7 @@ function CreateRouteForm({
           )}
 
           {/* Rates Breakdown */}
-          <div className={`${styles.modalBody} mt-4 grid grid-cols-2 gap-2`} >
+          <div className={`${styles.modalBody} mt-4 grid grid-cols-2 gap-2`}>
             <div>
               <Form.Label className={styles.ratesBreakdownLabel}>
                 {t('Max Volume (m³)')}
@@ -575,7 +637,7 @@ function CreateRouteForm({
             disabled={isPending}
             className="text-xs font-semibold"
           >
-            {isPending ? t('Saving...') : t('Save Route Preset')}
+            {isPending ? t('Saving...') : t('Update Route Preset')}
           </Button>
         </div>
       </FenrirModal.Footer>
@@ -584,47 +646,47 @@ function CreateRouteForm({
 }
 
 /**
- * Modal dialog for creating a new freight corridor / route preset.
+ * Modal dialog for editing an existing freight corridor / route preset.
  * Belongs to the RouteAdmin page (`src/Pages/RouteAdmin.tsx`).
- * Uses React key mounting lifecycle to automatically reset form state on exit.
  */
-export function CreateRouteModal({
+export function EditRouteModal({
+  preset,
   isOpen,
   onClose,
   onSubmit,
   isPending,
-}: CreateRouteModalProps) {
+}: EditRouteModalProps) {
   const { t } = useTranslation();
-  const [formKey, setFormKey] = useState(0);
 
   return (
     <FenrirModal
       isOpen={isOpen}
       onClose={onClose}
-      onExited={() => setFormKey((k) => k + 1)}
       size="xl"
     >
       <FenrirModal.Header>
         <div className="flex items-center gap-2.5">
           <div className="p-2 rounded-lg !bg-cyan-950/60 border !border-cyan-500/40 !text-cyan-400">
-            <Sparkles className="w-5 h-5" />
+            <Pencil className="w-5 h-5" />
           </div>
           <div>
-            <FenrirModal.Title>{t('CREATE NEW ROUTE PRESET')}</FenrirModal.Title>
+            <FenrirModal.Title>{t('EDIT ROUTE PRESET')}</FenrirModal.Title>
             <p className="text-[11px] !text-slate-400 font-mono m-0">
-              {t('Configure freight corridor details, service tariffs, and collateral limits.')}
+              {t('Update freight corridor details, service tariffs, and collateral limits.')}
             </p>
           </div>
         </div>
       </FenrirModal.Header>
 
-      <CreateRouteForm
-        key={formKey}
-        onClose={onClose}
-        onSubmit={onSubmit}
-        isPending={isPending}
-      />
+      {preset && (
+        <EditRouteForm
+          key={String(preset.id)}
+          preset={preset}
+          onClose={onClose}
+          onSubmit={onSubmit}
+          isPending={isPending}
+        />
+      )}
     </FenrirModal>
   );
 }
-

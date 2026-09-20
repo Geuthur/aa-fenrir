@@ -82,7 +82,8 @@ export interface paths {
         };
         /** Get Route Preset */
         get: operations["aafenrir_api_contract_get_route_preset"];
-        put?: never;
+        /** Update Route Preset */
+        put: operations["aafenrir_api_contract_update_route_preset"];
         post?: never;
         /** Delete Route Preset */
         delete: operations["aafenrir_api_contract_delete_route_preset"];
@@ -362,6 +363,11 @@ export interface components {
              * @default []
              */
             cyno_waypoints: string[];
+            /**
+             * Cyno Waypoint Ids
+             * @default []
+             */
+            cyno_waypoint_ids: number[];
             /** Danger Level */
             danger_level: string;
             /**
@@ -760,6 +766,65 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["RoutePresetSchema"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
+    aafenrir_api_contract_update_route_preset: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                preset_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateRoutePresetSchema"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RoutePresetSchema"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
                 };
             };
             /** @description Forbidden */

@@ -43,7 +43,7 @@ function Settings() {
     };
 
     return (
-        <main>
+        <main className="mt-4">
             <section className="card" aria-labelledby="settings-heading">
                 <div className="card-header bg-primary rounded">
                     <h2 id="settings-heading">{t("User Settings")}</h2>

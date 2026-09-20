@@ -59,7 +59,7 @@ function App() {
                 <Route path="settings/" element={<Settings />} />
                 <Route path="routes/admin/" element={<RouteAdmin />} />
                 <Route path="admin/routes/" element={<RouteAdmin />} />
-                <Route path="*" element={<ErrorLoader title={t("Error 404")} message={t("The page you are looking for does not exist.")} />} />
+                <Route path="*" element={<main className="mt-4"><ErrorLoader title={t("Error 404")} message={t("The page you are looking for does not exist.")} /></main>} />
               </Route>
               <Route path="*" element={<Navigate to={`/${ProjectName}/`} replace />} />
             </Routes>

@@ -15,6 +15,7 @@ from eve_sde.models import SolarSystem
 # AA Fenrir
 from aafenrir import __title__
 from aafenrir.api import schema
+from aafenrir.helpers.permission import get_manage_permissions
 from aafenrir.models import Contract, RoutePreset, RouteSystem
 
 
@@ -79,6 +80,7 @@ class ContractApiEndpoints:
                         ),
                         is_cyno_route=p.is_cyno_route,
                         cyno_waypoints=[w.name for w in p.cyno_waypoints.all()],
+                        cyno_waypoint_ids=[w.id for w in p.cyno_waypoints.all()],
                         danger_level=(
                             p.get_danger_level_display()
                             if hasattr(p, "get_danger_level_display")
@@ -146,6 +148,7 @@ class ContractApiEndpoints:
                 ),
                 is_cyno_route=p.is_cyno_route,
                 cyno_waypoints=[w.name for w in p.cyno_waypoints.all()],
+                cyno_waypoint_ids=[w.id for w in p.cyno_waypoints.all()],
                 danger_level=(
                     p.get_danger_level_display()
                     if hasattr(p, "get_danger_level_display")
@@ -166,7 +169,7 @@ class ContractApiEndpoints:
         def create_route_preset(
             request: WSGIRequest, data: schema.CreateRoutePresetSchema
         ):
-            if not request.user.has_perm("aafenrir.manage_access"):
+            if not get_manage_permissions(user=request.user):
                 return HTTPStatus.FORBIDDEN, {"error": _("Permission Denied.")}
 
             if not data.origin_system_id or not data.destination_system_id:
@@ -209,7 +212,7 @@ class ContractApiEndpoints:
 
             if data.cyno_waypoint_ids:
                 waypoints = SolarSystem.objects.filter(id__in=data.cyno_waypoint_ids)
-                preset.cynoWaypoints.set(waypoints)
+                preset.cyno_waypoints.set(waypoints)
 
             return HTTPStatus.CREATED, schema.RoutePresetSchema(
                 id=preset.id,
@@ -228,6 +231,7 @@ class ContractApiEndpoints:
                 base_fee=preset.base_fee,
                 fee_per_m3=preset.fee_per_m3,
                 fee_per_ly=float(preset.fee_per_ly),
+                fee_per_ly_or_jump=float(preset.fee_per_ly),
                 fee_per_lyorjump=float(preset.fee_per_ly),
                 collateral_percent=(
                     float(preset.collateral_percent) / 100.0
@@ -243,6 +247,111 @@ class ContractApiEndpoints:
                 ),
                 is_cyno_route=preset.is_cyno_route,
                 cyno_waypoints=[w.name for w in preset.cyno_waypoints.all()],
+                cyno_waypoint_ids=[w.id for w in preset.cyno_waypoints.all()],
+                danger_level=(
+                    preset.get_danger_level_display()
+                    if hasattr(preset, "get_danger_level_display")
+                    else preset.danger_level
+                ),
+                description="",
+            )
+
+        @api.put(
+            "contract/preset/{preset_id}/",
+            response={
+                HTTPStatus.OK: schema.RoutePresetSchema,
+                HTTPStatus.BAD_REQUEST: dict,
+                HTTPStatus.NOT_FOUND: dict,
+                HTTPStatus.FORBIDDEN: dict,
+            },
+            tags=self.tags,
+        )
+        def update_route_preset(
+            request: WSGIRequest,
+            preset_id: int,
+            data: schema.CreateRoutePresetSchema,
+        ):
+            if not get_manage_permissions(user=request.user):
+                return HTTPStatus.FORBIDDEN, {"error": _("Permission Denied.")}
+
+            try:
+                preset = RoutePreset.objects.get(id=preset_id)
+            except RoutePreset.DoesNotExist:
+                return HTTPStatus.NOT_FOUND, {"detail": _("Route preset not found.")}
+
+            if not data.origin_system_id or not data.destination_system_id:
+                return HTTPStatus.BAD_REQUEST, {
+                    "error": _("Origin and destination systems are required.")
+                }
+
+            try:
+                origin_sys = SolarSystem.objects.get(id=data.origin_system_id)
+                dest_sys = SolarSystem.objects.get(id=data.destination_system_id)
+            except SolarSystem.DoesNotExist:
+                return HTTPStatus.BAD_REQUEST, {"error": _("Solar system not found.")}
+
+            preset.name = data.name
+            preset.origin_system = origin_sys
+            preset.origin_system_station = data.origin_system_station or ""
+            preset.destination_system = dest_sys
+            preset.destination_system_station = data.destination_system_station or ""
+            preset.service_type = data.service_type or "jumpfreighter"
+            preset.max_volume = data.max_volume if data.max_volume is not None else 0
+            preset.max_collateral = (
+                data.max_collateral if data.max_collateral is not None else 0
+            )
+            preset.base_fee = data.base_fee if data.base_fee is not None else 5_000_000
+            preset.fee_per_m3 = data.fee_per_m3 if data.fee_per_m3 is not None else 0
+            preset.fee_per_ly = data.fee_per_ly if data.fee_per_ly is not None else 0
+            preset.collateral_percent = (
+                data.collateral_percent if data.collateral_percent is not None else 0
+            )
+            preset.min_reward = data.min_reward if data.min_reward is not None else 0
+            preset.estimated_time = (
+                data.estimated_time if data.estimated_time is not None else 0
+            )
+            preset.is_cyno_route = bool(data.is_cyno_route)
+            preset.danger_level = data.danger_level or "safe"
+            preset.save()
+
+            if data.cyno_waypoint_ids is not None:
+                waypoints = SolarSystem.objects.filter(id__in=data.cyno_waypoint_ids)
+                preset.cyno_waypoints.set(waypoints)
+
+            return HTTPStatus.OK, schema.RoutePresetSchema(
+                id=preset.id,
+                name=preset.name,
+                origin_system=preset.origin_system.name if preset.origin_system else "",
+                origin_system_id=preset.origin_system_id,
+                origin_station=preset.origin_system_station or "",
+                destination_system=(
+                    preset.destination_system.name if preset.destination_system else ""
+                ),
+                destination_system_id=preset.destination_system_id,
+                destination_station=preset.destination_system_station or "",
+                service_type=preset.service_type,
+                max_volume=preset.max_volume,
+                max_collateral=preset.max_collateral,
+                base_fee=preset.base_fee,
+                fee_per_m3=preset.fee_per_m3,
+                fee_per_ly=float(preset.fee_per_ly),
+                fee_per_ly_or_jump=float(preset.fee_per_ly),
+                fee_per_lyorjump=float(preset.fee_per_ly),
+                collateral_percent=(
+                    float(preset.collateral_percent) / 100.0
+                    if preset.collateral_percent >= 1
+                    else float(preset.collateral_percent)
+                ),
+                min_reward=preset.min_reward,
+                estimated_time=preset.estimated_time,
+                estimated_days=(
+                    round(preset.estimated_time / (24 * 60), 1)
+                    if preset.estimated_time > 60
+                    else max(1.0, float(preset.estimated_time))
+                ),
+                is_cyno_route=preset.is_cyno_route,
+                cyno_waypoints=[w.name for w in preset.cyno_waypoints.all()],
+                cyno_waypoint_ids=[w.id for w in preset.cyno_waypoints.all()],
                 danger_level=(
                     preset.get_danger_level_display()
                     if hasattr(preset, "get_danger_level_display")
@@ -261,7 +370,7 @@ class ContractApiEndpoints:
             tags=self.tags,
         )
         def delete_route_preset(request: WSGIRequest, preset_id: int):
-            if not request.user.has_perm("aafenrir.manage_access"):
+            if not get_manage_permissions(user=request.user):
                 return HTTPStatus.FORBIDDEN, {"error": _("Permission Denied.")}
 
             try:
@@ -339,7 +448,7 @@ class ContractApiEndpoints:
             tags=self.tags,
         )
         def add_route_system(request: WSGIRequest, data: schema.AddRouteSystemSchema):
-            if not request.user.has_perm("aafenrir.manage_access"):
+            if not get_manage_permissions(user=request.user):
                 return HTTPStatus.FORBIDDEN, {"error": _("Permission Denied.")}
 
             try:
@@ -392,7 +501,7 @@ class ContractApiEndpoints:
             tags=self.tags,
         )
         def delete_route_system(request: WSGIRequest, system_id: int):
-            if not request.user.has_perm("aafenrir.manage_access"):
+            if not get_manage_permissions(user=request.user):
                 return HTTPStatus.FORBIDDEN, {"error": _("Permission Denied.")}
 
             deleted_count = RouteSystem.objects.filter(

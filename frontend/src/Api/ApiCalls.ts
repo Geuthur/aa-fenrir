@@ -65,6 +65,29 @@ export async function createRoutePreset(
   return data as unknown as FreightCorridor;
 }
 
+export async function updateRoutePreset(
+  presetId: number,
+  presetData: components["schemas"]["CreateRoutePresetSchema"]
+): Promise<FreightCorridor> {
+  const { data, error } = await apiClient.PUT(
+    `/${ProjectName}/api/contract/preset/{preset_id}/`,
+    {
+      params: {
+        path: { preset_id: presetId },
+      },
+      body: presetData,
+    }
+  );
+  if (error || !data) {
+    throw new Error(
+      (error as { error?: string; detail?: string } | undefined)?.error ??
+        (error as { error?: string; detail?: string } | undefined)?.detail ??
+        "Failed to update route preset"
+    );
+  }
+  return data as unknown as FreightCorridor;
+}
+
 export async function deleteRoutePreset(
   presetId: number
 ): Promise<{ success: boolean; message?: string }> {

@@ -1,0 +1,91 @@
+@reference "@/App.css";
+
+.container {
+  @apply mt-4 relative p-4 rounded-xl border transition-all;
+}
+
+.activeContainer {
+  @apply bg-slate-900/80 border-cyan-500/40 shadow-[0_0_15px_rgba(6,182,212,0.15)];
+}
+
+.availableContainer {
+  @apply bg-slate-900/70 border-emerald-500/40 shadow-[0_0_15px_rgba(16,185,129,0.15)];
+}
+
+.standardContainer {
+  @apply bg-slate-900/40 border-slate-800;
+}
+
+.headerRow {
+  @apply flex flex-col sm:flex-row sm:items-center justify-between gap-3;
+}
+
+.titleGroup {
+  @apply flex items-center gap-2.5;
+}
+
+.iconActive {
+  @apply w-5 h-5 text-cyan-400 shrink-0;
+}
+
+.iconAvailable {
+  @apply w-5 h-5 text-emerald-400 shrink-0;
+}
+
+.iconStandard {
+  @apply w-5 h-5 text-slate-400 shrink-0;
+}
+
+.titleText {
+  @apply font-eve font-bold text-sm text-white tracking-wide;
+}
+
+.badgeActive {
+  @apply text-[10px] font-mono px-2 py-0.5 rounded border border-cyan-500/50 bg-cyan-950/60 text-cyan-300;
+}
+
+.badgeAvailable {
+  @apply text-[10px] font-mono px-2 py-0.5 rounded border border-emerald-500/50 bg-emerald-950/60 text-emerald-300;
+}
+
+.badgeStandard {
+  @apply text-[10px] font-mono px-2 py-0.5 rounded border border-slate-700 bg-slate-800 text-slate-400;
+}
+
+.ratesGrid {
+  @apply mt-3 pt-3 border-t border-slate-800/80 grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs font-mono;
+}
+
+.rateItem {
+  @apply bg-slate-950/50 p-2 rounded border border-slate-800/60;
+}
+
+.rateLabel {
+  @apply text-[9px] text-slate-500 uppercase block;
+}
+
+.rateValue {
+  @apply text-white font-semibold;
+}
+
+.toggleBtn {
+  @apply text-xs font-mono px-3 py-1 rounded border transition-colors shrink-0;
+}
+
+.applyBtn {
+  @apply text-xs font-mono px-3.5 py-1.5 rounded-lg border font-semibold transition-all shrink-0;
+  @apply !bg-emerald-600 hover:!bg-emerald-500 !text-white !border-emerald-400;
+  animation: pulse-emerald 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse-emerald {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 16px 4px rgba(16, 185, 129, 0.5);
+    transform: scale(1.02);
+  }
+}
+

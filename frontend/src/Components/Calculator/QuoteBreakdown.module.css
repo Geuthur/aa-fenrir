@@ -11,7 +11,7 @@
 
 /* Header */
 .header {
-  @apply flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-300/60 gap-2 mb-4;
+  @apply flex flex-col sm:flex-row sm:items-center justify-between pb-2 border-b border-slate-300/60 gap-2 mb-4;
 }
 
 .headerTitleGroup {

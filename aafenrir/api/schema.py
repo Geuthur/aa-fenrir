@@ -165,6 +165,7 @@ class RoutePresetSchema(Schema):
     estimated_days: float
     is_cyno_route: bool
     cyno_waypoints: list[str] = []
+    cyno_waypoint_ids: list[int] = []
     danger_level: str
     description: str = ""
 

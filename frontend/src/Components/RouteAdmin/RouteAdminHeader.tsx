@@ -21,7 +21,7 @@ export function RouteAdminHeader({ onCreateClick, onAddSystemClick }: RouteAdmin
   const { t } = useTranslation();
 
   return (
-    <div className={styles.routeAdminHeader + " fenrir-gradient fenrir-border-500"}>
+    <div className={styles.routeAdminHeader + " my-4 fenrir-gradient fenrir-border-500"}>
       <div>
         <div className="flex items-center gap-2">
           <RouteIcon className="w-6 h-6 !text-cyan-400" />
@@ -47,7 +47,7 @@ export function RouteAdminHeader({ onCreateClick, onAddSystemClick }: RouteAdmin
 
         <Button
           onClick={onCreateClick}
-          className={styles.createNewRoute}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg !bg-slate-900 border !border-slate-700 hover:!bg-slate-800 hover:!border-cyan-500/50 !text-cyan-300 text-xs font-semibold transition-all cursor-pointer shadow"
         >
           <PlusCircle className="w-4 h-4" />
           <span>{t('Create New Route')}</span>

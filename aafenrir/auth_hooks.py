@@ -17,7 +17,7 @@ class FenrirMenuItem(MenuItemHook):
     def __init__(self):
         super().__init__(
             f"{app_settings.AA_FENRIR_APP_NAME}",
-            "fas fa-book fa-fw",
+            "fas fa-truck fa-fw",
             "aafenrir:index",
             navactive=["aafenrir:"],
         )

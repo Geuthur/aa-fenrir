@@ -1,5 +1,5 @@
 // React
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 // Third Party
 import { Modal as BsModal } from 'react-bootstrap';
@@ -24,6 +24,7 @@ export function FenrirModal({
   show,
   onClose,
   onHide,
+  onExited,
   dialogClassName,
   contentClassName,
   centered = true,
@@ -33,17 +34,36 @@ export function FenrirModal({
   const isShowing = show ?? isOpen ?? false;
   const handleHide = onHide ?? onClose ?? (() => {});
 
+  // Cache children while isShowing is true so that during the fade-out animation
+  // (when isShowing becomes false and the parent may clear or reset the modal data),
+  // the modal continues rendering the previous content until the exit animation finishes.
+  const [cachedChildren, setCachedChildren] = useState<React.ReactNode>(() =>
+    isShowing ? children : null
+  );
+
+  useEffect(() => {
+    if (isShowing) {
+      setCachedChildren(children);
+    }
+  }, [isShowing, children]);
+
+  const handleExited = (node: HTMLElement) => {
+    setCachedChildren(null);
+    onExited?.(node);
+  };
+
   return (
     <BsModal
       show={isShowing}
       onHide={handleHide}
+      onExited={handleExited}
       centered={centered}
       dialogClassName={`${styles.fenrirModalDialog} ${dialogClassName || ''}`}
       contentClassName={`${styles.fenrirModalContent} ${contentClassName || ''}`}
       restoreFocus={false}
       {...rest}
     >
-      {children}
+      {isShowing ? children : (cachedChildren ?? children)}
     </BsModal>
   );
 }

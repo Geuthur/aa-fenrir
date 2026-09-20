@@ -1,6 +1,3 @@
-// React
-import { useEffect, useState } from 'react';
-
 // Third Party
 import { AlertTriangle } from 'lucide-react';
 import { Button } from 'react-bootstrap';
@@ -33,23 +30,10 @@ export function DeleteRouteModal({
 }: DeleteRouteModalProps) {
   const { t } = useTranslation();
 
-  // Preserve the last active preset during exit animation to prevent modal shrink/flicker
-  const [displayedPreset, setDisplayedPreset] = useState<FreightCorridor | null>(preset);
-
-  useEffect(() => {
-    if (preset) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setDisplayedPreset(preset);
-    }
-  }, [preset]);
-
-  const currentPreset = preset || displayedPreset;
-
   return (
     <FenrirModal
       isOpen={Boolean(preset)}
       onClose={onClose}
-      onExited={() => setDisplayedPreset(null)}
       size="lg"
     >
       <FenrirModal.Header>
@@ -66,44 +50,46 @@ export function DeleteRouteModal({
         </div>
       </FenrirModal.Header>
 
-      <FenrirModal.Body>
-        {currentPreset && (
+      {preset && (
+        <FenrirModal.Body>
           <div className="space-y-3 text-sm !text-slate-300">
             <p>{t('Are you sure you want to delete this route preset?')}</p>
             <div className="p-3.5 rounded-lg !bg-slate-900/80 border !border-slate-800 space-y-1.5 font-mono text-xs">
-              <div className="font-bold !text-white text-sm">{currentPreset.name}</div>
+              <div className="font-bold !text-white text-sm">{preset.name}</div>
               <div className="flex items-center gap-1.5 !text-slate-400">
-                <span className="!text-cyan-400">{currentPreset.origin_system}</span>
+                <span className="!text-cyan-400">{preset.origin_system}</span>
                 <span>➔</span>
-                <span className="!text-indigo-400">{currentPreset.destination_system}</span>
+                <span className="!text-indigo-400">{preset.destination_system}</span>
               </div>
             </div>
             <p className="text-xs !text-red-400/90 font-mono m-0">
               {t('This action cannot be undone.')}
             </p>
           </div>
-        )}
-      </FenrirModal.Body>
+        </FenrirModal.Body>
+      )}
 
-      <FenrirModal.Footer>
-        <div className="flex justify-end gap-3 w-full">
-          <Button
-            variant="primary"
-            onClick={onClose}
-            className="text-xs font-semibold"
-          >
-            {t('Cancel')}
-          </Button>
-          <Button
-            variant="danger"
-            onClick={() => currentPreset && onConfirm(Number(currentPreset.id))}
-            disabled={isPending || !currentPreset}
-            className="text-xs font-semibold"
-          >
-            {isPending ? t('Deleting...') : t('Delete Route')}
-          </Button>
-        </div>
-      </FenrirModal.Footer>
+      {preset && (
+        <FenrirModal.Footer>
+          <div className="flex justify-end gap-3 w-full">
+            <Button
+              variant="primary"
+              onClick={onClose}
+              className="text-xs font-semibold"
+            >
+              {t('Cancel')}
+            </Button>
+            <Button
+              variant="danger"
+              onClick={() => onConfirm(Number(preset.id))}
+              disabled={isPending}
+              className="text-xs font-semibold"
+            >
+              {isPending ? t('Deleting...') : t('Delete Route')}
+            </Button>
+          </div>
+        </FenrirModal.Footer>
+      )}
     </FenrirModal>
   );
 }

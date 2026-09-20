@@ -54,8 +54,8 @@ export function QuoteBreakdown({
         </div>
         <div className={styles.deliveryEstimate}>
           <Clock className={styles.deliveryIcon} />
-          <span>Estimated Delivery:</span>
-          <span className={styles.deliveryHours}>{quote.estimatedDeliveryHours} Hours</span>
+          <span>{t('Estimated Delivery:')}</span>
+          <span className={styles.deliveryHours}>{t('{{hours}} Hours', { hours: quote.estimatedDeliveryHours })}</span>
         </div>
       </div>
 
@@ -79,7 +79,7 @@ export function QuoteBreakdown({
         <div className={styles.heroContent}>
           <div>
             <span className={styles.heroLabel}>
-              Total Recommended Courier Contract Reward
+              {t('Total Recommended Courier Contract Reward')}
             </span>
             <div className={styles.heroAmountRow}>
               <span className={styles.heroAmount}>
@@ -105,7 +105,7 @@ export function QuoteBreakdown({
               {rewardCopied ? (
                 <>
                   <Check className={styles.copyCheckIcon} />
-                  <span className={styles.copyTextCopied}>Copied!</span>
+                  <span className={styles.copyTextCopied}>{t('Copied!')}</span>
                 </>
               ) : (
                 <>
@@ -122,18 +122,18 @@ export function QuoteBreakdown({
       <div className={styles.tariffCard}>
         <h3 className={styles.tariffTitle}>
           <ShieldCheck className={styles.tariffIcon} />
-          Itemized Tariff Calculation
+          {t('Itemized Tariff Calculation')}
         </h3>
 
         <div className={styles.tariffList}>
           <div className={styles.tariffRow}>
-            <span className={styles.tariffLabel}>Base Booking Fee:</span>
+            <span className={styles.tariffLabel}>{t('Base Booking Fee:')}</span>
             <span className={styles.tariffValue}>{formatIsk(quote.baseFee)}</span>
           </div>
 
           <div className={styles.tariffRow}>
             <div className={styles.tariffDetailGroup}>
-              <span className={styles.tariffLabel}>Volume Tariff:</span>
+              <span className={styles.tariffLabel}>{t('Volume Tariff:')}</span>
               <span className={styles.tariffDetailSub}>
                 ({formatM3(quote.volumeM3)} × {quote.corridor?.fee_per_m3 || 750} ISK/m³)
               </span>
@@ -143,9 +143,9 @@ export function QuoteBreakdown({
 
           <div className={styles.tariffRow}>
             <div className={styles.tariffDetailGroup}>
-              <span className={styles.tariffLabel}>Jump Distance / Waypoints:</span>
+              <span className={styles.tariffLabel}>{t('Jump Distance / Waypoints:')}</span>
               <span className={styles.tariffDetailSub}>
-                ({quote.distanceLy.toFixed(3)} LY transit)
+                ({t('{{ly}} LY transit', { ly: quote.distanceLy.toFixed(3) })})
               </span>
             </div>
             <span className={styles.tariffValue}>{formatIsk(quote.distanceFee)}</span>
@@ -153,9 +153,9 @@ export function QuoteBreakdown({
 
           <div className={styles.tariffRow}>
             <div className={styles.tariffDetailGroup}>
-              <span className={styles.tariffLabel}>Collateral Surcharge / Insurance:</span>
+              <span className={styles.tariffLabel}>{t('Collateral Surcharge / Insurance:')}</span>
               <span className={styles.tariffDetailSub}>
-                ({((quote.corridor?.collateral_percent || 0.01) * 100).toFixed(1)}% of {formatIskCompact(quote.collateralIsk)})
+                ({t('{{percent}}% of {{collateral}}', { percent: ((quote.corridor?.collateral_percent || 0.01) * 100).toFixed(1), collateral: formatIskCompact(quote.collateralIsk) })})
               </span>
             </div>
             <span className={styles.tariffValue}>{formatIsk(quote.collateralFee)}</span>
@@ -163,14 +163,14 @@ export function QuoteBreakdown({
 
           {quote.isRush && (
             <div className={styles.tariffRowRush}>
-              <span>RUSH Priority Surcharge (+35%):</span>
+              <span>{t('RUSH Priority Surcharge (+35%):')}</span>
               <span className={styles.tariffValueRush}>+{formatIsk(quote.rushSurcharge)}</span>
             </div>
           )}
 
           {quote.isCorpSubsidized && (
             <div className={styles.tariffRowSubsidized}>
-              <span>Alliance Member Subsidy Discount (-12%):</span>
+              <span>{t('Alliance Member Subsidy Discount (-12%):')}</span>
               <span className={styles.tariffValueSubsidized}>-{formatIsk(quote.subsidizedDiscount)}</span>
             </div>
           )}
@@ -198,7 +198,7 @@ export function QuoteBreakdown({
             </div>
             <div className={styles.fatigueRow}>
               <span className={styles.fatigueLabel}>{t('Jump Fatigue Estimate:')}</span>
-              <span className={styles.fatigueValue}>Blue 04:30 / Orange 00:08</span>
+              <span className={styles.fatigueValue}>{t('Blue 04:30 / Orange 00:08')}</span>
             </div>
           </div>
         </div>

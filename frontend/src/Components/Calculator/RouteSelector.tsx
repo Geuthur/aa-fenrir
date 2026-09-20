@@ -23,6 +23,8 @@ interface RouteSelectorProps {
   setOriginStation: (st: string) => void;
   destinationStation: string;
   setDestinationStation: (st: string) => void;
+  onSwapRoute?: () => void;
+  onSelectCorridor?: (corridor: FreightCorridor | null) => void;
   distanceLy: number;
   stargateJumps: number;
   serviceType: string;
@@ -43,6 +45,8 @@ export function RouteSelector({
   setOriginStation,
   destinationStation,
   setDestinationStation,
+  onSwapRoute,
+  onSelectCorridor,
   distanceLy,
   stargateJumps,
   serviceType,
@@ -92,45 +96,26 @@ export function RouteSelector({
 
   const handleCorridorSelect = (corridorId: string) => {
     if (!corridorId) {
-      setSelectedCorridor(null);
+      if (onSelectCorridor) {
+        onSelectCorridor(null);
+      } else {
+        setSelectedCorridor(null);
+      }
       return;
     }
     const found = corridors.find((c) => String(c.id) === String(corridorId));
-    if (found) {
-      setSelectedCorridor(found);
-      const oSys: EveSolarSystem = availableSystems.find(
-        (s) =>
-          (found.origin_system_id && s.id === Number(found.origin_system_id)) ||
-          (found.origin_system && s.name.toLowerCase() === found.origin_system.toLowerCase())
-      ) || {
-        id: found.origin_system_id ? Number(found.origin_system_id) : 0,
-        name: found.origin_system || 'Unknown',
-        security: 0.0,
-        securityClass: 'nullsec',
-        region: 'Unknown',
-        defaultStation: `${found.origin_system || 'Unknown'} - Upwell Citadel`,
-      };
-      const dSys: EveSolarSystem = availableSystems.find(
-        (s) =>
-          (found.destination_system_id && s.id === Number(found.destination_system_id)) ||
-          (found.destination_system && s.name.toLowerCase() === found.destination_system.toLowerCase())
-      ) || {
-        id: found.destination_system_id ? Number(found.destination_system_id) : 0,
-        name: found.destination_system || 'Unknown',
-        security: 0.0,
-        securityClass: 'nullsec',
-        region: 'Unknown',
-        defaultStation: `${found.destination_system || 'Unknown'} - Upwell Citadel`,
-      };
-      setOrigin(oSys);
-      setDestination(dSys);
-      setOriginStation(found.origin_station || oSys.defaultStation || `${oSys.name} - Upwell Citadel`);
-      setDestinationStation(found.destination_station || dSys.defaultStation || `${dSys.name} - Upwell Citadel`);
+    if (onSelectCorridor) {
+      onSelectCorridor(found || null);
+    } else {
+      setSelectedCorridor(found || null);
     }
   };
 
   const handleSwapRoute = () => {
-    setSelectedCorridor(null);
+    if (onSwapRoute) {
+      onSwapRoute();
+      return;
+    }
     const prevOrigin = origin;
     const prevDest = destination;
     const prevOriginSt = originStation;
@@ -173,12 +158,12 @@ export function RouteSelector({
             {/* EVE UTC Clock */}
             <div className={styles.eveClock}>
               <Radio className={styles.clockIcon} />
-              <span className={styles.clockLabel}>EVE TIME:</span>
+              <span className={styles.clockLabel}>{t('EVE TIME:')}</span>
               <span className={styles.clockTime}>{eveTime || '12:00:00'} UTC</span>
             </div>
           </div>
           <p className={styles.subtitle}>
-            Select an alliance approved freight corridor or specify custom origin and destination citadels.
+            {t('Select an alliance approved freight corridor or specify custom origin and destination citadels.')}
           </p>
         </div>
 
@@ -186,7 +171,7 @@ export function RouteSelector({
         <div className={styles.presetSelectorWrapper}>
           <Form.Label className={styles.presetSelectorLabel}>
             <Sparkles className={styles.presetSelectorIcon} />
-            Corridor Preset:
+            {t('Corridor Preset:')}
           </Form.Label>
           <Form.Select
             id="corridor-preset-select"
@@ -194,7 +179,7 @@ export function RouteSelector({
             onChange={(e) => handleCorridorSelect(e.target.value)}
             className={styles.presetSelectControl}
           >
-            <option value="">-- Custom / Manual Route --</option>
+            <option value="">{t('-- Custom / Manual Route --')}</option>
             {corridors.map((c) => (
               <option key={String(c.id)} value={String(c.id)}>
                 {c.name}
@@ -209,7 +194,7 @@ export function RouteSelector({
         <div className={styles.presetsPillsRow}>
           <span className={styles.presetsPillsLabel}>
             <Sparkles className={styles.presetsPillsIcon} />
-            Presets:
+            {t('Presets:')}
           </span>
           {displayedPresets.map((c) => {
             const isSelected = selectedCorridor?.id ? String(selectedCorridor.id) === String(c.id) : false;
@@ -221,7 +206,7 @@ export function RouteSelector({
                 className={isSelected ? styles.presetPillSelected : styles.presetPill}
               >
                 <span>{c.name}</span>
-                <span className={styles.presetPillSub}>({c.origin_system} ➔ {c.destination_system})</span>
+                <span className={styles.presetPillSub}>({c.origin_system} ⟷ {c.destination_system})</span>
               </Button>
             );
           })}
@@ -229,11 +214,11 @@ export function RouteSelector({
             <Button
               size="sm"
               onClick={onOpenConfigurePresets}
-              title="Customize Quick-Select Presets"
+              title={t('Customize Quick-Select Presets')}
               className={styles.configureBtn}
             >
               <SlidersHorizontal className={styles.configureIcon} />
-              <span className={styles.configureBtnText}>Configure</span>
+              <span className={styles.configureBtnText}>{t('Configure')}</span>
             </Button>
           )}
         </div>
@@ -246,10 +231,10 @@ export function RouteSelector({
           <div className={styles.systemCardHeader}>
             <span className={styles.systemCardTitle}>
               <span className={styles.originDot}></span>
-              Origin Solar System
+              {t('Origin Solar System')}
             </span>
             <span className={`${styles.secBadge} ${originSec.bg} ${originSec.text} ${originSec.border}`}>
-              Sec: {originSec.label}
+              {t('Sec:')} {originSec.label}
             </span>
           </div>
 
@@ -259,7 +244,7 @@ export function RouteSelector({
               onClick={() => setOriginOpen(!originOpen)}
               className={styles.systemDropdownBtn}
             >
-              <span>{origin.name || '-- Select System --'}</span>
+              <span>{origin.name || t('-- Select System --')}</span>
               <span className={styles.systemDropdownRegion}>
                 {origin.region}
               </span>
@@ -269,7 +254,7 @@ export function RouteSelector({
               <div className={styles.dropdownMenu}>
                 <Form.Control
                   type="text"
-                  placeholder="Search system or region..."
+                  placeholder={t('Search system or region...')}
                   value={originSearch}
                   onChange={(e) => setOriginSearch(e.target.value)}
                   className={styles.searchInput}
@@ -278,7 +263,7 @@ export function RouteSelector({
                 <div className={styles.dropdownList}>
                   {filteredOrigins.length === 0 ? (
                     <div className="p-3 text-center text-xs !text-slate-400">
-                      {systems.length === 0 ? 'No systems configured in Route Admin' : 'No matching systems found'}
+                      {systems.length === 0 ? t('No systems configured in Route Admin') : t('No matching systems found')}
                     </div>
                   ) : (
                     filteredOrigins.map((sys) => {
@@ -287,7 +272,6 @@ export function RouteSelector({
                         <Button
                           key={sys.id}
                           onClick={() => {
-                            setSelectedCorridor(null);
                             setOrigin(sys);
                             setOriginStation(sys.defaultStation || `${sys.name} - Upwell Citadel`);
                             setOriginOpen(false);
@@ -313,7 +297,7 @@ export function RouteSelector({
 
           <div className={styles.stationWrapper}>
             <Form.Label className={styles.stationLabel}>
-              Departure Station / Citadel Structure:
+              {t('Departure Station / Citadel Structure:')}
             </Form.Label>
             <Form.Control
               disabled
@@ -322,7 +306,7 @@ export function RouteSelector({
               value={originStation}
               onChange={(e) => setOriginStation(e.target.value)}
               className={styles.stationInput}
-              placeholder="e.g. Jita IV - Moon 4 - Caldari Navy Assembly Plant"
+              placeholder={t('e.g. Jita IV - Moon 4 - Caldari Navy Assembly Plant')}
             />
           </div>
         </div>
@@ -332,13 +316,13 @@ export function RouteSelector({
           <Button
             id="swap-route-btn"
             onClick={handleSwapRoute}
-            title="Swap Origin & Destination"
+            title={t('Swap Origin & Destination')}
             className={styles.swapBtn}
           >
             <ArrowRightLeft className={styles.swapIcon} />
           </Button>
           <div className={styles.swapLabel}>
-            Swap
+            {t('Swap')}
           </div>
         </div>
 
@@ -347,10 +331,10 @@ export function RouteSelector({
           <div className={styles.systemCardHeader}>
             <span className={styles.systemCardTitle}>
               <span className={styles.destDot}></span>
-              Destination Solar System
+              {t('Destination Solar System')}
             </span>
             <span className={`${styles.secBadge} ${destSec.bg} ${destSec.text} ${destSec.border}`}>
-              Sec: {destSec.label}
+              {t('Sec:')} {destSec.label}
             </span>
           </div>
 
@@ -360,7 +344,7 @@ export function RouteSelector({
               onClick={() => setDestOpen(!destOpen)}
               className={styles.systemDropdownBtn}
             >
-              <span>{destination.name || '-- Select System --'}</span>
+              <span>{destination.name || t('-- Select System --')}</span>
               <span className={styles.systemDropdownRegion}>
                 {destination.region}
               </span>
@@ -370,7 +354,7 @@ export function RouteSelector({
               <div className={styles.dropdownMenu}>
                 <Form.Control
                   type="text"
-                  placeholder="Search destination system..."
+                  placeholder={t('Search destination system...')}
                   value={destSearch}
                   onChange={(e) => setDestSearch(e.target.value)}
                   className={styles.searchInput}
@@ -379,7 +363,7 @@ export function RouteSelector({
                 <div className={styles.dropdownList}>
                   {filteredDests.length === 0 ? (
                     <div className="p-3 text-center text-xs !text-slate-400">
-                      {systems.length === 0 ? 'No systems configured in Route Admin' : 'No matching systems found'}
+                      {systems.length === 0 ? t('No systems configured in Route Admin') : t('No matching systems found')}
                     </div>
                   ) : (
                     filteredDests.map((sys) => {
@@ -389,7 +373,6 @@ export function RouteSelector({
                           key={sys.id}
                           type="button"
                           onClick={() => {
-                            setSelectedCorridor(null);
                             setDestination(sys);
                             setDestinationStation(sys.defaultStation || `${sys.name} - Upwell Citadel`);
                             setDestOpen(false);
@@ -415,7 +398,7 @@ export function RouteSelector({
 
           <div className={styles.stationWrapper}>
             <Form.Label className={styles.stationLabel}>
-              Arrival Station / Citadel Structure:
+              {t('Arrival Station / Citadel Structure:')}
             </Form.Label>
             <Form.Control
               disabled
@@ -424,7 +407,7 @@ export function RouteSelector({
               value={destinationStation}
               onChange={(e) => setDestinationStation(e.target.value)}
               className={styles.stationInput}
-              placeholder="e.g. 1DQ1-A 1 - Imperial Palace Keepstar"
+              placeholder={t('e.g. 1DQ1-A 1 - Imperial Palace Keepstar')}
             />
           </div>
         </div>
@@ -434,42 +417,42 @@ export function RouteSelector({
       <div className={styles.telemetryGrid}>
           {/* Buttons */}
           <div className={styles.telemetryCard}>
-            <span className={styles.telemetryLabel}>Service Profile</span>
+            <span className={styles.telemetryLabel}>{t('Service Profile')}</span>
             <span className={`${styles.serviceBadge} ${serviceBadge.color}`}>
-              {serviceBadge.label}
+              {t(serviceBadge.label)}
             </span>
           </div>
 
           <div className={styles.telemetryCard}>
-            <span className={styles.telemetryLabel}>Jump Drive Distance</span>
+            <span className={styles.telemetryLabel}>{t('Jump Drive Distance')}</span>
             <div className={styles.telemetryValueRow}>
               <span className={styles.telemetryValueCyan}>{distanceLy.toFixed(3)}</span>
-              <span className={styles.telemetryUnit}>Light Years</span>
+              <span className={styles.telemetryUnit}>{t('Light Years')}</span>
             </div>
           </div>
 
           <div className={styles.telemetryCard}>
-            <span className={styles.telemetryLabel}>Stargate Transit</span>
+            <span className={styles.telemetryLabel}>{t('Stargate Transit')}</span>
             <div className={styles.telemetryValueRow}>
               <span className={styles.telemetryValueWhite}>{stargateJumps}</span>
-              <span className={styles.telemetryUnit}>Gates</span>
+              <span className={styles.telemetryUnit}>{t('Gates')}</span>
             </div>
           </div>
 
           <div className={styles.telemetryCard}>
-            <span className={styles.telemetryLabel}>Route Risk Rating</span>
+            <span className={styles.telemetryLabel}>{t('Route Risk Rating')}</span>
             <div className={styles.riskRatingRow}>
               {isCynoGuarded ? (
                 <span className={styles.riskRatingSafe}>
-                  <Navigation className={styles.riskRatingIcon} /> Cyno-Guarded
+                  <Navigation className={styles.riskRatingIcon} /> {t('Cyno-Guarded')}
                 </span>
               ) : isSafe || (origin.securityClass === 'highsec' && destination.securityClass === 'highsec') ? (
                 <span className={styles.riskRatingSafe}>
-                  <ShieldCheck className={styles.riskRatingIcon} /> {isSafe ? 'Safe Corridor' : 'Highsec Concord Protected'}
+                  <ShieldCheck className={styles.riskRatingIcon} /> {isSafe ? t('Safe Corridor') : t('Highsec Concord Protected')}
                 </span>
               ) : (
                 <span className={styles.riskRatingWarning}>
-                  <ShieldAlert className={styles.riskRatingIcon} /> Low/Null Transit
+                  <ShieldAlert className={styles.riskRatingIcon} /> {t('Low/Null Transit')}
                 </span>
               )}
             </div>

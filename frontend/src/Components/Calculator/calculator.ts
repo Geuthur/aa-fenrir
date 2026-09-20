@@ -1,4 +1,5 @@
 import { JUMP_FREIGHTERS } from '@/Components/Fenrir/eveData';
+import { useTranslation } from 'react-i18next';
 import type { EveSolarSystem, FreightCorridor, JumpFreighterShip, QuoteCalculation } from '@/types';
 
 // 1 Light Year in meters (calibrated to EVE Online coordinates, yielding 53.437 LY for Jita -> 1DQ1-A)
@@ -68,6 +69,7 @@ export function calculateTransportQuote({
   isCorpSubsidized: boolean;
   selectedShipId?: string;
 }): QuoteCalculation {
+  const { t } = useTranslation();
   const warnings: string[] = [];
   const distanceLy = calculateDistanceLy(origin, destination);
   const stargateJumps = estimateStargateJumps(origin, destination);
@@ -97,12 +99,12 @@ export function calculateTransportQuote({
 
   const maxAllowedCol = corridor ? Number(corridor.max_collateral ?? 15_000_000_000) : 15_000_000_000;
   if (collateralIsk > maxAllowedCol) {
-    warnings.push(`Collateral (${formatIskCompact(collateralIsk)}) exceeds corridor insurance maximum (${formatIskCompact(maxAllowedCol)}).`);
+    warnings.push(`${t('Collateral')} (${formatIskCompact(collateralIsk)}) ${t('exceeds corridor insurance maximum')} (${formatIskCompact(maxAllowedCol)}).`);
   }
 
   // Security warnings
   if ((origin.securityClass === 'nullsec' || destination.securityClass === 'nullsec') && corridor?.service_type === 'standard_freighter') {
-    warnings.push(`Standard Freighters cannot safely transit Nullsec stargates! Please use Jump Freighter service.`);
+    warnings.push(`${t('Standard Freighters cannot safely transit Nullsec stargates! Please use Jump Freighter service.')}`);
   }
 
   // Cost items
@@ -226,4 +228,40 @@ export function getServiceBadge(service: string) {
     default:
       return { label: 'Courier Service', color: '!bg-slate-500/15 !text-slate-300 !border-slate-500/30' };
   }
+}
+
+/**
+ * Checks if a freight corridor matches the given origin and destination solar systems.
+ * Route presets are always bidirectional: A ➔ B and B ➔ A are considered equal.
+ */
+export function doesCorridorMatch(
+  corridor: FreightCorridor | null,
+  origin: EveSolarSystem,
+  destination: EveSolarSystem
+): boolean {
+  if (!corridor || !origin || !destination) return false;
+  const oId = origin.id ? Number(origin.id) : 0;
+  const dId = destination.id ? Number(destination.id) : 0;
+  const oName = (origin.name || '').trim().toLowerCase();
+  const dName = (destination.name || '').trim().toLowerCase();
+
+  if (!oId && !oName) return false;
+  if (!dId && !dName) return false;
+  if (oId && dId && oId === dId) return false;
+  if (oName && dName && oName === dName) return false;
+
+  const cOId = corridor.origin_system_id ? Number(corridor.origin_system_id) : 0;
+  const cDId = corridor.destination_system_id ? Number(corridor.destination_system_id) : 0;
+  const cOName = (corridor.origin_system || '').trim().toLowerCase();
+  const cDName = (corridor.destination_system || '').trim().toLowerCase();
+
+  // Direct match: origin -> destination
+  const directOrigin = (cOId && oId && cOId === oId) || (cOName && oName && cOName === oName);
+  const directDest = (cDId && dId && cDId === dId) || (cDName && dName && cDName === dName);
+  if (directOrigin && directDest) return true;
+
+  // Reverse match: destination -> origin (both directions are equal)
+  const reverseOrigin = (cOId && dId && cOId === dId) || (cOName && dName && cOName === dName);
+  const reverseDest = (cDId && oId && cDId === oId) || (cDName && oName && cDName === oName);
+  return Boolean(reverseOrigin && reverseDest);
 }

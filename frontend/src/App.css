@@ -32,7 +32,7 @@
 
 .fenrir-border-700,
 :where(.btn).fenrir-border-700 {
-  border: 1px solid #0f172a !important;
+  border: 1px solid #0f172a;
   --bs-btn-border-color: #0f172a !important;
 }
 .fenrir-border-700:hover,
@@ -43,7 +43,7 @@
 
 .fenrir-border-500,
 :where(.btn).fenrir-border-500 {
-  border: 1px solid #0f172a !important;
+  border: 1px solid #0f172a;
   --bs-btn-border-color: #0f172a !important;
   transition: border-color 0.2s ease-in-out;
 }

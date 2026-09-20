@@ -1,6 +1,3 @@
-// React
-import { useEffect, useState } from 'react';
-
 // Third Party
 import { AlertTriangle } from 'lucide-react';
 import { Button } from 'react-bootstrap';
@@ -25,22 +22,11 @@ export function DeleteRouteSystemModal({
   isPending,
 }: DeleteRouteSystemModalProps) {
   const { t } = useTranslation();
-  const [displayedSystem, setDisplayedSystem] = useState<RouteSystemItem | null>(system);
-
-  useEffect(() => {
-    if (system) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setDisplayedSystem(system);
-    }
-  }, [system]);
-
-  const currentSystem = system || displayedSystem;
 
   return (
     <FenrirModal
       isOpen={Boolean(system)}
       onClose={onClose}
-      onExited={() => setDisplayedSystem(null)}
       size="lg"
     >
       <FenrirModal.Header>
@@ -57,19 +43,19 @@ export function DeleteRouteSystemModal({
         </div>
       </FenrirModal.Header>
 
-      <FenrirModal.Body>
-        {currentSystem && (
+      {system && (
+        <FenrirModal.Body>
           <div className="space-y-3 text-sm !text-slate-300">
             <p>
               {t('Are you sure you want to remove {{name}} from available route systems?', {
-                name: currentSystem.name,
+                name: system.name,
               })}
             </p>
             <div className="p-3.5 rounded-lg !bg-slate-900/80 border !border-slate-800 space-y-1.5 font-mono text-xs">
-              <div className="font-bold !text-white text-sm">{currentSystem.name}</div>
-              {currentSystem.region_name && (
+              <div className="font-bold !text-white text-sm">{system.name}</div>
+              {system.region_name && (
                 <div className="text-[11px] !text-slate-400">
-                  {t('Region:')} {currentSystem.region_name}
+                  {t('Region:')} {system.region_name}
                 </div>
               )}
             </div>
@@ -77,28 +63,30 @@ export function DeleteRouteSystemModal({
               {t('Routes currently utilizing this system may need to be updated.')}
             </p>
           </div>
-        )}
-      </FenrirModal.Body>
+        </FenrirModal.Body>
+      )}
 
-      <FenrirModal.Footer>
-        <div className="flex justify-end gap-3 w-full">
-          <Button
-            variant="secondary"
-            onClick={onClose}
-            className="text-xs font-semibold"
-          >
-            {t('Cancel')}
-          </Button>
-          <Button
-            variant="danger"
-            onClick={() => currentSystem && onConfirm(currentSystem.id)}
-            disabled={isPending || !currentSystem}
-            className="text-xs font-semibold"
-          >
-            {isPending ? t('Removing...') : t('Remove System')}
-          </Button>
-        </div>
-      </FenrirModal.Footer>
+      {system && (
+        <FenrirModal.Footer>
+          <div className="flex justify-end gap-3 w-full">
+            <Button
+              variant="secondary"
+              onClick={onClose}
+              className="text-xs font-semibold"
+            >
+              {t('Cancel')}
+            </Button>
+            <Button
+              variant="danger"
+              onClick={() => onConfirm(system.id)}
+              disabled={isPending}
+              className="text-xs font-semibold"
+            >
+              {isPending ? t('Removing...') : t('Remove System')}
+            </Button>
+          </div>
+        </FenrirModal.Footer>
+      )}
     </FenrirModal>
   );
 }

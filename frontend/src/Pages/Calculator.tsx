@@ -8,10 +8,12 @@ import { loadRoutePresets, loadRouteSystems, loadUserData, updateUserSettings } 
 import { queryKeys } from '@/Api/query';
 import {
   CargoInput,
+  MatchedCorridorIndicator,
   QuoteBreakdown,
   RouteSelector,
   calculateDistanceLy,
   calculateTransportQuote,
+  doesCorridorMatch,
   estimateStargateJumps,
 } from '@/Components/Calculator';
 import { ConfigurePresetsModal, ContractModal } from '@/Components/Calculator/Modals';
@@ -88,34 +90,131 @@ export default function Calculator() {
 
     useEffect(() => {
         if (!hasInitialized && availableSystems.length > 0) {
-            if (presets.length > 0) {
-                const first = presets[0];
-                // eslint-disable-next-line react-hooks/set-state-in-effect
-                setSelectedCorridor(first);
-                const oSys: EveSolarSystem = availableSystems.find(
-                    (s) =>
-                        (first.origin_system_id && s.id === Number(first.origin_system_id)) ||
-                        (first.origin_system && s.name.toLowerCase() === first.origin_system.toLowerCase())
-                ) || availableSystems[0];
-                const dSys: EveSolarSystem = availableSystems.find(
-                    (s) =>
-                        (first.destination_system_id && s.id === Number(first.destination_system_id)) ||
-                        (first.destination_system && s.name.toLowerCase() === first.destination_system.toLowerCase())
-                ) || availableSystems[1] || availableSystems[0];
-                setOrigin(oSys);
-                setDestination(dSys);
-                setOriginStation(first.origin_station || oSys.defaultStation || `${oSys.name} - Upwell Citadel`);
-                setDestinationStation(first.destination_station || dSys.defaultStation || `${dSys.name} - Upwell Citadel`);
-                setHasInitialized(true);
-            } else {
-                setOrigin(availableSystems[0]);
-                setDestination(availableSystems[1] || availableSystems[0]);
-                setOriginStation(availableSystems[0].defaultStation || `${availableSystems[0].name} - Upwell Citadel`);
-                setDestinationStation((availableSystems[1] || availableSystems[0]).defaultStation || `${(availableSystems[1] || availableSystems[0]).name} - Upwell Citadel`);
-                setHasInitialized(true);
-            }
+            // Default to base rates with first available systems
+            const oSys = availableSystems[0];
+            const dSys = availableSystems[1] || availableSystems[0];
+            setOrigin(oSys);
+            setDestination(dSys);
+            setOriginStation(oSys.defaultStation || `${oSys.name} - Upwell Citadel`);
+            setDestinationStation(dSys.defaultStation || `${dSys.name} - Upwell Citadel`);
+            setSelectedCorridor(null);
+            setHasInitialized(true);
         }
-    }, [presets, hasInitialized, availableSystems]);
+    }, [hasInitialized, availableSystems]);
+
+    // Matching corridor preset detection for selected origin & destination (bidirectional)
+    const matchingCorridor = useMemo(() => {
+        if (!origin.id && !origin.name) return null;
+        if (!destination.id && !destination.name) return null;
+        if (origin.id && destination.id && origin.id === destination.id) return null;
+
+        return presets.find((p) => doesCorridorMatch(p, origin, destination)) || null;
+    }, [presets, origin, destination]);
+
+    // Effective active corridor:
+    // Only applied if user explicitly selected a corridor and it matches the current systems (bidirectional)
+    const effectiveCorridor = useMemo(() => {
+        if (!selectedCorridor) return null;
+        if (doesCorridorMatch(selectedCorridor, origin, destination)) {
+            return selectedCorridor;
+        }
+        return null;
+    }, [selectedCorridor, origin, destination]);
+
+    const handleSelectOrigin = (sys: EveSolarSystem) => {
+        setOrigin(sys);
+        setOriginStation(sys.defaultStation || `${sys.name} - Upwell Citadel`);
+        // If user had a corridor selected, only keep it if it still matches (bidirectional)
+        setSelectedCorridor((prev) => (doesCorridorMatch(prev, sys, destination) ? prev : null));
+    };
+
+    const handleSelectDestination = (sys: EveSolarSystem) => {
+        setDestination(sys);
+        setDestinationStation(sys.defaultStation || `${sys.name} - Upwell Citadel`);
+        // If user had a corridor selected, only keep it if it still matches (bidirectional)
+        setSelectedCorridor((prev) => (doesCorridorMatch(prev, origin, sys) ? prev : null));
+    };
+
+    const handleApplyCorridor = (corridor: FreightCorridor) => {
+        setSelectedCorridor(corridor);
+
+        // Check whether current route is reverse direction
+        const isReverse =
+            (corridor.origin_system_id && Number(corridor.origin_system_id) === destination.id) ||
+            (corridor.origin_system && corridor.origin_system.toLowerCase() === destination.name.toLowerCase());
+
+        if (isReverse) {
+            if (corridor.destination_station) setOriginStation(corridor.destination_station);
+            if (corridor.origin_station) setDestinationStation(corridor.origin_station);
+        } else {
+            if (corridor.origin_station) setOriginStation(corridor.origin_station);
+            if (corridor.destination_station) setDestinationStation(corridor.destination_station);
+        }
+    };
+
+    const handleSelectPresetCorridor = (corridor: FreightCorridor | null) => {
+        if (!corridor) {
+            setSelectedCorridor(null);
+            return;
+        }
+
+        // Check if current route already matches this corridor (direct or reverse)
+        const isMatch = doesCorridorMatch(corridor, origin, destination);
+
+        if (isMatch) {
+            // Keep current systems, but apply the corridor and ensure correct stations for current direction
+            handleApplyCorridor(corridor);
+            return;
+        }
+
+        // Otherwise set systems to corridor's systems
+        const oSys: EveSolarSystem = availableSystems.find(
+            (s) =>
+                (corridor.origin_system_id && s.id === Number(corridor.origin_system_id)) ||
+                (corridor.origin_system && s.name.toLowerCase() === corridor.origin_system.toLowerCase())
+        ) || {
+            id: corridor.origin_system_id ? Number(corridor.origin_system_id) : 0,
+            name: corridor.origin_system || 'Unknown',
+            security: 0.0,
+            securityClass: 'nullsec' as SecurityClass,
+            region: 'Unknown',
+            defaultStation: `${corridor.origin_system || 'Unknown'} - Upwell Citadel`,
+        };
+
+        const dSys: EveSolarSystem = availableSystems.find(
+            (s) =>
+                (corridor.destination_system_id && s.id === Number(corridor.destination_system_id)) ||
+                (corridor.destination_system && s.name.toLowerCase() === corridor.destination_system.toLowerCase())
+        ) || {
+            id: corridor.destination_system_id ? Number(corridor.destination_system_id) : 0,
+            name: corridor.destination_system || 'Unknown',
+            security: 0.0,
+            securityClass: 'nullsec' as SecurityClass,
+            region: 'Unknown',
+            defaultStation: `${corridor.destination_system || 'Unknown'} - Upwell Citadel`,
+        };
+
+        setOrigin(oSys);
+        setDestination(dSys);
+        setOriginStation(corridor.origin_station || oSys.defaultStation || `${oSys.name} - Upwell Citadel`);
+        setDestinationStation(corridor.destination_station || dSys.defaultStation || `${dSys.name} - Upwell Citadel`);
+        setSelectedCorridor(corridor);
+    };
+
+    const handleSwapRoute = () => {
+        const prevOrigin = origin;
+        const prevDest = destination;
+        const prevOriginSt = originStation;
+        const prevDestSt = destinationStation;
+
+        setOrigin(prevDest);
+        setDestination(prevOrigin);
+        setOriginStation(prevDestSt);
+        setDestinationStation(prevOriginSt);
+
+        // Keep corridor active if it matches swapped systems (both directions are equal!)
+        setSelectedCorridor((prev) => (doesCorridorMatch(prev, prevDest, prevOrigin) ? prev : null));
+    };
 
     // Cargo & Rates State
     const [volumeM3, setVolumeM3] = useState(65000);
@@ -127,7 +226,7 @@ export default function Calculator() {
     // Calculate quote dynamically
     const quote = useMemo(() => {
         return calculateTransportQuote({
-        corridor: selectedCorridor,
+        corridor: effectiveCorridor,
         origin,
         destination,
         volumeM3,
@@ -136,35 +235,49 @@ export default function Calculator() {
         isCorpSubsidized,
         selectedShipId,
         });
-    }, [selectedCorridor, origin, destination, volumeM3, collateralIsk, isRush, isCorpSubsidized, selectedShipId]);
+    }, [effectiveCorridor, origin, destination, volumeM3, collateralIsk, isRush, isCorpSubsidized, selectedShipId]);
 
     const distanceLy = useMemo(() => calculateDistanceLy(origin, destination), [origin, destination]);
     const stargateJumps = useMemo(() => estimateStargateJumps(origin, destination), [origin, destination]);
 
     //const pendingCount = contracts.filter((c) => c.status === 'pending').length;
   return (
-    <div className="min-h-screen !text-slate-200 flex flex-col font-sans selection:!bg-cyan-500/30 selection:!text-cyan-200">
-        <main className="flex-1 w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <main className="mt-4 min-h-screen !text-slate-200 flex flex-col font-sans selection:!bg-cyan-500/30 selection:!text-cyan-200">
+        <div className="flex-1 w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <div className="space-y-6">
             {/* Top Route & Flight Corridor Selector */}
             <RouteSelector
                 origin={origin}
-                setOrigin={setOrigin}
+                setOrigin={handleSelectOrigin}
                 destination={destination}
-                setDestination={setDestination}
-                selectedCorridor={selectedCorridor}
-                setSelectedCorridor={setSelectedCorridor}
+                setDestination={handleSelectDestination}
+                selectedCorridor={effectiveCorridor}
+                setSelectedCorridor={handleSelectPresetCorridor}
+                onSelectCorridor={handleSelectPresetCorridor}
+                onSwapRoute={handleSwapRoute}
                 originStation={originStation}
                 setOriginStation={setOriginStation}
                 destinationStation={destinationStation}
                 setDestinationStation={setDestinationStation}
                 distanceLy={distanceLy}
                 stargateJumps={stargateJumps}
-                serviceType={selectedCorridor?.service_type || 'jump_freighter'}
+                serviceType={effectiveCorridor?.service_type || 'jump_freighter'}
                 corridors={presets}
                 quickSelectPresetIds={userData?.user.quick_select_presets}
                 onOpenConfigurePresets={() => setShowConfigurePresetsModal(true)}
                 systems={availableSystems}
+            />
+
+            {/* Dedicated Matched Corridor Status Component */}
+            <MatchedCorridorIndicator
+                selectedCorridor={effectiveCorridor}
+                matchingCorridor={matchingCorridor}
+                origin={origin}
+                destination={destination}
+                onApplyCorridor={handleApplyCorridor}
+                onUseBaseRates={() => {
+                    setSelectedCorridor(null);
+                }}
             />
 
             {/* Two Column Layout: Cargo Inputs & Live Tariff Breakdown */}
@@ -180,8 +293,9 @@ export default function Calculator() {
                     isCorpSubsidized={isCorpSubsidized}
                     setIsCorpSubsidized={setIsCorpSubsidized}
                     selectedShipId={selectedShipId}
-                    maxVolumeAllowed={selectedCorridor?.max_volume || 360000}
-                    maxCollateralAllowed={selectedCorridor?.max_collateral || 15000000000}
+                    maxVolumeAllowed={effectiveCorridor?.max_volume || 360000}
+                    maxCollateralAllowed={effectiveCorridor?.max_collateral || 15000000000}
+                    corridor={effectiveCorridor}
                 />
                 </div>
 
@@ -193,7 +307,7 @@ export default function Calculator() {
                 </div>
             </div>
             </div>
-        </main>
+        </div>
         {/* Modals */}
         <ContractModal
             quote={quote}
@@ -209,6 +323,6 @@ export default function Calculator() {
             onSave={(ids) => savePresetsMutation.mutate(ids)}
             isPending={savePresetsMutation.isPending}
         />
-    </div>
+    </main>
   );
 }

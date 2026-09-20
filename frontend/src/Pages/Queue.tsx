@@ -23,24 +23,30 @@ export default function Queue() {
   });
 
   if (isLoading) {
-    return <FetchingLoader message={t('Loading contracts queue...')} />;
+    return (
+      <main className="mt-4">
+        <FetchingLoader message={t('Loading contracts queue...')} />
+      </main>
+    );
   }
 
   if (error) {
     return (
-      <ErrorLoader
-        title={t('Error')}
-        message={t('Failed to load contracts queue. Please try again.')}
-      />
+      <main className="mt-4">
+        <ErrorLoader
+          title={t('Error')}
+          message={t('Failed to load contracts queue. Please try again.')}
+        />
+      </main>
     );
   }
 
   return (
-    <div>
+    <main className="mt-4">
       <ContractQueue
         contracts={contracts}
         onNewQuoteClick={() => navigate(`/${ProjectName}/calculator/`)}
       />
-    </div>
+    </main>
   );
 }

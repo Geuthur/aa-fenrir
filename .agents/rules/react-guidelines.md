@@ -116,4 +116,18 @@ Follow the project import order convention:
 
 - **Always wrap user-facing text in `t('...')` from `react-i18next`**.
 - **Immediate German Translation**: Whenever a new `t(...)` key is introduced, you **must** immediately provide the German translation in `frontend/i18n/de/translation.json`.
-- Refer to \[`.agents/rules/translation-guidelines.md`\](file:///home/github/aa-fenrir/.agents/rules/translation-guidelines.md) for the complete workflow (`make react-translations`, German EVE Online terminology, and `make react-copy-translations`).
+- Refer to \[.agents/rules/translation-guidelines.md\](file:///home/github/aa-fenrir/.agents/rules/translation-guidelines.md) for the complete workflow (`make react-translations`, German EVE Online terminology, and `make react-copy-translations`).
+
+## 9. Build, Deployment & Server Restart Rules
+
+- **Always run `make react-test-build` after updating frontend code/data**:
+  - Whenever you update React frontend code, components, or translations, run:
+    ```bash
+    make react-test-build
+    ```
+  - This command automatically executes `react-build`, `react-copy-assets`, `react-copy-translations`, and `collectstatic`.
+  - It deploys the updated static files to the test server and catches any build or type errors immediately so the user can verify changes quickly.
+- **Server Restarts Only for `.py` Changes (Always Ask First)**:
+  - A server restart is **only** required when Python backend files (`.py`) are modified.
+  - **NEVER restart the server automatically**: Always ask the user for permission first before executing any restart.
+  - When approved, always use `make restart-test-server` (never raw supervisorctl).
