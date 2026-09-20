@@ -1,0 +1,12 @@
+{% load i18n %}
+{% load navactive %}
+
+{% if request.user.is_superuser %}
+    {% comment %}
+        <li class="nav-item">
+            <a class="nav-link py-0" href="{% url 'aafenrir:admin' %}">
+                <span class="btn btn-danger">{% translate 'Admin' %}</span>
+            </a>
+        </li>
+    {% endcomment %}
+{% endif %}

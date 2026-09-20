@@ -1,0 +1,995 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "AA Fenrir API",
+    "version": "0.5.0",
+    "description": ""
+  },
+  "paths": {
+    "/aafenrir/api/menu/": {
+      "get": {
+        "operationId": "aafenrir_api_general_get_menu",
+        "summary": "Get Menu",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MenuSchema"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "General"
+        ],
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    },
+    "/aafenrir/api/user/": {
+      "get": {
+        "operationId": "aafenrir_api_general_get_user",
+        "summary": "Get User",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserData"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "General"
+        ],
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    },
+    "/aafenrir/api/modify/user/settings/": {
+      "post": {
+        "operationId": "aafenrir_api_general_modify_user_settings",
+        "summary": "Modify User Settings",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "General"
+        ],
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    },
+    "/aafenrir/api/contract/presets/": {
+      "get": {
+        "operationId": "aafenrir_api_contract_get_route_presets",
+        "summary": "Get Route Presets",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/RoutePresetSchema"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Contracts"
+        ],
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "aafenrir_api_contract_create_route_preset",
+        "summary": "Create Route Preset",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoutePresetSchema"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Contracts"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRoutePresetSchema"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    },
+    "/aafenrir/api/contract/preset/{preset_id}/": {
+      "get": {
+        "operationId": "aafenrir_api_contract_get_route_preset",
+        "summary": "Get Route Preset",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "preset_id",
+            "schema": {
+              "title": "Preset Id",
+              "type": "integer"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoutePresetSchema"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Contracts"
+        ],
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "aafenrir_api_contract_delete_route_preset",
+        "summary": "Delete Route Preset",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "preset_id",
+            "schema": {
+              "title": "Preset Id",
+              "type": "integer"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Contracts"
+        ],
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    },
+    "/aafenrir/api/contract/{contract_id}/": {
+      "get": {
+        "operationId": "aafenrir_api_contract_get_contract",
+        "summary": "Get Contract",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "contract_id",
+            "schema": {
+              "title": "Contract Id",
+              "type": "integer"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MenuSchema"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Contracts"
+        ],
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    },
+    "/aafenrir/api/eve_sde/solar-system/{eve_id}": {
+      "get": {
+        "operationId": "aafenrir_api_eve_sde_get_solar_system",
+        "summary": "Get Solar System",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "eve_id",
+            "schema": {
+              "title": "Eve Id",
+              "type": "integer"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SolarSystemSchema"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "EVE SDE"
+        ],
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "MenuLink": {
+        "description": "Represents a link in the menu.\n\nParameters:\n    name (str): The name of the menu link.\n    link (str | None): The URL or path the menu link points to.",
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "link": {
+            "title": "Link",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "MenuLink",
+        "type": "object"
+      },
+      "MenuModalSchema": {
+        "description": "Schema for menu modals",
+        "properties": {
+          "create_aafenrir": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ModalSchema"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "title": "MenuModalSchema",
+        "type": "object"
+      },
+      "MenuSchema": {
+        "description": "Schema for the overall menu, including links and modals.\n\nParameters:\n    links (list[MenuLink]): The list of links in the menu.\n    modals (MenuModalSchema | None): The modals associated with the menu.",
+        "properties": {
+          "left_links": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/MenuLink"
+            },
+            "title": "Left Links",
+            "type": "array"
+          },
+          "right_links": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/MenuLink"
+            },
+            "title": "Right Links",
+            "type": "array"
+          },
+          "modals": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MenuModalSchema"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "title": "MenuSchema",
+        "type": "object"
+      },
+      "ModalSchema": {
+        "description": "Schema for modal dialog data.",
+        "properties": {
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          },
+          "icon": {
+            "title": "Icon",
+            "type": "string"
+          },
+          "modal_id": {
+            "title": "Modal Id",
+            "type": "string"
+          },
+          "url": {
+            "title": "Url",
+            "type": "string"
+          },
+          "color": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Color"
+          },
+          "buttonText": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Buttontext"
+          }
+        },
+        "required": [
+          "title",
+          "text",
+          "icon",
+          "modal_id",
+          "url"
+        ],
+        "title": "ModalSchema",
+        "type": "object"
+      },
+      "UserData": {
+        "description": "Schema for user data, including character ID and character name.\n\nParameters:\n    user_id (int): The ID of the user.\n    character_id (int): The ID of the character associated with the user.\n    character_name (str): The name of the character.\n    portrait (str | None): The URL or path to the character's portrait image.\n    notification (boolean): The notification status for the user.",
+        "properties": {
+          "user_id": {
+            "title": "User Id",
+            "type": "integer"
+          },
+          "character_id": {
+            "title": "Character Id",
+            "type": "integer"
+          },
+          "character_name": {
+            "title": "Character Name",
+            "type": "string"
+          },
+          "portrait": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Portrait"
+          },
+          "notification": {
+            "title": "Notification",
+            "type": "boolean"
+          },
+          "quick_select_presets": {
+            "default": [],
+            "items": {
+              "type": "integer"
+            },
+            "title": "Quick Select Presets",
+            "type": "array"
+          },
+          "has_manage_access": {
+            "default": false,
+            "title": "Has Manage Access",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "user_id",
+          "character_id",
+          "character_name",
+          "notification"
+        ],
+        "title": "UserData",
+        "type": "object"
+      },
+      "RoutePresetSchema": {
+        "description": "Schema for RoutePreset.",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "origin_system": {
+            "title": "Origin System",
+            "type": "string"
+          },
+          "origin_system_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Origin System Id"
+          },
+          "origin_station": {
+            "default": "",
+            "title": "Origin Station",
+            "type": "string"
+          },
+          "destination_system": {
+            "title": "Destination System",
+            "type": "string"
+          },
+          "destination_system_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Destination System Id"
+          },
+          "destination_station": {
+            "default": "",
+            "title": "Destination Station",
+            "type": "string"
+          },
+          "service_type": {
+            "title": "Service Type",
+            "type": "string"
+          },
+          "max_volume": {
+            "title": "Max Volume",
+            "type": "integer"
+          },
+          "max_collateral": {
+            "title": "Max Collateral",
+            "type": "integer"
+          },
+          "base_fee": {
+            "title": "Base Fee",
+            "type": "integer"
+          },
+          "fee_per_m3": {
+            "title": "Fee Per M3",
+            "type": "integer"
+          },
+          "fee_per_ly": {
+            "title": "Fee Per Ly",
+            "type": "number"
+          },
+          "fee_per_ly_or_jump": {
+            "default": 0.0,
+            "title": "Fee Per Ly Or Jump",
+            "type": "number"
+          },
+          "fee_per_lyorjump": {
+            "default": 0.0,
+            "title": "Fee Per Lyorjump",
+            "type": "number"
+          },
+          "collateral_percent": {
+            "title": "Collateral Percent",
+            "type": "number"
+          },
+          "min_reward": {
+            "title": "Min Reward",
+            "type": "integer"
+          },
+          "estimated_time": {
+            "title": "Estimated Time",
+            "type": "integer"
+          },
+          "estimated_days": {
+            "title": "Estimated Days",
+            "type": "number"
+          },
+          "is_cyno_route": {
+            "title": "Is Cyno Route",
+            "type": "boolean"
+          },
+          "cyno_waypoints": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Cyno Waypoints",
+            "type": "array"
+          },
+          "danger_level": {
+            "title": "Danger Level",
+            "type": "string"
+          },
+          "description": {
+            "default": "",
+            "title": "Description",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "origin_system",
+          "destination_system",
+          "service_type",
+          "max_volume",
+          "max_collateral",
+          "base_fee",
+          "fee_per_m3",
+          "fee_per_ly",
+          "collateral_percent",
+          "min_reward",
+          "estimated_time",
+          "estimated_days",
+          "is_cyno_route",
+          "danger_level"
+        ],
+        "title": "RoutePresetSchema",
+        "type": "object"
+      },
+      "CreateRoutePresetSchema": {
+        "description": "Schema for creating a RoutePreset.",
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "origin_system_id": {
+            "title": "Origin System Id",
+            "type": "integer"
+          },
+          "origin_system_station": {
+            "default": "",
+            "title": "Origin System Station",
+            "type": "string"
+          },
+          "destination_system_id": {
+            "title": "Destination System Id",
+            "type": "integer"
+          },
+          "destination_system_station": {
+            "default": "",
+            "title": "Destination System Station",
+            "type": "string"
+          },
+          "service_type": {
+            "default": "jumpfreighter",
+            "title": "Service Type",
+            "type": "string"
+          },
+          "max_volume": {
+            "default": 0,
+            "title": "Max Volume",
+            "type": "integer"
+          },
+          "max_collateral": {
+            "default": 0,
+            "title": "Max Collateral",
+            "type": "integer"
+          },
+          "base_fee": {
+            "default": 5000000,
+            "title": "Base Fee",
+            "type": "integer"
+          },
+          "fee_per_m3": {
+            "default": 0,
+            "title": "Fee Per M3",
+            "type": "integer"
+          },
+          "fee_per_ly": {
+            "default": 0,
+            "title": "Fee Per Ly",
+            "type": "number"
+          },
+          "collateral_percent": {
+            "default": 0,
+            "title": "Collateral Percent",
+            "type": "integer"
+          },
+          "min_reward": {
+            "default": 0,
+            "title": "Min Reward",
+            "type": "integer"
+          },
+          "estimated_time": {
+            "default": 0,
+            "title": "Estimated Time",
+            "type": "integer"
+          },
+          "is_cyno_route": {
+            "default": false,
+            "title": "Is Cyno Route",
+            "type": "boolean"
+          },
+          "cyno_waypoint_ids": {
+            "default": [],
+            "items": {
+              "type": "integer"
+            },
+            "title": "Cyno Waypoint Ids",
+            "type": "array"
+          },
+          "danger_level": {
+            "default": "safe",
+            "title": "Danger Level",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "origin_system_id",
+          "destination_system_id"
+        ],
+        "title": "CreateRoutePresetSchema",
+        "type": "object"
+      },
+      "SolarSystemSchema": {
+        "description": "Schema for a solar system entry.",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "border": {
+            "title": "Border",
+            "type": "boolean"
+          },
+          "constellation_id": {
+            "title": "Constellation Id",
+            "type": "integer"
+          },
+          "corridor": {
+            "title": "Corridor",
+            "type": "boolean"
+          },
+          "faction_id_raw": {
+            "title": "Faction Id Raw",
+            "type": "integer"
+          },
+          "fringe": {
+            "title": "Fringe",
+            "type": "boolean"
+          },
+          "hub": {
+            "title": "Hub",
+            "type": "boolean"
+          },
+          "international": {
+            "title": "International",
+            "type": "boolean"
+          },
+          "luminosity": {
+            "title": "Luminosity",
+            "type": "number"
+          },
+          "radius": {
+            "title": "Radius",
+            "type": "number"
+          },
+          "regional": {
+            "title": "Regional",
+            "type": "boolean"
+          },
+          "security_class": {
+            "title": "Security Class",
+            "type": "string"
+          },
+          "security_status": {
+            "title": "Security Status",
+            "type": "number"
+          },
+          "visual_effect": {
+            "title": "Visual Effect",
+            "type": "string"
+          },
+          "wormhole_class_id_raw": {
+            "title": "Wormhole Class Id Raw",
+            "type": "integer"
+          },
+          "x": {
+            "title": "X",
+            "type": "number"
+          },
+          "y": {
+            "title": "Y",
+            "type": "number"
+          },
+          "z": {
+            "title": "Z",
+            "type": "number"
+          },
+          "x_2d": {
+            "title": "X 2D",
+            "type": "number"
+          },
+          "y_2d": {
+            "title": "Y 2D",
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "border",
+          "constellation_id",
+          "corridor",
+          "faction_id_raw",
+          "fringe",
+          "hub",
+          "international",
+          "luminosity",
+          "radius",
+          "regional",
+          "security_class",
+          "security_status",
+          "visual_effect",
+          "wormhole_class_id_raw",
+          "x",
+          "y",
+          "z",
+          "x_2d",
+          "y_2d"
+        ],
+        "title": "SolarSystemSchema",
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "SessionAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "sessionid"
+      }
+    }
+  },
+  "servers": []
+}

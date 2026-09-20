@@ -1,0 +1,24 @@
+@reference "@/App.css";
+
+.routeCard {
+  @apply p-5 rounded-xl bg-[#111724] border border-slate-800 hover:border-slate-700 flex flex-col justify-between space-y-4 transition-all;
+}
+
+.routeLabel {
+  @apply flex items-start justify-between gap-2;
+}
+
+
+
+.deleteButton {
+  @apply flex items-center gap-1 px-3 py-1.5 rounded text-xs font-semibold cursor-pointer transition-all disabled:opacity-50;
+  background-color: rgba(69, 10, 10, 0.4) !important;
+  border: 1px solid rgba(239, 68, 68, 0.4) !important;
+  color: #fca5a5 !important;
+}
+
+.deleteButton:hover {
+  background-color: rgba(127, 29, 29, 0.6) !important;
+  border-color: rgba(239, 68, 68, 0.8) !important;
+  color: #fef2f2 !important;
+}

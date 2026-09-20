@@ -1,0 +1,321 @@
+@reference "@/App.css";
+
+/* Main Container */
+.container {
+  @apply rounded-xl p-5 shadow-lg relative overflow-hidden bg-slate-800/80;
+}
+
+.cornerGradient {
+  @apply absolute top-0 right-0 w-48 h-48 bg-gradient-to-bl from-cyan-500/10 via-transparent to-transparent pointer-events-none;
+}
+
+/* Header */
+.header {
+  @apply flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-300/60 mb-5;
+}
+
+.titleGroup {
+  @apply flex items-center gap-2;
+}
+
+.titleIcon {
+  @apply w-5 h-5 text-blue-400;
+}
+
+.titleHeading {
+  @apply font-eve font-bold text-lg text-white tracking-wide;
+}
+
+.subtitle {
+  @apply text-xs text-slate-300 mt-0.5;
+}
+
+.eveClock {
+  @apply hidden sm:flex items-center gap-2 px-3 py-1 rounded bg-black/40 border border-slate-800 text-xs font-mono;
+}
+
+.clockIcon {
+  @apply w-3.5 h-3.5 text-cyan-400 animate-pulse;
+}
+
+.clockLabel {
+  @apply text-slate-400;
+}
+
+.clockTime {
+  @apply text-cyan-300 font-semibold;
+}
+
+/* Preset Corridor Selector */
+.presetSelectorWrapper {
+  @apply w-full sm:w-72;
+}
+
+.presetSelectorLabel {
+  @apply block text-[11px] font-mono text-slate-300 uppercase tracking-wider mb-1 flex items-center gap-1;
+}
+
+.presetSelectorIcon {
+  @apply w-3 h-3 text-cyan-400;
+}
+
+.presetSelectControl {
+  @apply w-full px-3 py-2 text-xs rounded-lg text-slate-200 font-medium;
+  background-color: #0f172a !important;
+  border: 1px solid #0f172a !important;
+}
+.presetSelectControl:focus {
+  outline: none;
+  border-color: #06b6d4 !important;
+  box-shadow: 0 0 0 1px #06b6d4;
+}
+
+/* Preset Route Quick Select Pills */
+.presetsPillsRow {
+  @apply flex flex-wrap items-center gap-2 mb-5 -mt-2;
+}
+
+.presetsPillsLabel {
+  @apply text-[11px] font-mono text-slate-400 uppercase flex items-center gap-1;
+}
+
+.presetsPillsIcon {
+  @apply w-3 h-3 text-cyan-400;
+}
+
+.presetPill {
+  @apply text-xs font-mono flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all cursor-pointer;
+  background-color: rgba(15, 23, 42, 0.6) !important;
+  border: 1px solid rgba(51, 65, 85, 0.8) !important;
+  --bs-btn-border-color: rgba(51, 65, 85, 0.8) !important;
+  color: #cbd5e1 !important;
+}
+.presetPill:hover {
+  border-color: #64748b !important;
+  --bs-btn-border-color: #64748b !important;
+  color: #f1f5f9 !important;
+}
+
+.presetPillSelected {
+  @apply text-xs font-mono flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer;
+  background-color: rgba(6, 182, 212, 0.2) !important;
+  border: 1px solid #22d3ee !important;
+  --bs-btn-border-color: #22d3ee !important;
+  color: #67e8f9 !important;
+  box-shadow: 0 0 12px rgba(6, 182, 212, 0.25) !important;
+}
+
+.presetPillSub {
+  @apply text-[10px] text-slate-400;
+}
+
+.configureBtn {
+  @apply text-xs p-1 px-2 flex items-center gap-1 font-mono transition-all cursor-pointer;
+  background: transparent !important;
+  border: 1px solid #334155 !important;
+  --bs-btn-border-color: #334155 !important;
+  color: #94a3b8 !important;
+}
+.configureBtn:hover {
+  border-color: rgba(6, 182, 212, 0.6) !important;
+  --bs-btn-border-color: rgba(6, 182, 212, 0.6) !important;
+  color: #67e8f9 !important;
+}
+
+.configureBtnText {
+  @apply text-[10px] uppercase;
+}
+
+.configureIcon {
+  @apply w-3.5 h-3.5;
+}
+
+/* Systems Grid */
+.systemsGrid {
+  @apply grid grid-cols-1 lg:grid-cols-11 gap-4 items-center;
+}
+
+.systemCard {
+  @apply lg:col-span-5 rounded-lg p-4 transition-all bg-slate-900/60;
+  border: 1px solid rgba(6, 182, 212, 0.5);
+}
+
+.systemCardHeader {
+  @apply flex items-center justify-between mb-2;
+}
+
+.systemCardTitle {
+  @apply text-[11px] font-mono uppercase tracking-wider text-slate-300 flex items-center gap-1.5;
+}
+
+.originDot {
+  @apply w-2 h-2 rounded-full bg-cyan-400;
+}
+
+.destDot {
+  @apply w-2 h-2 rounded-full bg-indigo-400;
+}
+
+.secBadge {
+  @apply text-[10px] font-mono px-2 py-0.5 rounded border;
+}
+
+.dropdownWrapper {
+  @apply relative;
+}
+
+.systemDropdownBtn {
+  @apply w-full text-left flex items-center justify-between px-3 py-2 rounded-lg text-white font-bold text-base cursor-pointer transition-all;
+  font-family: 'Chakra Petch', -apple-system, sans-serif;
+  background-color: #0c1018 !important;
+  border: 1px solid #334155 !important;
+  --bs-btn-border-color: #334155 !important;
+}
+.systemDropdownBtn:hover {
+  border-color: rgba(6, 182, 212, 0.6) !important;
+  --bs-btn-border-color: rgba(6, 182, 212, 0.6) !important;
+}
+
+.systemDropdownRegion {
+  @apply text-xs font-sans font-normal text-slate-300;
+}
+
+.dropdownMenu {
+  @apply absolute top-full left-0 right-0 mt-1.5 border border-slate-800 rounded-lg shadow-2xl z-30 max-h-60 overflow-y-auto p-2;
+  background-color: #0c1018;
+}
+
+.searchInput {
+  @apply w-full px-2.5 py-1.5 text-xs rounded text-slate-200 mb-2 font-mono;
+  background-color: #0f172a !important;
+  border: 1px solid #334155 !important;
+}
+.searchInput:focus {
+  outline: none;
+  border-color: #06b6d4 !important;
+}
+
+.dropdownList {
+  @apply space-y-1;
+}
+
+.systemItemBtn {
+  @apply w-full flex items-center justify-between px-2.5 py-1.5 rounded text-left text-xs cursor-pointer;
+  background: transparent !important;
+  border: none !important;
+  --bs-btn-border-color: transparent !important;
+  box-shadow: none !important;
+}
+.systemItemBtn:hover {
+  background-color: #1e293b !important;
+}
+
+.systemItemName {
+  @apply text-white font-medium;
+}
+
+.systemItemMeta {
+  @apply flex items-center gap-2;
+}
+
+.systemItemRegion {
+  @apply text-[11px] text-slate-300;
+}
+
+.systemItemSecBadge {
+  @apply text-[10px] font-mono px-1.5 py-0.5 rounded border;
+}
+
+.stationWrapper {
+  @apply mt-3;
+}
+
+.stationLabel {
+  @apply block text-[10px] font-mono text-slate-300 uppercase mb-1;
+}
+
+.stationInput {
+  @apply w-full px-2.5 py-1.5 text-xs rounded text-slate-300;
+  background-color: #0c1018 !important;
+  border: 1px solid #1e293b !important;
+}
+.stationInput:focus {
+  outline: none;
+  border-color: #06b6d4 !important;
+}
+
+/* Swap / Connector */
+.swapWrapper {
+  @apply lg:col-span-1 flex flex-col items-center justify-center py-2 lg:py-0;
+}
+
+.swapBtn {
+  @apply p-2 rounded-full transition-all cursor-pointer;
+  background-color: rgba(15, 23, 42, 0.6) !important;
+  border: 1px solid #334155 !important;
+  --bs-btn-border-color: #334155 !important;
+  color: #94a3b8 !important;
+}
+.swapBtn:hover {
+  border-color: rgba(6, 182, 212, 0.6) !important;
+  --bs-btn-border-color: rgba(6, 182, 212, 0.6) !important;
+  color: #67e8f9 !important;
+}
+
+.swapIcon {
+  @apply w-4 h-4;
+}
+
+.swapLabel {
+  @apply hidden lg:block text-[10px] font-mono text-slate-500 mt-1 uppercase;
+}
+
+/* Navigation Telemetry Bar */
+.telemetryGrid {
+  @apply mt-4 pt-4 border-t border-slate-300/60 grid grid-cols-2 sm:grid-cols-4 gap-3;
+}
+
+.telemetryCard {
+  @apply p-2.5 rounded-lg bg-slate-900/60;
+  border: 1px solid rgba(6, 182, 212, 0.5);
+}
+
+.telemetryLabel {
+  @apply block text-[10px] font-mono text-slate-300 uppercase;
+}
+
+.serviceBadge {
+  @apply inline-block mt-1 text-xs px-2 py-0.5 rounded border font-medium;
+}
+
+.telemetryValueRow {
+  @apply flex items-baseline gap-1 mt-1;
+}
+
+.telemetryValueCyan {
+  @apply text-base font-mono font-bold text-cyan-300;
+}
+
+.telemetryValueWhite {
+  @apply text-base font-mono font-bold text-slate-200;
+}
+
+.telemetryUnit {
+  @apply text-xs text-slate-300;
+}
+
+.riskRatingRow {
+  @apply flex items-center gap-1.5 mt-1 text-xs font-semibold;
+}
+
+.riskRatingSafe {
+  @apply text-emerald-400 flex items-center gap-1;
+}
+
+.riskRatingWarning {
+  @apply text-amber-400 flex items-center gap-1;
+}
+
+.riskRatingIcon {
+  @apply w-3.5 h-3.5;
+}

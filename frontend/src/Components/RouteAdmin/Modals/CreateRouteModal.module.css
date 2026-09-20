@@ -1,0 +1,72 @@
+@reference "@/App.css";
+
+.modalBody {
+  @apply p-4 rounded-lg bg-slate-900/60 border border-slate-800;
+}
+
+@media (min-width: 640px) {
+  .modalBody {
+    @apply grid-cols-4;
+  }
+}
+
+.ratesBreakdownLabel {
+  @apply block text-[10px] font-mono text-slate-400 uppercase;
+}
+
+.ratesInput,
+:global(.form-control).ratesInput {
+  @apply w-full px-2.5 py-1.5 text-xs bg-[#0c1018] border border-slate-800 rounded text-slate-300;
+  background-color: #0c1018 !important;
+  color: #cbd5e1 !important;
+  font-size: 0.75rem !important;
+  line-height: 1rem !important;
+  padding: 0.375rem 0.625rem !important;
+  border: 1px solid rgb(30 41 59) !important;
+  border-radius: 0.25rem !important;
+}
+
+.ratesInput:focus,
+:global(.form-control).ratesInput:focus {
+  @apply border-cyan-500 shadow-none outline-none;
+  border-color: #06b6d4 !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.ratesInput:disabled,
+:global(.form-control).ratesInput:disabled {
+  @apply bg-[#080b11] border-slate-900 text-slate-500 cursor-not-allowed;
+  background-color: #080b11 !important;
+  border-color: #0f172a !important;
+  color: #64748b !important;
+  opacity: 0.7 !important;
+}
+
+.ratesSelect,
+:global(.form-select).ratesSelect {
+  @apply w-full px-2.5 py-1.5 text-xs bg-[#0c1018] border border-slate-800 rounded text-slate-300;
+  background-color: #0c1018 !important;
+  color: #cbd5e1 !important;
+  font-size: 0.75rem !important;
+  line-height: 1rem !important;
+  padding: 0.375rem 0.625rem !important;
+  border: 1px solid rgb(30 41 59) !important;
+  border-radius: 0.25rem !important;
+}
+
+.ratesSelect:focus,
+:global(.form-select).ratesSelect:focus {
+  @apply border-cyan-500 shadow-none outline-none;
+  border-color: #06b6d4 !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.validationError {
+  @apply p-3 rounded-lg bg-red-950/50 border border-red-500/40 text-red-300 text-xs mb-4;
+}
+
+.routeLabel {
+  @apply block text-xs font-mono text-slate-300 uppercase;
+}

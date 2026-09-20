@@ -1,0 +1,391 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: AA Fenrir\n"
+"Report-Msgid-Bugs-To: https://weblate.geuthur.de/projects/alliance-auth/aa-fenrir/\n"
+"POT-Creation-Date: 2026-09-20 17:08+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
+"1 : 2;\n"
+#: aafenrir/api/contract.py:36 aafenrir/api/contract.py:103
+#: aafenrir/api/contract.py:170 aafenrir/api/contract.py:265
+#: aafenrir/api/contract.py:288 aafenrir/api/contract.py:343
+#: aafenrir/api/contract.py:396 aafenrir/api/contract.py:420
+#: aafenrir/api/general.py:65 aafenrir/api/general.py:107
+msgid "Permission Denied."
+msgstr ""
+
+#: aafenrir/api/contract.py:114 aafenrir/api/contract.py:270
+msgid "Route preset not found."
+msgstr ""
+
+#: aafenrir/api/contract.py:174
+msgid "Origin and destination systems are required."
+msgstr ""
+
+#: aafenrir/api/contract.py:181 aafenrir/api/contract.py:350
+#: aafenrir/api/eve_sde.py:40
+msgid "Solar system not found."
+msgstr ""
+
+#: aafenrir/api/contract.py:275
+msgid "Route preset deleted successfully."
+msgstr ""
+
+#: aafenrir/api/contract.py:403
+msgid "Route system not found."
+msgstr ""
+
+#: aafenrir/api/contract.py:407
+msgid "Route system removed successfully."
+msgstr ""
+
+#: aafenrir/api/eve_sde.py:34 aafenrir/api/eve_sde.py:55
+msgid "You do not have access to this resource."
+msgstr ""
+
+#: aafenrir/api/general.py:33
+msgid "Calculator"
+msgstr ""
+
+#: aafenrir/api/general.py:34
+msgid "Contracts Queue"
+msgstr ""
+
+#: aafenrir/api/general.py:35
+msgid "Settings"
+msgstr ""
+
+#: aafenrir/api/general.py:40
+msgid "Route Admin"
+msgstr ""
+
+#: aafenrir/api/general.py:44
+msgid "Add Company"
+msgstr ""
+
+#: aafenrir/api/general.py:126
+msgid "Invalid input data. Please check the format and try again."
+msgstr ""
+
+#: aafenrir/api/general.py:132
+msgid "User settings updated successfully."
+msgstr ""
+
+#: aafenrir/forms.py:14
+msgid "Disable Notifications"
+msgstr ""
+
+#: aafenrir/forms.py:18
+msgid "Check this box to disable notifications for expired belt timers."
+msgstr ""
+
+#: aafenrir/helpers/choice.py:17 aafenrir/models/fenrir.py:105
+msgid "Character"
+msgstr ""
+
+#: aafenrir/helpers/choice.py:18
+msgid "Corporation"
+msgstr ""
+
+#: aafenrir/helpers/choice.py:19
+msgid "Alliance"
+msgstr ""
+
+#: aafenrir/helpers/choice.py:25
+msgid "Pending"
+msgstr ""
+
+#: aafenrir/helpers/choice.py:26
+msgid "In Progress"
+msgstr ""
+
+#: aafenrir/helpers/choice.py:27
+msgid "Finished Issuer"
+msgstr ""
+
+#: aafenrir/helpers/choice.py:28
+msgid "Finished Contractor"
+msgstr ""
+
+#: aafenrir/helpers/choice.py:29
+msgid "Finished"
+msgstr ""
+
+#: aafenrir/helpers/choice.py:30
+msgid "Canceled"
+msgstr ""
+
+#: aafenrir/helpers/choice.py:31
+msgid "Rejected"
+msgstr ""
+
+#: aafenrir/helpers/choice.py:32
+msgid "Failed"
+msgstr ""
+
+#: aafenrir/helpers/choice.py:33
+msgid "Deleted"
+msgstr ""
+
+#: aafenrir/helpers/choice.py:34
+msgid "Reversed"
+msgstr ""
+
+#: aafenrir/helpers/choice.py:59
+msgid "Jumpfreighter"
+msgstr ""
+
+#: aafenrir/helpers/choice.py:60
+msgid "Deep Space Transport"
+msgstr ""
+
+#: aafenrir/helpers/choice.py:61
+msgid "Freighter"
+msgstr ""
+
+#: aafenrir/helpers/choice.py:67
+msgid "Safe"
+msgstr ""
+
+#: aafenrir/helpers/choice.py:68
+msgid "Cyno Guarded"
+msgstr ""
+
+#: aafenrir/managers.py:323
+#, python-format
+msgid "%s: Contracts not modified since last check."
+msgstr ""
+
+#: aafenrir/models/fenrir.py:90 aafenrir/models/fenrir.py:91
+msgid "contract handler"
+msgstr ""
+
+#: aafenrir/models/fenrir.py:98
+msgid "organization"
+msgstr ""
+
+#: aafenrir/models/fenrir.py:107
+msgid "Character used for syncing contracts"
+msgstr ""
+
+#: aafenrir/models/fenrir.py:114
+msgid "version hash"
+msgstr ""
+
+#: aafenrir/models/fenrir.py:115
+msgid "hash to identify changes to contracts"
+msgstr ""
+
+#: aafenrir/models/fenrir.py:121
+msgid "last sync at"
+msgstr ""
+
+#: aafenrir/models/fenrir.py:122
+msgid "when the last sync happened"
+msgstr ""
+
+#: aafenrir/models/fenrir.py:179 aafenrir/models/fenrir.py:259
+msgid "ID"
+msgstr ""
+
+#: aafenrir/models/fenrir.py:182
+msgid "Category"
+msgstr ""
+
+#: aafenrir/models/fenrir.py:184 aafenrir/models/fenrir.py:273
+msgid "Name"
+msgstr ""
+
+#: aafenrir/models/fenrir.py:252
+msgid "Location"
+msgstr ""
+
+#: aafenrir/models/fenrir.py:253
+msgid "Locations"
+msgstr ""
+
+#: aafenrir/models/fenrir.py:328 aafenrir/models/fenrir.py:681
+msgid "Contract"
+msgstr ""
+
+#: aafenrir/models/fenrir.py:329
+msgid "Contracts"
+msgstr ""
+
+#: aafenrir/models/fenrir.py:338
+msgid "Contract ID"
+msgstr ""
+
+#: aafenrir/models/fenrir.py:346
+msgid "Acceptor"
+msgstr ""
+
+#: aafenrir/models/fenrir.py:348
+msgid "Character of acceptor or None if accepted by corp"
+msgstr ""
+
+#: aafenrir/models/fenrir.py:357
+msgid "Acceptor Corporation"
+msgstr ""
+
+#: aafenrir/models/fenrir.py:359
+msgid "Corporation of acceptor"
+msgstr ""
+
+#: aafenrir/models/fenrir.py:362
+msgid "Collateral"
+msgstr ""
+
+#: aafenrir/models/fenrir.py:367
+msgid "Date Accepted"
+msgstr ""
+
+#: aafenrir/models/fenrir.py:374
+msgid "Date Completed"
+msgstr ""
+
+#: aafenrir/models/fenrir.py:377
+msgid "Date Expired"
+msgstr ""
+
+#: aafenrir/models/fenrir.py:379
+msgid "Date Issued"
+msgstr ""
+
+#: aafenrir/models/fenrir.py:387 aafenrir/models/fenrir.py:691
+msgid "Date Notified"
+msgstr ""
+
+#: aafenrir/models/fenrir.py:388
+msgid "Datetime of latest notification, None = none has been sent"
+msgstr ""
+
+#: aafenrir/models/fenrir.py:392
+msgid "Days to Complete"
+msgstr ""
+
+#: aafenrir/models/fenrir.py:398
+msgid "End Location"
+msgstr ""
+
+#: aafenrir/models/fenrir.py:402
+msgid "For Corporation"
+msgstr ""
+
+#: aafenrir/models/fenrir.py:406
+msgid "Issuer Corporation"
+msgstr ""
+
+#: aafenrir/models/fenrir.py:413
+msgid "Issuer"
+msgstr ""
+
+#: aafenrir/models/fenrir.py:417
+msgid "Reward"
+msgstr ""
+
+#: aafenrir/models/fenrir.py:422
+msgid "Start Location"
+msgstr ""
+
+#: aafenrir/models/fenrir.py:430 aafenrir/models/fenrir.py:688
+msgid "Status"
+msgstr ""
+
+#: aafenrir/models/fenrir.py:438
+msgid "title"
+msgstr ""
+
+#: aafenrir/models/fenrir.py:441
+msgid "Volume"
+msgstr ""
+
+#: aafenrir/models/fenrir.py:696
+msgid "Contract customer notification"
+msgstr ""
+
+#: aafenrir/models/general.py:29
+msgid "Can access this app"
+msgstr ""
+
+#: aafenrir/models/general.py:30
+msgid "Can manage"
+msgstr ""
+
+#: aafenrir/models/general.py:31
+msgid "Full access"
+msgstr ""
+
+#: aafenrir/models/route.py:60 aafenrir/models/route.py:72
+#: aafenrir/models/route.py:78 aafenrir/models/route.py:138
+msgid "N/A"
+msgstr ""
+
+#: aafenrir/models/route.py:79
+msgid "Type of service for the route"
+msgstr ""
+
+#: aafenrir/models/route.py:84
+msgid "Maximum volume for the route"
+msgstr ""
+
+#: aafenrir/models/route.py:89
+msgid "Maximum collateral for the route"
+msgstr ""
+
+#: aafenrir/models/route.py:94
+msgid "Base fee for the route"
+msgstr ""
+
+#: aafenrir/models/route.py:99
+msgid "Fee per cubic meter for the route"
+msgstr ""
+
+#: aafenrir/models/route.py:106
+msgid "Fee per light-year for the route"
+msgstr ""
+
+#: aafenrir/models/route.py:111
+msgid "Collateral percentage for the route"
+msgstr ""
+
+#: aafenrir/models/route.py:116
+msgid "Minimum reward for the route"
+msgstr ""
+
+#: aafenrir/models/route.py:121
+msgid "Estimated time for the route in minutes"
+msgstr ""
+
+#: aafenrir/models/route.py:125
+msgid "Indicates if the route is a cyno route"
+msgstr ""
+
+#: aafenrir/models/route.py:132
+msgid "Cyno waypoints for the route"
+msgstr ""
+
+#: aafenrir/models/route.py:139
+msgid "Danger level for the route"
+msgstr ""
+
+#: aafenrir/templates/aafenrir/base.html:5
+#: aafenrir/templates/aafenrir/base.html:9
+msgid "Fenrir"
+msgstr ""
+
+#: aafenrir/templates/aafenrir/base.html:64
+msgid "Internal Server Error"
+msgstr ""

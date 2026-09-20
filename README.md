@@ -1,0 +1,148 @@
+# AA Fenrir.<a name="aa-fenrir"></a>
+
+> [!WARNING]
+> Before you create Models, etc remove the 0001_initial.py from migrations folder if you dont have created own one.
+
+A Fenrir App that templating fenrir to fenrir
+
+______________________________________________________________________
+
+<!-- mdformat-toc start --slug=github --maxlevel=6 --minlevel=1 -->
+
+- [AA Fenrir.](#aa-fenrir)
+  - [Features](#features)
+  - [Upcoming](#upcoming)
+  - [Installation](#installation)
+    - [Step 1 - Install the Package](#step-1---install-the-package)
+    - [Step 2 - Configure Alliance Auth](#step-2---configure-alliance-auth)
+    - [Step 3 - Add the Scheduled Tasks](#step-3---add-the-scheduled-tasks)
+    - [Step 3.1 - (Optional) Add own Logger File](#step-31---optional-add-own-logger-file)
+    - [Step 4 - Migrate & Preload EVE SDE Data](#step-4---migrate--preload-eve-sde-data)
+    - [Step 4.1 - Migrate App and collect static](#step-41---migrate-app-and-collect-static)
+    - [Step 5 - Setting up Permissions](#step-5---setting-up-permissions)
+    - [Step 6 - (Optional) Setting up Compatibilies](#step-6---optional-setting-up-compatibilies)
+  - [Translations](#translations)
+  - [Contributing](#contributing)
+
+<!-- mdformat-toc end -->
+
+## Features<a name="features"></a>
+
+- Fenrir
+  - Copy & Paste
+
+## Upcoming<a name="upcoming"></a>
+
+- Crazy Shit incoming.
+
+## Installation<a name="installation"></a>
+
+> [!NOTE]
+> AA Fenrir needs at least Alliance Auth v5
+> Please make sure to update your Alliance Auth before you install this APP
+
+### Step 1 - Install the Package<a name="step-1---install-the-package"></a>
+
+Make sure you're in your virtual environment (venv) of your Alliance Auth then install the pakage.
+
+```shell
+pip install aa-fenrir
+```
+
+### Step 2 - Configure Alliance Auth<a name="step-2---configure-alliance-auth"></a>
+
+Configure your Alliance Auth settings (`local.py`) as follows:
+
+```python
+INSTALLED_APPS = [
+    # other apps
+    "eve_sde",  # only if it not already existing
+    "aafenrir",
+    # other apps?
+]
+
+# This line is right below the `INSTALLED_APPS` list, if not already exist!
+INSTALLED_APPS = ["modeltranslation"] + INSTALLED_APPS
+```
+
+### Step 3 - Add the Scheduled Tasks<a name="step-3---add-the-scheduled-tasks"></a>
+
+To set up the Scheduled Tasks add following code to your `local.py`
+
+```python
+if "aafenrir" in INSTALLED_APPS:
+    CELERYBEAT_SCHEDULE["AA Fenrir :: Test Task"] = {
+        "task": "aafenrir.tasks.fenrir_task",
+        "schedule": crontab(minute=0, hour="*/1"),
+    }
+```
+
+### Step 3.1 - (Optional) Add own Logger File<a name="step-31---optional-add-own-logger-file"></a>
+
+To set up the Logger add following code to your `local.py`
+Ensure that you have writing permission in logs folder.
+
+```python
+LOGGING["handlers"]["aafenrir_file"] = {
+    "level": "INFO",
+    "class": "logging.handlers.RotatingFileHandler",
+    "filename": os.path.join(BASE_DIR, "log/aafenrir.log"),
+    "formatter": "verbose",
+    "maxBytes": 1024 * 1024 * 5,
+    "backupCount": 5,
+}
+LOGGING["loggers"]["extensions.aafenrir"] = {
+    "handlers": ["aafenrir_file"],
+    "level": "DEBUG",
+}
+```
+
+### Step 4 - Migrate & Preload EVE SDE Data<a name="step-4---migrate--preload-eve-sde-data"></a>
+
+AA Skillfarm uses EVE SDE data to map IDs to names for EveTypes. You will need to preload some data from SDE once.
+
+```shell
+python manage.py migrate eve_sde
+python manage.py esde_load_sde
+```
+
+### Step 4.1 - Migrate App and collect static<a name="step-41---migrate-app-and-collect-static"></a>
+
+Migrate the app and collect static.
+
+```shell
+python manage.py migrate aafenrir
+python manage.py collectstatic --noinput
+```
+
+### Step 5 - Setting up Permissions<a name="step-5---setting-up-permissions"></a>
+
+With the Following IDs you can set up the permissions for the Fenrir
+
+| ID              | Description                      |                                                        |
+| :-------------- | :------------------------------- | :----------------------------------------------------- |
+| `basic_access`  | Can access the Fenrir module     | All Members with the Permission can access the Fenrir. |
+| `manage_access` | Can Manage Fenrir module         | Can manage Application                                 |
+| `full_access`   | Has full access to Fenrir Module | Has Full Access                                        |
+
+### Step 6 - (Optional) Setting up Compatibilies<a name="step-6---optional-setting-up-compatibilies"></a>
+
+The Following Settings can be setting up in the `local.py`
+
+- AA_FENRIR_APP_NAME: `"YOURNAME"` - Set the name of the APP
+- AA_FENRIR_TASKS_TIME_LIMIT: `7200` - Defines the time (in seconds) a task will timeout
+
+## Translations<a name="translations"></a>
+
+[![Translations](https://weblate.geuthur.de/widget/allianceauth/aa-fenrir/multi-auto.svg)](https://weblate.geuthur.de/engage/allianceauth/)
+
+Help us translate this app into your language or improve existing translations. Join our team!"
+
+## Contributing<a name="contributing"></a>
+
+You want to improve the project?
+Please ensure you read the [Contribution Guidelines]
+
+<!-- MD Links -->
+
+[contribution guidelines]: https://github.com/Geuthur/aa-fenrir/blob/master/CONTRIBUTING.md "Contribution Guidelines"
