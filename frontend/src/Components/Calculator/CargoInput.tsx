@@ -61,6 +61,7 @@ export function CargoInput({
   const rawPercent = Math.round((volumeM3 / effectiveCapacity) * 100);
   const isOverload = volumeM3 > effectiveCapacity;
   const barFillPercent = Math.min(100, rawPercent);
+  const isSubsidyDisabled = Boolean(corridor && corridor.has_alliance_subsidy === false);
 
   const handleParseText = (text: string) => {
     setPastedText(text);
@@ -103,9 +104,9 @@ export function CargoInput({
         <Button
           id="open-clipboard-appraiser"
           onClick={() => setShowClipboardModal(true)}
-          className={styles.pasteBtn}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg !bg-slate-900 border !border-slate-700 hover:!bg-slate-800 hover:!border-cyan-500/50 !text-cyan-300 text-xs font-semibold transition-all cursor-pointer shadow"
         >
-          <Clipboard className={styles.pasteBtnIcon} />
+          <Clipboard className="w-4 h-4" />
           <span>{t('Paste EVE Inventory')}</span>
         </Button>
       </div>
@@ -263,21 +264,53 @@ export function CargoInput({
         </div>
 
         {/* Corp Subsidy / Alliance Member */}
-        <div className={styles.perkCard}>
+        <div
+          className={`${styles.perkCard} ${
+            isSubsidyDisabled
+              ? 'opacity-60 !border-dashed !border-slate-700/80 !bg-slate-900/40'
+              : ''
+          }`}
+        >
           <div className={styles.perkInfo}>
-            <div className={`${styles.perkIconBox} ${isCorpSubsidized ? styles.perkIconEmeraldActive : styles.perkIconInactive}`}>
+            <div
+              className={`${styles.perkIconBox} ${
+                isSubsidyDisabled
+                  ? '!bg-slate-800/80 !text-slate-500 !border-slate-700/60'
+                  : isCorpSubsidized
+                  ? styles.perkIconEmeraldActive
+                  : styles.perkIconInactive
+              }`}
+            >
               <Users className={styles.perkIcon} />
             </div>
             <div>
-              <div className={styles.perkTitle}>{t('Alliance Subsidy')}</div>
-              <div className={styles.perkSubtitle}>{t('Auth role discount (-12%)')}</div>
+              <div className="flex items-center gap-2">
+                <div className={styles.perkTitle}>{t('Alliance Subsidy')}</div>
+                {isSubsidyDisabled && (
+                  <span className="text-[9px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-rose-950/60 text-rose-400 border border-rose-800/60">
+                    {t('No Route Subsidy')}
+                  </span>
+                )}
+              </div>
+              <div
+                className={
+                  isSubsidyDisabled
+                    ? 'text-[11px] text-slate-500 font-mono mt-0.5'
+                    : styles.perkSubtitle
+                }
+              >
+                {isSubsidyDisabled
+                  ? t('Subsidy disabled for this route')
+                  : t('Auth role discount (-12%)')}
+              </div>
             </div>
           </div>
           <Form.Check
             id="corp-subsidy-toggle"
-            checked={isCorpSubsidized}
-            onChange={(e) => setIsCorpSubsidized(e.target.checked)}
-            className={styles.checkEmerald}
+            checked={isSubsidyDisabled ? false : isCorpSubsidized}
+            disabled={isSubsidyDisabled}
+            onChange={(e) => !isSubsidyDisabled && setIsCorpSubsidized(e.target.checked)}
+            className={isSubsidyDisabled ? 'opacity-30 cursor-not-allowed' : styles.checkEmerald}
           />
         </div>
       </div>

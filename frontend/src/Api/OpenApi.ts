@@ -92,40 +92,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/aafenrir/api/contract/{contract_id}/": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get Contract */
-        get: operations["aafenrir_api_contract_get_contract"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/aafenrir/api/contract/queue/": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Get Contract Queue */
-        get: operations["aafenrir_api_contract_get_contract_queue"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/aafenrir/api/contract/systems/": {
         parameters: {
             query?: never;
@@ -161,15 +127,15 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/aafenrir/api/eve_sde/solar-systems/search/": {
+    "/aafenrir/api/contract/queue/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /** Search Solar Systems */
-        get: operations["aafenrir_api_eve_sde_search_solar_systems"];
+        /** Get Contract Queue */
+        get: operations["aafenrir_api_contract_get_contract_queue"];
         put?: never;
         post?: never;
         delete?: never;
@@ -195,6 +161,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/aafenrir/api/eve_sde/solar-systems/search/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Search Solar Systems */
+        get: operations["aafenrir_api_eve_sde_search_solar_systems"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -206,6 +189,7 @@ export interface components {
          *     Parameters:
          *         name (str): The name of the menu link.
          *         link (str | None): The URL or path the menu link points to.
+         *         is_external (bool): Whether the link is outside of React and should be opened directly.
          */
         MenuLink: {
             /** Name */
@@ -216,7 +200,7 @@ export interface components {
              * Is External
              * @default false
              */
-            is_external?: boolean;
+            is_external: boolean;
         };
         /**
          * MenuModalSchema
@@ -375,6 +359,11 @@ export interface components {
              * @default
              */
             description: string;
+            /**
+             * Has Alliance Subsidy
+             * @default true
+             */
+            has_alliance_subsidy: boolean;
         };
         /**
          * CreateRoutePresetSchema
@@ -457,6 +446,126 @@ export interface components {
              * @default safe
              */
             danger_level: string;
+            /**
+             * Has Alliance Subsidy
+             * @default true
+             */
+            has_alliance_subsidy: boolean;
+        };
+        /**
+         * RouteSystemSchema
+         * @description Schema for an available route solar system.
+         */
+        RouteSystemSchema: {
+            /** Id */
+            id: number;
+            /** System Id */
+            system_id: number;
+            /** Name */
+            name: string;
+            /** Security Status */
+            security_status: number;
+            /** Security Class */
+            security_class: string;
+            /**
+             * Region Name
+             * @default
+             */
+            region_name: string;
+            /**
+             * X
+             * @default 0
+             */
+            x: number;
+            /**
+             * Y
+             * @default 0
+             */
+            y: number;
+            /**
+             * Z
+             * @default 0
+             */
+            z: number;
+        };
+        /**
+         * AddRouteSystemSchema
+         * @description Schema for adding a solar system to available route systems.
+         */
+        AddRouteSystemSchema: {
+            /** System Id */
+            system_id: number;
+        };
+        /**
+         * ContractSchema
+         * @description Schema for courier contract queue data.
+         */
+        ContractSchema: {
+            /** Id */
+            id: number;
+            /** Contract Id */
+            contract_id: number;
+            /** Title */
+            title?: string | null;
+            /** Status */
+            status: string;
+            /** Status Display */
+            status_display: string;
+            /**
+             * Issuer Name
+             * @default Unknown
+             */
+            issuer_name: string;
+            /**
+             * Issuer Corporation Name
+             * @default
+             */
+            issuer_corporation_name: string;
+            /**
+             * Issuer Corporation Ticker
+             * @default
+             */
+            issuer_corporation_ticker: string;
+            /** Start Location Name */
+            start_location_name: string;
+            /** Start Location Solar System */
+            start_location_solar_system: string;
+            /** End Location Name */
+            end_location_name: string;
+            /** End Location Solar System */
+            end_location_solar_system: string;
+            /** Volume */
+            volume: number;
+            /** Collateral */
+            collateral: number;
+            /** Reward */
+            reward: number;
+            /**
+             * Date Issued
+             * Format: date-time
+             */
+            date_issued: string;
+            /**
+             * Date Expired
+             * Format: date-time
+             */
+            date_expired: string;
+            /** Date Accepted */
+            date_accepted?: string | null;
+            /** Date Completed */
+            date_completed?: string | null;
+            /**
+             * Days To Complete
+             * @default 0
+             */
+            days_to_complete: number;
+            /** Acceptor Name */
+            acceptor_name?: string | null;
+            /**
+             * For Corporation
+             * @default false
+             */
+            for_corporation: boolean;
         };
         /**
          * SolarSystemSchema
@@ -507,65 +616,23 @@ export interface components {
             y_2d: number;
         };
         /**
-         * ContractSchema
-         * @description Schema for courier contract queue data.
-         */
-        ContractSchema: {
-            id: number;
-            contract_id: number;
-            title?: string | null;
-            status: string;
-            status_display: string;
-            issuer_name: string;
-            issuer_corporation_name?: string;
-            issuer_corporation_ticker?: string;
-            start_location_name: string;
-            start_location_solar_system: string;
-            end_location_name: string;
-            end_location_solar_system: string;
-            volume: number;
-            collateral: number;
-            reward: number;
-            date_issued: string;
-            date_expired: string;
-            date_accepted?: string | null;
-            date_completed?: string | null;
-            days_to_complete: number;
-            acceptor_name?: string | null;
-            for_corporation: boolean;
-        };
-        /**
-         * RouteSystemSchema
-         * @description Schema for an available route solar system.
-         */
-        RouteSystemSchema: {
-            id: number;
-            system_id: number;
-            name: string;
-            security_status: number;
-            security_class: string;
-            region_name?: string;
-            x?: number;
-            y?: number;
-            z?: number;
-        };
-        /**
-         * AddRouteSystemSchema
-         * @description Schema for adding a solar system to available route systems.
-         */
-        AddRouteSystemSchema: {
-            system_id: number;
-        };
-        /**
          * SolarSystemSearchSchema
          * @description Schema for solar system search results.
          */
         SolarSystemSearchSchema: {
+            /** Id */
             id: number;
+            /** Name */
             name: string;
+            /** Security Status */
             security_status: number;
+            /** Security Class */
             security_class: string;
-            region_name?: string;
+            /**
+             * Region Name
+             * @default
+             */
+            region_name: string;
         };
     };
     responses: never;
@@ -897,103 +964,6 @@ export interface operations {
             };
         };
     };
-    aafenrir_api_contract_get_contract: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                contract_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["MenuSchema"];
-                };
-            };
-        };
-    };
-    aafenrir_api_eve_sde_get_solar_system: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                eve_id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SolarSystemSchema"];
-                };
-            };
-            /** @description Forbidden */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
-                };
-            };
-            /** @description Not Found */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
-                };
-            };
-        };
-    };
-    aafenrir_api_contract_get_contract_queue: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ContractSchema"][];
-                };
-            };
-            /** @description Forbidden */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
-                };
-            };
-        };
-    };
     aafenrir_api_contract_get_route_systems: {
         parameters: {
             query?: never;
@@ -1091,6 +1061,81 @@ export interface operations {
                     "application/json": {
                         [key: string]: unknown;
                     };
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
+    aafenrir_api_contract_get_contract_queue: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ContractSchema"][];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
+    aafenrir_api_eve_sde_get_solar_system: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                eve_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SolarSystemSchema"];
                 };
             };
             /** @description Forbidden */

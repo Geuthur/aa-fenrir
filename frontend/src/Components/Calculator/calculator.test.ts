@@ -148,5 +148,33 @@ describe('Calculator doesCorridorMatch (Bidirectional Preset Matching)', () => {
     expect(doesCorridorMatch(null, jita, dq)).toBe(false);
     expect(doesCorridorMatch(testCorridor, jita, jita)).toBe(false);
   });
+
+  it('should apply subsidy discount when enabled and allowed on corridor', () => {
+    const quote = calculateTransportQuote({
+      corridor: { ...testCorridor, has_alliance_subsidy: true },
+      origin: jita,
+      destination: dq,
+      volumeM3: 100000,
+      collateralIsk: 1000000000,
+      isRush: false,
+      isCorpSubsidized: true,
+      selectedShipId: 'rhea',
+    });
+    expect(quote.subsidizedDiscount).toBeGreaterThan(0);
+  });
+
+  it('should not apply subsidy discount when has_alliance_subsidy is false on corridor', () => {
+    const quote = calculateTransportQuote({
+      corridor: { ...testCorridor, has_alliance_subsidy: false },
+      origin: jita,
+      destination: dq,
+      volumeM3: 100000,
+      collateralIsk: 1000000000,
+      isRush: false,
+      isCorpSubsidized: true,
+      selectedShipId: 'rhea',
+    });
+    expect(quote.subsidizedDiscount).toBe(0);
+  });
 });
 

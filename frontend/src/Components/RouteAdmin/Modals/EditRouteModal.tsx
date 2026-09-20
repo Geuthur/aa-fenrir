@@ -76,6 +76,7 @@ function EditRouteForm({
     is_cyno_route: Boolean(preset.is_cyno_route),
     cyno_waypoint_ids: preset.cyno_waypoint_ids || [],
     danger_level: preset.danger_level || 'safe',
+    has_alliance_subsidy: preset.has_alliance_subsidy !== false,
   });
 
   const [originSearch, setOriginSearch] = useState('');
@@ -504,6 +505,24 @@ function EditRouteForm({
                 />
                 <span className="text-xs !text-slate-300 font-medium leading-none">
                   {t('Is Cyno Pipeline Route')}
+                </span>
+              </label>
+            </div>
+
+            <div className="flex items-center pb-2">
+              <label
+                htmlFor="has-alliance-subsidy-edit-chk"
+                className="flex items-center gap-2 cursor-pointer m-0 select-none"
+              >
+                <input
+                  type="checkbox"
+                  id="has-alliance-subsidy-edit-chk"
+                  checked={formData.has_alliance_subsidy ?? true}
+                  onChange={(e) => updateField('has_alliance_subsidy', e.target.checked)}
+                  className="w-4 h-4 rounded !bg-slate-900 !border-slate-700 accent-emerald-500 cursor-pointer m-0"
+                />
+                <span className="text-xs !text-slate-300 font-medium leading-none">
+                  {t('Alliance Subsidy Enabled')}
                 </span>
               </label>
             </div>

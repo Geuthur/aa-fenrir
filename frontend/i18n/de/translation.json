@@ -324,5 +324,10 @@
   "exceeds corridor insurance maximum": "übersteigt das Korridor-Versicherungsmaximum",
   "Standard Freighters cannot safely transit Nullsec stargates! Please use Jump Freighter service.": "Standard-Frachter können Nullsec-Sternentore nicht sicher passieren! Bitte nutzen Sie den Jump-Freighter-Dienst.",
   "Note: This feature works best with the English version of the EVE Online client.": "Hinweis: Dieses Feature funktioniert am besten mit der englischen Version des EVE Online Clients.",
-  "In the EVE Online client, select items in your asset list, press Ctrl+C, and paste here. Our parser calculates volume and estimated market collateral automatically.": "Wähle im EVE Online-Client Gegenstände in deiner Asset-Liste aus, drücke Strg+C und füge sie hier ein. Unser Parser berechnet Volumen und geschätzte Marktsicherheit automatisch."
+  "In the EVE Online client, select items in your asset list, press Ctrl+C, and paste here. Our parser calculates volume and estimated market collateral automatically.": "Wähle im EVE Online-Client Gegenstände in deiner Asset-Liste aus, drücke Strg+C und füge sie hier ein. Unser Parser berechnet Volumen und geschätzte Marktsicherheit automatisch.",
+  "Alliance Subsidy Enabled": "Allianz-Subvention aktiviert",
+  "No Route Subsidy": "Keine Routen-Subvention",
+  "Subsidy disabled for this route": "Subvention für diese Route deaktiviert",
+  "Alliance Member Subsidy:": "Allianz-Mitgliedersubvention:",
+  "Not available on this corridor": "Für diesen Korridor nicht verfügbar"
 }

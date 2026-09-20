@@ -168,12 +168,22 @@ export function QuoteBreakdown({
             </div>
           )}
 
-          {quote.isCorpSubsidized && (
+          {quote.corridor?.has_alliance_subsidy === false ? (
+            <div className="flex items-center justify-between text-xs py-1.5 px-3 rounded bg-slate-900/60 border border-slate-800/80 text-slate-400">
+              <span className="flex items-center gap-1.5 text-slate-400">
+                <span className="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+                {t('Alliance Member Subsidy:')}
+              </span>
+              <span className="text-[11px] font-mono text-rose-400/90 italic">
+                {t('Not available on this corridor')}
+              </span>
+            </div>
+          ) : quote.isCorpSubsidized ? (
             <div className={styles.tariffRowSubsidized}>
               <span>{t('Alliance Member Subsidy Discount (-12%):')}</span>
               <span className={styles.tariffValueSubsidized}>-{formatIsk(quote.subsidizedDiscount)}</span>
             </div>
-          )}
+          ) : null}
         </div>
       </div>
 

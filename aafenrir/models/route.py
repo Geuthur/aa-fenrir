@@ -138,3 +138,8 @@ class RoutePreset(models.Model):
         default=_("N/A"),
         help_text=_("Danger level for the route"),
     )
+
+    has_alliance_subsidy = models.BooleanField(
+        default=True,
+        help_text=_("Indicates if alliance subsidy is enabled for this route"),
+    )

@@ -287,6 +287,87 @@
           }
         ]
       },
+      "put": {
+        "operationId": "aafenrir_api_contract_update_route_preset",
+        "summary": "Update Route Preset",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "preset_id",
+            "schema": {
+              "title": "Preset Id",
+              "type": "integer"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoutePresetSchema"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Contracts"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRoutePresetSchema"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      },
       "delete": {
         "operationId": "aafenrir_api_contract_delete_route_preset",
         "summary": "Delete Route Preset",
@@ -349,16 +430,118 @@
         ]
       }
     },
-    "/aafenrir/api/contract/{contract_id}/": {
+    "/aafenrir/api/contract/systems/": {
       "get": {
-        "operationId": "aafenrir_api_contract_get_contract",
-        "summary": "Get Contract",
+        "operationId": "aafenrir_api_contract_get_route_systems",
+        "summary": "Get Route Systems",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/RouteSystemSchema"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Contracts"
+        ],
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "aafenrir_api_contract_add_route_system",
+        "summary": "Add Route System",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RouteSystemSchema"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Contracts"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddRouteSystemSchema"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    },
+    "/aafenrir/api/contract/system/{system_id}/": {
+      "delete": {
+        "operationId": "aafenrir_api_contract_delete_route_system",
+        "summary": "Delete Route System",
         "parameters": [
           {
             "in": "path",
-            "name": "contract_id",
+            "name": "system_id",
             "schema": {
-              "title": "Contract Id",
+              "title": "System Id",
               "type": "integer"
             },
             "required": true
@@ -370,7 +553,76 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MenuSchema"
+                  "additionalProperties": true,
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Contracts"
+        ],
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    },
+    "/aafenrir/api/contract/queue/": {
+      "get": {
+        "operationId": "aafenrir_api_contract_get_contract_queue",
+        "summary": "Get Contract Queue",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ContractSchema"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response",
+                  "type": "object"
                 }
               }
             }
@@ -446,12 +698,66 @@
           }
         ]
       }
+    },
+    "/aafenrir/api/eve_sde/solar-systems/search/": {
+      "get": {
+        "operationId": "aafenrir_api_eve_sde_search_solar_systems",
+        "summary": "Search Solar Systems",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "default": "",
+              "title": "Query",
+              "type": "string"
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/SolarSystemSearchSchema"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "EVE SDE"
+        ],
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
     }
   },
   "components": {
     "schemas": {
       "MenuLink": {
-        "description": "Represents a link in the menu.\n\nParameters:\n    name (str): The name of the menu link.\n    link (str | None): The URL or path the menu link points to.",
+        "description": "Represents a link in the menu.\n\nParameters:\n    name (str): The name of the menu link.\n    link (str | None): The URL or path the menu link points to.\n    is_external (bool): Whether the link is outside of React and should be opened directly.",
         "properties": {
           "name": {
             "title": "Name",
@@ -460,6 +766,11 @@
           "link": {
             "title": "Link",
             "type": "string"
+          },
+          "is_external": {
+            "default": false,
+            "title": "Is External",
+            "type": "boolean"
           }
         },
         "required": [
@@ -740,6 +1051,14 @@
             "title": "Cyno Waypoints",
             "type": "array"
           },
+          "cyno_waypoint_ids": {
+            "default": [],
+            "items": {
+              "type": "integer"
+            },
+            "title": "Cyno Waypoint Ids",
+            "type": "array"
+          },
           "danger_level": {
             "title": "Danger Level",
             "type": "string"
@@ -748,6 +1067,11 @@
             "default": "",
             "title": "Description",
             "type": "string"
+          },
+          "has_alliance_subsidy": {
+            "default": true,
+            "title": "Has Alliance Subsidy",
+            "type": "boolean"
           }
         },
         "required": [
@@ -858,6 +1182,11 @@
             "default": "safe",
             "title": "Danger Level",
             "type": "string"
+          },
+          "has_alliance_subsidy": {
+            "default": true,
+            "title": "Has Alliance Subsidy",
+            "type": "boolean"
           }
         },
         "required": [
@@ -866,6 +1195,221 @@
           "destination_system_id"
         ],
         "title": "CreateRoutePresetSchema",
+        "type": "object"
+      },
+      "RouteSystemSchema": {
+        "description": "Schema for an available route solar system.",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "system_id": {
+            "title": "System Id",
+            "type": "integer"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "security_status": {
+            "title": "Security Status",
+            "type": "number"
+          },
+          "security_class": {
+            "title": "Security Class",
+            "type": "string"
+          },
+          "region_name": {
+            "default": "",
+            "title": "Region Name",
+            "type": "string"
+          },
+          "x": {
+            "default": 0.0,
+            "title": "X",
+            "type": "number"
+          },
+          "y": {
+            "default": 0.0,
+            "title": "Y",
+            "type": "number"
+          },
+          "z": {
+            "default": 0.0,
+            "title": "Z",
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "system_id",
+          "name",
+          "security_status",
+          "security_class"
+        ],
+        "title": "RouteSystemSchema",
+        "type": "object"
+      },
+      "AddRouteSystemSchema": {
+        "description": "Schema for adding a solar system to available route systems.",
+        "properties": {
+          "system_id": {
+            "title": "System Id",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "system_id"
+        ],
+        "title": "AddRouteSystemSchema",
+        "type": "object"
+      },
+      "ContractSchema": {
+        "description": "Schema for courier contract queue data.",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "contract_id": {
+            "title": "Contract Id",
+            "type": "integer"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "status_display": {
+            "title": "Status Display",
+            "type": "string"
+          },
+          "issuer_name": {
+            "default": "Unknown",
+            "title": "Issuer Name",
+            "type": "string"
+          },
+          "issuer_corporation_name": {
+            "default": "",
+            "title": "Issuer Corporation Name",
+            "type": "string"
+          },
+          "issuer_corporation_ticker": {
+            "default": "",
+            "title": "Issuer Corporation Ticker",
+            "type": "string"
+          },
+          "start_location_name": {
+            "title": "Start Location Name",
+            "type": "string"
+          },
+          "start_location_solar_system": {
+            "title": "Start Location Solar System",
+            "type": "string"
+          },
+          "end_location_name": {
+            "title": "End Location Name",
+            "type": "string"
+          },
+          "end_location_solar_system": {
+            "title": "End Location Solar System",
+            "type": "string"
+          },
+          "volume": {
+            "title": "Volume",
+            "type": "number"
+          },
+          "collateral": {
+            "title": "Collateral",
+            "type": "number"
+          },
+          "reward": {
+            "title": "Reward",
+            "type": "number"
+          },
+          "date_issued": {
+            "format": "date-time",
+            "title": "Date Issued",
+            "type": "string"
+          },
+          "date_expired": {
+            "format": "date-time",
+            "title": "Date Expired",
+            "type": "string"
+          },
+          "date_accepted": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date Accepted"
+          },
+          "date_completed": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date Completed"
+          },
+          "days_to_complete": {
+            "default": 0,
+            "title": "Days To Complete",
+            "type": "integer"
+          },
+          "acceptor_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Acceptor Name"
+          },
+          "for_corporation": {
+            "default": false,
+            "title": "For Corporation",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "contract_id",
+          "status",
+          "status_display",
+          "start_location_name",
+          "start_location_solar_system",
+          "end_location_name",
+          "end_location_solar_system",
+          "volume",
+          "collateral",
+          "reward",
+          "date_issued",
+          "date_expired"
+        ],
+        "title": "ContractSchema",
         "type": "object"
       },
       "SolarSystemSchema": {
@@ -980,6 +1524,40 @@
           "y_2d"
         ],
         "title": "SolarSystemSchema",
+        "type": "object"
+      },
+      "SolarSystemSearchSchema": {
+        "description": "Schema for solar system search results.",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "security_status": {
+            "title": "Security Status",
+            "type": "number"
+          },
+          "security_class": {
+            "title": "Security Class",
+            "type": "string"
+          },
+          "region_name": {
+            "default": "",
+            "title": "Region Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "security_status",
+          "security_class"
+        ],
+        "title": "SolarSystemSearchSchema",
         "type": "object"
       }
     },

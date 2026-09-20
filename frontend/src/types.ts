@@ -49,6 +49,7 @@ export interface FreightCorridor {
   cyno_waypoint_ids?: number[];
   description: string;
   danger_level: 'Safe' | 'Low' | 'Moderate' | 'Dangerous' | 'Cyno-Guarded' | 'Cyno Guarded' | 'cyno_guarded' | string;
+  has_alliance_subsidy?: boolean;
 }
 
 export interface JumpFreighterShip {

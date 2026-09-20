@@ -212,13 +212,12 @@ export function RouteSelector({
           })}
           {onOpenConfigurePresets && (
             <Button
-              size="sm"
               onClick={onOpenConfigurePresets}
               title={t('Customize Quick-Select Presets')}
-              className={styles.configureBtn}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg !bg-slate-900 border !border-slate-700 hover:!bg-slate-800 hover:!border-cyan-500/50 !text-cyan-300 text-xs font-semibold transition-all cursor-pointer shadow"
             >
-              <SlidersHorizontal className={styles.configureIcon} />
-              <span className={styles.configureBtnText}>{t('Configure')}</span>
+              <SlidersHorizontal className="w-4 h-4" />
+              <span>{t('Configure')}</span>
             </Button>
           )}
         </div>

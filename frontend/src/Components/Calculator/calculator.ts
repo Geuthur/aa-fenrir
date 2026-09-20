@@ -129,7 +129,8 @@ export function calculateTransportQuote({
 
   // Surcharges & Discounts
   const rushSurcharge = isRush ? Math.round(subtotal * 0.35) : 0;
-  const subsidizedDiscount = isCorpSubsidized ? Math.round(subtotal * 0.12) : 0;
+  const isSubsidyAllowed = corridor ? corridor.has_alliance_subsidy !== false : true;
+  const subsidizedDiscount = (isCorpSubsidized && isSubsidyAllowed) ? Math.round(subtotal * 0.12) : 0;
 
   const totalReward = Math.max(minReward, subtotal + rushSurcharge - subsidizedDiscount);
 

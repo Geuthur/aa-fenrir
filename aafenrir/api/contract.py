@@ -87,6 +87,9 @@ class ContractApiEndpoints:
                             else p.danger_level
                         ),
                         description="",
+                        has_alliance_subsidy=bool(
+                            getattr(p, "has_alliance_subsidy", True)
+                        ),
                     )
                 )
             return HTTPStatus.OK, results
@@ -155,6 +158,7 @@ class ContractApiEndpoints:
                     else p.danger_level
                 ),
                 description="",
+                has_alliance_subsidy=bool(getattr(p, "has_alliance_subsidy", True)),
             )
 
         @api.post(
@@ -208,6 +212,11 @@ class ContractApiEndpoints:
                 ),
                 is_cyno_route=bool(data.is_cyno_route),
                 danger_level=data.danger_level or "safe",
+                has_alliance_subsidy=(
+                    bool(data.has_alliance_subsidy)
+                    if data.has_alliance_subsidy is not None
+                    else True
+                ),
             )
 
             if data.cyno_waypoint_ids:
@@ -254,6 +263,9 @@ class ContractApiEndpoints:
                     else preset.danger_level
                 ),
                 description="",
+                has_alliance_subsidy=bool(
+                    getattr(preset, "has_alliance_subsidy", True)
+                ),
             )
 
         @api.put(
@@ -312,6 +324,8 @@ class ContractApiEndpoints:
             )
             preset.is_cyno_route = bool(data.is_cyno_route)
             preset.danger_level = data.danger_level or "safe"
+            if data.has_alliance_subsidy is not None:
+                preset.has_alliance_subsidy = bool(data.has_alliance_subsidy)
             preset.save()
 
             if data.cyno_waypoint_ids is not None:
@@ -358,6 +372,9 @@ class ContractApiEndpoints:
                     else preset.danger_level
                 ),
                 description="",
+                has_alliance_subsidy=bool(
+                    getattr(preset, "has_alliance_subsidy", True)
+                ),
             )
 
         @api.delete(

@@ -46,6 +46,7 @@ const INITIAL_FORM: components['schemas']['CreateRoutePresetSchema'] = {
   is_cyno_route: true,
   cyno_waypoint_ids: [],
   danger_level: 'cyno_guarded',
+  has_alliance_subsidy: true,
 };
 
 /**
@@ -441,6 +442,24 @@ function CreateRouteForm({
                 />
                 <span className="text-xs !text-slate-300 font-medium leading-none">
                   {t('Is Cyno Pipeline Route')}
+                </span>
+              </label>
+            </div>
+
+            <div className="flex items-center pb-2">
+              <label
+                htmlFor="has-alliance-subsidy-modal-chk"
+                className="flex items-center gap-2 cursor-pointer m-0 select-none"
+              >
+                <input
+                  type="checkbox"
+                  id="has-alliance-subsidy-modal-chk"
+                  checked={formData.has_alliance_subsidy ?? true}
+                  onChange={(e) => updateField('has_alliance_subsidy', e.target.checked)}
+                  className="w-4 h-4 rounded !bg-slate-900 !border-slate-700 accent-emerald-500 cursor-pointer m-0"
+                />
+                <span className="text-xs !text-slate-300 font-medium leading-none">
+                  {t('Alliance Subsidy Enabled')}
                 </span>
               </label>
             </div>

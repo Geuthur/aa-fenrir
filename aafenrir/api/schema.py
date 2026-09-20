@@ -168,6 +168,7 @@ class RoutePresetSchema(Schema):
     cyno_waypoint_ids: list[int] = []
     danger_level: str
     description: str = ""
+    has_alliance_subsidy: bool = True
 
 
 class CreateRoutePresetSchema(Schema):
@@ -192,6 +193,7 @@ class CreateRoutePresetSchema(Schema):
     is_cyno_route: bool = False
     cyno_waypoint_ids: list[int] = []
     danger_level: str = "safe"
+    has_alliance_subsidy: bool = True
 
 
 class ContractSchema(Schema):
