@@ -2,7 +2,7 @@
 import { useState } from 'react';
 
 // Third Party
-import { Box, Check, Clipboard, Coins, Package, Users, Zap } from 'lucide-react';
+import { Box, Check, Clipboard, Coins, Info, Package, Users, Zap } from 'lucide-react';
 import { Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
@@ -298,7 +298,11 @@ export function CargoInput({
         <FenrirModal.Body>
           <div className={styles.modalBodyContainer}>
             <p className={styles.modalDescription}>
-              {t('In the EVE Online client, select items in your hangar or cargo hold, press Ctrl+C, and paste here. Our parser calculates volume and estimated market collateral automatically.')}
+              {t('In the EVE Online client, select items in your asset list, press Ctrl+C, and paste here. Our parser calculates volume and estimated market collateral automatically.')}
+            </p>
+            <p className="text-[11px] !text-amber-400/90 font-mono mt-1 mb-2 flex items-center gap-1.5">
+              <Info className="w-3.5 h-3.5 shrink-0" />
+              <span>{t('Note: This feature works best with the English version of the EVE Online client.')}</span>
             </p>
 
             <textarea

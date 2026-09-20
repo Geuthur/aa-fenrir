@@ -321,5 +321,7 @@
   "Showing all {{total}} {{items}}": "Showing all {{total}} {{items}}",
   "contracts": "contracts",
   "Showing {{start}}-{{end}} of {{total}} {{items}}": "Showing {{start}}-{{end}} of {{total}} {{items}}",
-  "systems": "systems"
+  "systems": "systems",
+  "Note: This feature works best with the English version of the EVE Online client.": "Note: This feature works best with the English version of the EVE Online client.",
+  "In the EVE Online client, select items in your asset list, press Ctrl+C, and paste here. Our parser calculates volume and estimated market collateral automatically.": "In the EVE Online client, select items in your asset list, press Ctrl+C, and paste here. Our parser calculates volume and estimated market collateral automatically."
 }

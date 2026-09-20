@@ -315,5 +315,6 @@
   "Move Down": "Move Down",
   "Remove Waypoint": "Remove Waypoint",
   "exceeds corridor insurance maximum": "exceeds corridor insurance maximum",
-  "Standard Freighters cannot safely transit Nullsec stargates! Please use Jump Freighter service.": "Standard Freighters cannot safely transit Nullsec stargates! Please use Jump Freighter service."
+  "Standard Freighters cannot safely transit Nullsec stargates! Please use Jump Freighter service.": "Standard Freighters cannot safely transit Nullsec stargates! Please use Jump Freighter service.",
+  "Note: This feature works best with the English version of the EVE Online client.": "Note: This feature works best with the English version of the EVE Online client."
 }
