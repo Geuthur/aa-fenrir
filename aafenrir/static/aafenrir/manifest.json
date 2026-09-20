@@ -22,8 +22,8 @@
       "_@bootstrap-libs-DUVBvNVX.js"
     ]
   },
-  "_@vendor-DpRtzTR9.js": {
-    "file": "react/js/@vendor-DpRtzTR9.js",
+  "_@vendor-BerLgYF1.js": {
+    "file": "react/js/@vendor-BerLgYF1.js",
     "name": "@vendor",
     "imports": [
       "_rolldown-runtime-CbXtAM7H.js",
@@ -36,19 +36,19 @@
     "name": "rolldown-runtime"
   },
   "index.html": {
-    "file": "react/js/index-Ce1uXLh-.js",
+    "file": "react/js/index-BKEr3mrF.js",
     "name": "index",
     "src": "index.html",
     "isEntry": true,
     "imports": [
       "_rolldown-runtime-CbXtAM7H.js",
       "_@bootstrap-libs-DUVBvNVX.js",
-      "_@vendor-DpRtzTR9.js",
+      "_@vendor-BerLgYF1.js",
       "_@react-libs-BQS3-WH-.js",
       "_@lang-libs-BdqZ5c9S.js"
     ],
     "css": [
-      "react/css/index-C8tVvqc5.css"
+      "react/css/index-IFT9CyeH.css"
     ]
   }
 }
