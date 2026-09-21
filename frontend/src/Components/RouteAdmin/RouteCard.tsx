@@ -82,7 +82,7 @@ export function RouteCard({
           <div>
             <span className="text-[10px] !text-slate-500 uppercase block">{t('Insurance')}</span>
             <span className="!text-amber-300 font-bold">
-              {(preset.collateral_percent * 100).toFixed(1)}%
+              {(preset.collateral_percent * 100).toFixed(2)}%
             </span>
           </div>
         </div>

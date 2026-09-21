@@ -66,7 +66,7 @@ function EditRouteForm({
     fee_per_ly: Number(preset.fee_per_ly || 0),
     collateral_percent:
       preset.collateral_percent < 1
-        ? Math.round(preset.collateral_percent * 100)
+        ? preset.collateral_percent * 100
         : Number(preset.collateral_percent || 0),
     min_reward: Number(preset.min_reward || 0),
     estimated_time: Number(

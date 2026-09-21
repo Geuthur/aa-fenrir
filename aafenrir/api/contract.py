@@ -90,11 +90,7 @@ class ContractApiEndpoints:
                         fee_per_ly=float(p.fee_per_ly),
                         fee_per_ly_or_jump=float(p.fee_per_ly),
                         fee_per_lyorjump=float(p.fee_per_ly),
-                        collateral_percent=(
-                            float(p.collateral_percent) / 100.0
-                            if p.collateral_percent >= 1
-                            else float(p.collateral_percent)
-                        ),
+                        collateral_percent=float(p.collateral_percent) / 100.0,
                         min_reward=p.min_reward,
                         estimated_time=p.estimated_time,
                         estimated_days=(
@@ -172,11 +168,7 @@ class ContractApiEndpoints:
                 fee_per_ly=float(p.fee_per_ly),
                 fee_per_ly_or_jump=float(p.fee_per_ly),
                 fee_per_lyorjump=float(p.fee_per_ly),
-                collateral_percent=(
-                    float(p.collateral_percent) / 100.0
-                    if p.collateral_percent >= 1
-                    else float(p.collateral_percent)
-                ),
+                collateral_percent=float(p.collateral_percent) / 100.0,
                 min_reward=p.min_reward,
                 estimated_time=p.estimated_time,
                 estimated_days=(
@@ -298,11 +290,7 @@ class ContractApiEndpoints:
                 fee_per_ly=float(preset.fee_per_ly),
                 fee_per_ly_or_jump=float(preset.fee_per_ly),
                 fee_per_lyorjump=float(preset.fee_per_ly),
-                collateral_percent=(
-                    float(preset.collateral_percent) / 100.0
-                    if preset.collateral_percent >= 1
-                    else float(preset.collateral_percent)
-                ),
+                collateral_percent=float(preset.collateral_percent) / 100.0,
                 min_reward=preset.min_reward,
                 estimated_time=preset.estimated_time,
                 estimated_days=(

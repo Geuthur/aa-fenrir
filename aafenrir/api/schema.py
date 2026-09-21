@@ -200,7 +200,7 @@ class CreateRoutePresetSchema(Schema):
     base_fee: int = 5_000_000
     fee_per_m3: int = 0
     fee_per_ly: float = 0
-    collateral_percent: int = 0
+    collateral_percent: float = 0
     min_reward: int = 0
     estimated_time: int = 0
     is_cyno_route: bool = False

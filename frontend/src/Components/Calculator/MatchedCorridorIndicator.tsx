@@ -92,7 +92,7 @@ export function MatchedCorridorIndicator({
           <div className={styles.rateItem}>
             <span className={styles.rateLabel}>{t('Insurance')}</span>
             <span className="!text-amber-300 font-semibold">
-              {(selectedCorridor.collateral_percent * 100).toFixed(1)}%
+              {(selectedCorridor.collateral_percent * 100).toFixed(2)}%
             </span>
           </div>
           <div className={styles.rateItem}>

@@ -174,7 +174,7 @@ export function QuoteBreakdown({
             <div className={styles.tariffDetailGroup}>
               <span className={styles.tariffLabel}>{t('Collateral Surcharge / Insurance:')}</span>
               <span className={styles.tariffDetailSub}>
-                ({t('{{percent}}% of {{collateral}}', { percent: ((quote.corridor?.collateral_percent || 0.01) * 100).toFixed(1), collateral: formatIskCompact(quote.collateralIsk) })})
+                ({t('{{percent}}% of {{collateral}}', { percent: ((quote.corridor?.collateral_percent || 0.01) * 100).toFixed(2), collateral: formatIskCompact(quote.collateralIsk) })})
               </span>
             </div>
             <span className={styles.tariffValue}>{formatIsk(quote.collateralFee)}</span>

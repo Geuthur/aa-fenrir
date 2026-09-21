@@ -1241,7 +1241,7 @@
           "collateral_percent": {
             "default": 0,
             "title": "Collateral Percent",
-            "type": "integer"
+            "type": "number"
           },
           "min_reward": {
             "default": 0,

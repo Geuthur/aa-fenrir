@@ -554,7 +554,7 @@ function CreateRouteForm({
               </Form.Label>
               <Form.Control
                 type="number"
-                step="0.1"
+                step="0.01"
                 value={formData.collateral_percent}
                 onChange={(e) => updateField('collateral_percent', Number(e.target.value))}
                 className={styles.ratesInput}

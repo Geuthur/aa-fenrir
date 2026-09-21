@@ -106,7 +106,9 @@ class RoutePreset(models.Model):
         help_text=_("Fee per light-year for the route"),
     )
 
-    collateral_percent = models.IntegerField(
+    collateral_percent = models.DecimalField(
+        max_digits=5,
+        decimal_places=4,
         default=0,
         help_text=_("Collateral percentage for the route"),
     )
