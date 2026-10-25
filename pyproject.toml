@@ -39,9 +39,10 @@ dependencies = [
     "django-ninja>=1.5,<2",
 ]
 optional-dependencies.tests-allianceauth-latest = [
+    "aa-evesde-factory",
     "coverage",
     "factory-boy",
-    "pook",
+    "pookx",
 ]
 urls.Changelog = "https://github.com/Geuthur/aa-fenrir/blob/master/CHANGELOG.md"
 urls.Discord = "https://discord.gg/WrHzA4rnxA"

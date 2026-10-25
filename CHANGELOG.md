@@ -60,6 +60,9 @@ Section Order:
   - Standardized the `Cyno-Guarded` presentation in Route Admin cards to match the Calculator (Navigation icon with emerald green styling).
 - **CSS Modularization**:
   - Extracted header action button styling (`Create New Route`, `Add System`) into `RouteAdminHeader.module.css`.
+- Replaced `pook` with `pookx` in the test dependencies.
+
+<!-- Your changes go here -->
 
 ## [0.0.1] - 2024-08-xx
 

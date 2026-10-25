@@ -3,13 +3,8 @@ import secrets
 
 # Third Party
 import factory
+from evesde_factory.allianceauth import EveCharacterFactory, UserFactory
 from evesde_factory.utils import add_character_to_user
-
-# AA Fenrir
-from aafenrir.tests.testdata.factory import (
-    EveCharacterFactory,
-    UserFactory,
-)
 
 
 class UserMainFactory(UserFactory):
