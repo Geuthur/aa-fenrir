@@ -62,6 +62,8 @@ Section Order:
   - Extracted header action button styling (`Create New Route`, `Add System`) into `RouteAdminHeader.module.css`.
 - Replaced `pook` with `pookx` in the test dependencies.
 
+<!-- Your changes go here -->
+
 ## [0.0.1] - 2024-08-xx
 
 ### Added
