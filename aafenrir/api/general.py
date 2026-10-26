@@ -13,7 +13,7 @@ from django.utils.translation import gettext as _
 from aafenrir import __title__, forms
 from aafenrir.api import schema
 from aafenrir.helpers.eveonline import get_character_portrait_url
-from aafenrir.models.general import UserSettings
+from aafenrir.models.general import General, UserSettings
 
 
 class GeneralApiEndpoints:
@@ -35,7 +35,7 @@ class GeneralApiEndpoints:
             left_menu.append(schema.MenuLink(name=_("Settings"), link="/settings/"))
 
             right_menu: list[schema.MenuLink] = []
-            if request.user.has_perm("aafenrir.manage_access"):
+            if General.has_management_access(request.user):
                 right_menu.append(
                     schema.MenuLink(name=_("Route Admin"), link="/routes/admin/")
                 )
@@ -45,6 +45,11 @@ class GeneralApiEndpoints:
                         link=reverse("voicesofwar:add_freight"),
                         is_external=True,
                     )
+                )
+
+            if General.has_admin_access(request.user):
+                right_menu.append(
+                    schema.MenuLink(name=_("Administration"), link="/administration/")
                 )
 
             return schema.MenuSchema(
@@ -61,7 +66,7 @@ class GeneralApiEndpoints:
             tags=self.tags,
         )
         def get_user(request):
-            if not request.user.has_perm("aafenrir.basic_access"):
+            if not General.has_basic_access(request.user):
                 return HTTPStatus.FORBIDDEN, {"error": _("Permission Denied.")}
 
             try:
@@ -90,7 +95,9 @@ class GeneralApiEndpoints:
                 portrait=portrait_url,
                 notification=settings.disable_notifications,
                 quick_select_presets=settings.quick_select_presets or [],
-                has_manage_access=request.user.has_perm("aafenrir.manage_access"),
+                has_manage_access=General.has_management_access(request.user),
+                has_admin_access=General.has_admin_access(request.user),
+                is_superuser=request.user.is_superuser,
             )
 
         @api.post(
@@ -103,7 +110,7 @@ class GeneralApiEndpoints:
             tags=self.tags,
         )
         def modify_user_settings(request):
-            if not request.user.has_perm("aafenrir.basic_access"):
+            if not General.has_basic_access(request.user):
                 return HTTPStatus.FORBIDDEN, {"error": _("Permission Denied.")}
 
             settings = UserSettings.objects.get_or_create(user=request.user)[0]

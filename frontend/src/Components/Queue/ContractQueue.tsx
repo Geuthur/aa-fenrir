@@ -8,11 +8,11 @@ import { CheckCircle, Clock, Search, Truck, XCircle } from 'lucide-react';
 import { Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
+import { BaseTable } from '@/Components/Base/BaseTable';
 // AA Fenrir
 import { formatIskCompact, formatM3 } from '@/Components/Calculator/calculator';
 import QueueFilter from '@/Components/Queue/Partial/QueueFilter';
 import { QueueMetrics } from '@/Components/Queue/Partial/QueueMetrics';
-import BaseTable from '@/Components/Tables/BaseTable/BaseTable';
 import type { ContractItem } from '@/types';
 
 export interface ContractQueueProps {
@@ -243,7 +243,6 @@ export function ContractQueue({ contracts, onNewQuoteClick }: ContractQueueProps
         <BaseTable
           data={filteredContracts}
           columns={columns}
-          variant="fenrir"
           initialState={{
             pagination: { pageSize: 10 },
             sorting: [{ id: 'contract_id', desc: true }],

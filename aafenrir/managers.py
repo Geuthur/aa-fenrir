@@ -19,7 +19,8 @@ from esi.models import Token
 
 # AA Fenrir
 from aafenrir import __title__
-from aafenrir.helpers.choice import Status
+from aafenrir.helpers.choice import Category, Status
+from aafenrir.models.general import General
 from aafenrir.providers import AppLogger, esi
 
 logger = AppLogger(get_extension_logger(__name__), __title__)
@@ -49,7 +50,7 @@ class AccessQuerySet(models.QuerySet[T], Generic[T]):
             )
             return self
 
-        if user.has_perm("aafenrir.full_access"):
+        if General.has_admin_access(user):
             logger.debug("Returning all survey sessions for admin user %s.", user)
             return self
 
@@ -81,7 +82,7 @@ class AccessQuerySet(models.QuerySet[T], Generic[T]):
             )
             return self
 
-        if user.has_perm("aafenrir.full_access"):
+        if General.has_admin_access(user):
             logger.debug("Returning all survey sessions for admin user %s.", user)
             return self
 
@@ -122,7 +123,7 @@ class AccessManager(models.Manager[T], Generic[T]):
             logger.debug("Returning all characters for superuser %s.", user)
             return qs.all()
 
-        if user.has_perm("aafenrir.full_access"):
+        if General.has_admin_access(user):
             logger.debug("Returning all characters for %s.", user)
             return qs.all()
 
@@ -233,10 +234,6 @@ class LocationManager(models.Manager["LocationContext"]):
         self, token: Token, location_id: int, add_unknown: bool = True
     ) -> tuple["LocationContext", bool]:
         """updates or creates location object with data fetched from ESI"""
-        # pylint: disable=import-outside-toplevel
-        # AA Fenrir
-        from aafenrir.models import Location
-
         if self.STATION_ID_START <= location_id <= self.STATION_ID_END:
             logger.info("%s: Fetching station from ESI", location_id)
             station = esi.client.Universe.GetUniverseStationsStationId(
@@ -254,7 +251,7 @@ class LocationManager(models.Manager["LocationContext"]):
                     "name": station_item.name,
                     "solar_system_id": station_item.system_id,
                     "type_id": station_item.type_id,
-                    "category_id": Location.Category.STATION_ID,
+                    "category_id": Category.STATION_ID,
                 },
             )
 
@@ -274,7 +271,7 @@ class LocationManager(models.Manager["LocationContext"]):
                     id=location_id,
                     defaults={
                         "name": f"Unknown structure {location_id}",
-                        "category_id": Location.Category.STRUCTURE_ID,
+                        "category_id": Category.STRUCTURE_ID,
                     },
                 )
             raise ex
@@ -285,7 +282,7 @@ class LocationManager(models.Manager["LocationContext"]):
                     id=location_id,
                     defaults={
                         "name": f"Unknown structure {location_id}",
-                        "category_id": Location.Category.STRUCTURE_ID,
+                        "category_id": Category.STRUCTURE_ID,
                     },
                 )
             raise ex
@@ -296,7 +293,7 @@ class LocationManager(models.Manager["LocationContext"]):
                 "name": structure_item.name,
                 "solar_system_id": structure_item.solar_system_id,
                 "type_id": structure_item.type_id,
-                "category_id": Location.Category.STRUCTURE_ID,
+                "category_id": Category.STRUCTURE_ID,
             },
         )
 

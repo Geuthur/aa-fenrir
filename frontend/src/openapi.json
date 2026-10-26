@@ -125,6 +125,296 @@
         ]
       }
     },
+    "/aafenrir/api/administration/handlers/": {
+      "get": {
+        "operationId": "aafenrir_api_administration_list_administration_handlers",
+        "summary": "List Administration Handlers",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AdministrationHandlerSchema"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Administration"
+        ],
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    },
+    "/aafenrir/api/administration/handlers/{corporation_id}/": {
+      "get": {
+        "operationId": "aafenrir_api_administration_get_administration_handler",
+        "summary": "Get Administration Handler",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "corporation_id",
+            "schema": {
+              "title": "Corporation Id",
+              "type": "integer"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdministrationHandlerDetailSchema"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Administration"
+        ],
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "aafenrir_api_administration_delete_administration_handler",
+        "summary": "Delete Administration Handler",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "corporation_id",
+            "schema": {
+              "title": "Corporation Id",
+              "type": "integer"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Administration"
+        ],
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    },
+    "/aafenrir/api/administration/handlers/{corporation_id}/update/": {
+      "post": {
+        "operationId": "aafenrir_api_administration_update_administration_handler",
+        "summary": "Update Administration Handler",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "corporation_id",
+            "schema": {
+              "title": "Corporation Id",
+              "type": "integer"
+            },
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "force_refresh",
+            "schema": {
+              "default": false,
+              "title": "Force Refresh",
+              "type": "boolean"
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Administration"
+        ],
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    },
+    "/aafenrir/api/administration/update/": {
+      "post": {
+        "operationId": "aafenrir_api_administration_update_administration_all",
+        "summary": "Update Administration All",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "force_refresh",
+            "schema": {
+              "default": false,
+              "title": "Force Refresh",
+              "type": "boolean"
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Administration"
+        ],
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    },
     "/aafenrir/api/contract/handlers/": {
       "get": {
         "operationId": "aafenrir_api_contract_get_contract_handlers",
@@ -970,6 +1260,16 @@
             "default": false,
             "title": "Has Manage Access",
             "type": "boolean"
+          },
+          "has_admin_access": {
+            "default": false,
+            "title": "Has Admin Access",
+            "type": "boolean"
+          },
+          "is_superuser": {
+            "default": false,
+            "title": "Is Superuser",
+            "type": "boolean"
           }
         },
         "required": [
@@ -979,6 +1279,276 @@
           "notification"
         ],
         "title": "UserData",
+        "type": "object"
+      },
+      "AdministrationHandlerSchema": {
+        "description": "Schema for a contract handler in the Administration.\n\nParameters:\n    status (str): One of ok, outdated, never_synced, no_character, token_error.",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "category": {
+            "title": "Category",
+            "type": "string"
+          },
+          "character_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Character Id"
+          },
+          "character_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Character Name"
+          },
+          "last_sync": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Sync"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "contracts_total": {
+            "default": 0,
+            "title": "Contracts Total",
+            "type": "integer"
+          },
+          "contracts_pending": {
+            "default": 0,
+            "title": "Contracts Pending",
+            "type": "integer"
+          },
+          "contracts_in_progress": {
+            "default": 0,
+            "title": "Contracts In Progress",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "category",
+          "status"
+        ],
+        "title": "AdministrationHandlerSchema",
+        "type": "object"
+      },
+      "AdministrationHandlerDetailSchema": {
+        "description": "Schema for the inspection view of a handler.",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "integer"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "category": {
+            "title": "Category",
+            "type": "string"
+          },
+          "character_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Character Id"
+          },
+          "character_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Character Name"
+          },
+          "last_sync": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Sync"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "contracts_total": {
+            "default": 0,
+            "title": "Contracts Total",
+            "type": "integer"
+          },
+          "contracts_pending": {
+            "default": 0,
+            "title": "Contracts Pending",
+            "type": "integer"
+          },
+          "contracts_in_progress": {
+            "default": 0,
+            "title": "Contracts In Progress",
+            "type": "integer"
+          },
+          "stats": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/AdministrationStatusStatsSchema"
+            },
+            "title": "Stats",
+            "type": "array"
+          },
+          "total_reward": {
+            "default": 0,
+            "title": "Total Reward",
+            "type": "number"
+          },
+          "total_collateral": {
+            "default": 0,
+            "title": "Total Collateral",
+            "type": "number"
+          },
+          "total_volume": {
+            "default": 0,
+            "title": "Total Volume",
+            "type": "number"
+          },
+          "first_issued": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "First Issued"
+          },
+          "last_issued": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Issued"
+          },
+          "recent_notifications": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/AdministrationNotificationSchema"
+            },
+            "title": "Recent Notifications",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "category",
+          "status"
+        ],
+        "title": "AdministrationHandlerDetailSchema",
+        "type": "object"
+      },
+      "AdministrationNotificationSchema": {
+        "description": "A customer notification sent for a contract.",
+        "properties": {
+          "contract_id": {
+            "title": "Contract Id",
+            "type": "integer"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "date_notified": {
+            "format": "date-time",
+            "title": "Date Notified",
+            "type": "string"
+          }
+        },
+        "required": [
+          "contract_id",
+          "status",
+          "date_notified"
+        ],
+        "title": "AdministrationNotificationSchema",
+        "type": "object"
+      },
+      "AdministrationStatusStatsSchema": {
+        "description": "Contract statistics of one contract status.",
+        "properties": {
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "count": {
+            "title": "Count",
+            "type": "integer"
+          },
+          "reward": {
+            "title": "Reward",
+            "type": "number"
+          },
+          "collateral": {
+            "title": "Collateral",
+            "type": "number"
+          },
+          "volume": {
+            "title": "Volume",
+            "type": "number"
+          }
+        },
+        "required": [
+          "status",
+          "count",
+          "reward",
+          "collateral",
+          "volume"
+        ],
+        "title": "AdministrationStatusStatsSchema",
         "type": "object"
       },
       "ContractHandlerSchema": {

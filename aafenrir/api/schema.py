@@ -26,6 +26,8 @@ class UserData(Schema):
     notification: bool
     quick_select_presets: list[int] = []
     has_manage_access: bool = False
+    has_admin_access: bool = False
+    is_superuser: bool = False
 
 
 class DataTableSchema(Schema):
@@ -275,3 +277,53 @@ class SolarSystemSearchSchema(Schema):
     security_status: float
     security_class: str
     region_name: str = ""
+
+
+class AdministrationHandlerSchema(Schema):
+    """
+    Schema for a contract handler in the Administration.
+
+    Parameters:
+        status (str): One of ok, outdated, never_synced, no_character, token_error.
+    """
+
+    id: int
+    name: str
+    category: str
+    character_id: int | None = None
+    character_name: str | None = None
+    last_sync: datetime | None = None
+    status: str
+    contracts_total: int = 0
+    contracts_pending: int = 0
+    contracts_in_progress: int = 0
+
+
+class AdministrationStatusStatsSchema(Schema):
+    """Contract statistics of one contract status."""
+
+    status: str
+    count: int
+    reward: float
+    collateral: float
+    volume: float
+
+
+class AdministrationNotificationSchema(Schema):
+    """A customer notification sent for a contract."""
+
+    contract_id: int
+    status: str
+    date_notified: datetime
+
+
+class AdministrationHandlerDetailSchema(AdministrationHandlerSchema):
+    """Schema for the inspection view of a handler."""
+
+    stats: list[AdministrationStatusStatsSchema] = []
+    total_reward: float = 0
+    total_collateral: float = 0
+    total_volume: float = 0
+    first_issued: datetime | None = None
+    last_issued: datetime | None = None
+    recent_notifications: list[AdministrationNotificationSchema] = []

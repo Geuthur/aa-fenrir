@@ -1,0 +1,15 @@
+.searchContainer {
+  max-width: 300px;
+}
+
+.dropdownMenu {
+  z-index: 1060;
+}
+
+.cursorPointer {
+  cursor: pointer;
+}
+
+.compactButton {
+  font-size: 0.75rem;
+}
