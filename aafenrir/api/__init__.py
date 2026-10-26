@@ -7,7 +7,7 @@ from django.conf import settings
 
 # AA Fenrir
 from aafenrir import __title__
-from aafenrir.api import contract, eve_sde, general
+from aafenrir.api import administration, contract, eve_sde, general
 
 api = NinjaAPI(
     title="AA Fenrir API",
@@ -20,6 +20,7 @@ api = NinjaAPI(
 
 def setup(ninja_api):
     general.GeneralApiEndpoints(ninja_api)
+    administration.AdministrationApiEndpoints(ninja_api)
     contract.ContractApiEndpoints(ninja_api)
     eve_sde.EveSdeApiEndpoints(ninja_api)
 

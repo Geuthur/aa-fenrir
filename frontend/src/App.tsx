@@ -13,6 +13,7 @@ import { initReactI18next, useTranslation } from "react-i18next";
 import "@/App.css"
 
 import ErrorLoader from "@/Components/Loader/ErrorLoader"
+import Administration from "@/Pages/Administration";
 import AuthBase from "@/Pages/Base";
 import Calculator from "@/Pages/Calculator";
 import Queue from "@/Pages/Queue";
@@ -58,6 +59,7 @@ function App() {
                 <Route path="calculator/" element={<Calculator />} />
                 <Route path="queue/" element={<Queue />} />
                 <Route path="settings/" element={<Settings />} />
+                <Route path="administration/" element={<Administration />} />
                 <Route path="routes/admin/" element={<RouteAdmin />} />
                 <Route path="admin/routes/" element={<RouteAdmin />} />
                 <Route path="*" element={<main className="mt-4"><ErrorLoader title={t("Error 404")} message={t("The page you are looking for does not exist.")} /></main>} />

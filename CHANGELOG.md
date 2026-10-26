@@ -2,6 +2,9 @@
 
 ## [In Development] - Unreleased
 
+> [!IMPORTANT]
+> A new **Administration** page is available for users with the `aafenrir.full_access` permission (no new permission was added). Users with only `manage_access` do not see it. Users with `full_access` now also see the *Route Admin* menu entry, as `full_access` already allowed editing routes.
+
 <!--
 > [!NOTE]
 >
@@ -28,6 +31,11 @@ Section Order:
 
 ### Added
 
+- **Administration**:
+  - New page for contract handlers with sync status (synced, outdated, never synced, no character, token error), contract counters, filter and search.
+  - Inspection view per handler with contract statistics per status (count, reward, collateral, volume), date range and recent customer notifications.
+  - Update a single handler, delete a handler (including its contracts) and queue an update for all handlers (superuser only, as is `force_refresh`).
+  - NPC corporations are never shown, their detail endpoints return `404`.
 - **Cyno Chain Waypoint Manager (`CynoWaypointManager`)**:
   - Full cyno waypoint pipeline management for intermediate jump beacons in `CreateRouteModal` and `EditRouteModal`.
   - EVE SDE solar system search with debouncing and quick-select from configured route systems.
@@ -57,6 +65,8 @@ Section Order:
 
 ### Changed
 
+- **Shared `BaseTable`**: Replaced the Fenrir-specific table with the shared `BaseTable` used in the other plugins (moved to `Components/Base/BaseTable`). The tables in *Route Admin* and *Contracts Queue* now use its default look. Formatting helpers moved to `Utils/format`.
+- **Central Permissions**: All permission checks use the `General` model (`General.Permission`, `has_perm`, `has_basic_access`, `has_management_access`, `has_admin_access`). The helper `aafenrir.helpers.permission` was removed.
 - **Editable Origin & Destination Stations**:
   - Made *Origin Station / Structure Name* and *Destination Station / Structure Name* fully editable in both `CreateRouteModal` and `EditRouteModal`.
 - **Consistent Danger Rating Styling**:
@@ -64,6 +74,10 @@ Section Order:
 - **CSS Modularization**:
   - Extracted header action button styling (`Create New Route`, `Add System`) into `RouteAdminHeader.module.css`.
 - Replaced `pook` with `pookx` in the test dependencies.
+
+### Removed
+
+- Unused `BaseModal` component in `Components/Modals` (it was a copy of the table component).
 
 <!-- Your changes go here -->
 

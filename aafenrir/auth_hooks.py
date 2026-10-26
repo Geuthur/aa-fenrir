@@ -9,6 +9,7 @@ from allianceauth import hooks
 from allianceauth.services.hooks import MenuItemHook, UrlHook
 
 from . import app_settings, urls
+from .models.general import General
 
 
 class FenrirMenuItem(MenuItemHook):
@@ -23,7 +24,7 @@ class FenrirMenuItem(MenuItemHook):
         )
 
     def render(self, request):
-        if request.user.has_perm("aafenrir.basic_access"):
+        if General.has_basic_access(request.user):
             return MenuItemHook.render(self, request)
         return ""
 

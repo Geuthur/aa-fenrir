@@ -55,6 +55,75 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/aafenrir/api/administration/handlers/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Administration Handlers */
+        get: operations["aafenrir_api_administration_list_administration_handlers"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/aafenrir/api/administration/handlers/{corporation_id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Administration Handler */
+        get: operations["aafenrir_api_administration_get_administration_handler"];
+        put?: never;
+        post?: never;
+        /** Delete Administration Handler */
+        delete: operations["aafenrir_api_administration_delete_administration_handler"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/aafenrir/api/administration/handlers/{corporation_id}/update/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Update Administration Handler */
+        post: operations["aafenrir_api_administration_update_administration_handler"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/aafenrir/api/administration/update/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Update Administration All */
+        post: operations["aafenrir_api_administration_update_administration_all"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/aafenrir/api/contract/handlers/": {
         parameters: {
             query?: never;
@@ -299,6 +368,149 @@ export interface components {
              * @default false
              */
             has_manage_access: boolean;
+            /**
+             * Has Admin Access
+             * @default false
+             */
+            has_admin_access: boolean;
+            /**
+             * Is Superuser
+             * @default false
+             */
+            is_superuser: boolean;
+        };
+        /**
+         * AdministrationHandlerSchema
+         * @description Schema for a contract handler in the Administration.
+         *
+         *     Parameters:
+         *         status (str): One of ok, outdated, never_synced, no_character, token_error.
+         */
+        AdministrationHandlerSchema: {
+            /** Id */
+            id: number;
+            /** Name */
+            name: string;
+            /** Category */
+            category: string;
+            /** Character Id */
+            character_id?: number | null;
+            /** Character Name */
+            character_name?: string | null;
+            /** Last Sync */
+            last_sync?: string | null;
+            /** Status */
+            status: string;
+            /**
+             * Contracts Total
+             * @default 0
+             */
+            contracts_total: number;
+            /**
+             * Contracts Pending
+             * @default 0
+             */
+            contracts_pending: number;
+            /**
+             * Contracts In Progress
+             * @default 0
+             */
+            contracts_in_progress: number;
+        };
+        /**
+         * AdministrationHandlerDetailSchema
+         * @description Schema for the inspection view of a handler.
+         */
+        AdministrationHandlerDetailSchema: {
+            /** Id */
+            id: number;
+            /** Name */
+            name: string;
+            /** Category */
+            category: string;
+            /** Character Id */
+            character_id?: number | null;
+            /** Character Name */
+            character_name?: string | null;
+            /** Last Sync */
+            last_sync?: string | null;
+            /** Status */
+            status: string;
+            /**
+             * Contracts Total
+             * @default 0
+             */
+            contracts_total: number;
+            /**
+             * Contracts Pending
+             * @default 0
+             */
+            contracts_pending: number;
+            /**
+             * Contracts In Progress
+             * @default 0
+             */
+            contracts_in_progress: number;
+            /**
+             * Stats
+             * @default []
+             */
+            stats: components["schemas"]["AdministrationStatusStatsSchema"][];
+            /**
+             * Total Reward
+             * @default 0
+             */
+            total_reward: number;
+            /**
+             * Total Collateral
+             * @default 0
+             */
+            total_collateral: number;
+            /**
+             * Total Volume
+             * @default 0
+             */
+            total_volume: number;
+            /** First Issued */
+            first_issued?: string | null;
+            /** Last Issued */
+            last_issued?: string | null;
+            /**
+             * Recent Notifications
+             * @default []
+             */
+            recent_notifications: components["schemas"]["AdministrationNotificationSchema"][];
+        };
+        /**
+         * AdministrationNotificationSchema
+         * @description A customer notification sent for a contract.
+         */
+        AdministrationNotificationSchema: {
+            /** Contract Id */
+            contract_id: number;
+            /** Status */
+            status: string;
+            /**
+             * Date Notified
+             * Format: date-time
+             */
+            date_notified: string;
+        };
+        /**
+         * AdministrationStatusStatsSchema
+         * @description Contract statistics of one contract status.
+         */
+        AdministrationStatusStatsSchema: {
+            /** Status */
+            status: string;
+            /** Count */
+            count: number;
+            /** Reward */
+            reward: number;
+            /** Collateral */
+            collateral: number;
+            /** Volume */
+            volume: number;
         };
         /**
          * ContractHandlerSchema
@@ -772,6 +984,210 @@ export interface operations {
             };
             /** @description Bad Request */
             400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
+    aafenrir_api_administration_list_administration_handlers: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdministrationHandlerSchema"][];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
+    aafenrir_api_administration_get_administration_handler: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                corporation_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdministrationHandlerDetailSchema"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
+    aafenrir_api_administration_delete_administration_handler: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                corporation_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
+    aafenrir_api_administration_update_administration_handler: {
+        parameters: {
+            query?: {
+                force_refresh?: boolean;
+            };
+            header?: never;
+            path: {
+                corporation_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
+    aafenrir_api_administration_update_administration_all: {
+        parameters: {
+            query?: {
+                force_refresh?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };

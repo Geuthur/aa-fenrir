@@ -33,6 +33,7 @@ from aafenrir.managers import (
     EveEntityManager,
     LocationManager,
 )
+from aafenrir.models.general import General
 from aafenrir.providers import AppLogger
 from aafenrir.thirdparty.discord import send_user_notification
 
@@ -456,17 +457,17 @@ class Contract(models.Model):
     @property
     def is_completed(self) -> bool:
         """whether this contract is completed or active"""
-        return self.status in self.Status.completed()
+        return self.status in Status.completed()
 
     @property
     def is_in_progress(self) -> bool:
         """Return True if this contract is in progress, else False."""
-        return self.status == self.Status.IN_PROGRESS
+        return self.status == Status.IN_PROGRESS
 
     @property
     def is_failed(self) -> bool:
         """Return True if this contract is failed, else False."""
-        return self.status == self.Status.FAILED
+        return self.status == Status.FAILED
 
     @property
     def has_expired(self) -> bool:
@@ -545,20 +546,20 @@ class Contract(models.Model):
             acceptor_text = f"by {self.acceptor_name} "
         else:
             acceptor_text = ""
-        if status_to_report == self.Status.PENDING:
+        if status_to_report == Status.PENDING:
             contents += "We have received your contract"
             contents += " and it will be picked up by one of our pilots shortly."
-        elif status_to_report == self.Status.IN_PROGRESS:
+        elif status_to_report == Status.IN_PROGRESS:
             contents += (
                 f"Your contract has been picked up {acceptor_text}"
                 "and will be delivered to you shortly."
             )
-        elif status_to_report == self.Status.FINISHED:
+        elif status_to_report == Status.FINISHED:
             contents += (
                 "Your contract has been **delivered**.\n"
                 "Thank you for using our freight service."
             )
-        elif status_to_report == self.Status.FAILED:
+        elif status_to_report == Status.FAILED:
             contents += (
                 f"Your contract has been **failed** {acceptor_text}"
                 "Thank you for using our freight service."
@@ -636,7 +637,7 @@ class Contract(models.Model):
 
             if self.date_notified is None:
                 for manager in managers:
-                    if manager.has_perm("aafenrir.full_access"):
+                    if General.has_admin_access(manager):
                         message = (
                             f"There is a new courier contract from {self.issuer} "
                             "looking to be picked up "
@@ -662,7 +663,7 @@ class Contract(models.Model):
     def send_customer_notification(self, force_sent=False):
         """Send notification to customer about this contract"""
         status_to_report = None
-        for status in self.Status.for_customer_notification():
+        for status in Status.for_customer_notification():
             if self.status == status and (
                 force_sent or not self.aafenrir_notifications.filter(status=status)
             ):

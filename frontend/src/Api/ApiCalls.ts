@@ -194,3 +194,77 @@ export async function loadContractHandlers(): Promise<ContractHandlerItem[]> {
 
 
 
+
+type AdministrationMessage = { success: boolean; message: string };
+
+function getApiError(error: unknown, fallback: string): string {
+  const e = error as { detail?: string; error?: string } | undefined;
+  return e?.detail ?? e?.error ?? fallback;
+}
+
+export async function loadAdministrationHandlers(): Promise<
+  components["schemas"]["AdministrationHandlerSchema"][]
+> {
+  const { data, error } = await apiClient.GET(`/${ProjectName}/api/administration/handlers/`);
+  if (error || !data) {
+    throw new Error(getApiError(error, "Failed to load handlers"));
+  }
+  return data;
+}
+
+export async function loadAdministrationHandler(
+  corporationId: number
+): Promise<components["schemas"]["AdministrationHandlerDetailSchema"]> {
+  const { data, error } = await apiClient.GET(
+    `/${ProjectName}/api/administration/handlers/{corporation_id}/`,
+    { params: { path: { corporation_id: corporationId } } }
+  );
+  if (error || !data) {
+    throw new Error(getApiError(error, "Failed to load handler"));
+  }
+  return data;
+}
+
+export async function updateAdministrationHandler(
+  corporationId: number,
+  forceRefresh: boolean
+): Promise<AdministrationMessage> {
+  const { data, error } = await apiClient.POST(
+    `/${ProjectName}/api/administration/handlers/{corporation_id}/update/`,
+    {
+      params: {
+        path: { corporation_id: corporationId },
+        query: { force_refresh: forceRefresh },
+      },
+    }
+  );
+  if (error || !data) {
+    throw new Error(getApiError(error, "Failed to queue update"));
+  }
+  return data as AdministrationMessage;
+}
+
+export async function deleteAdministrationHandler(
+  corporationId: number
+): Promise<AdministrationMessage> {
+  const { data, error } = await apiClient.DELETE(
+    `/${ProjectName}/api/administration/handlers/{corporation_id}/`,
+    { params: { path: { corporation_id: corporationId } } }
+  );
+  if (error || !data) {
+    throw new Error(getApiError(error, "Failed to delete handler"));
+  }
+  return data as AdministrationMessage;
+}
+
+export async function updateAdministrationAll(
+  forceRefresh: boolean
+): Promise<AdministrationMessage> {
+  const { data, error } = await apiClient.POST(`/${ProjectName}/api/administration/update/`, {
+    params: { query: { force_refresh: forceRefresh } },
+  });
+  if (error || !data) {
+    throw new Error(getApiError(error, "Failed to queue update"));
+  }
+  return data as AdministrationMessage;
+}

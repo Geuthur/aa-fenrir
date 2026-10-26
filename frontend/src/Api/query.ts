@@ -7,4 +7,6 @@ export const queryKeys = {
     Contracts: ["Contracts"] as const,
     RouteSystems: ["RouteSystems"] as const,
     ContractHandlers: ["ContractHandlers"] as const,
+    AdministrationHandlers: ["AdministrationHandlers"] as const,
+    AdministrationHandler: (corporationId: number) => ["AdministrationHandler", corporationId] as const,
 };

@@ -30,6 +30,7 @@ import {
 } from '@/Api/ApiCalls';
 import type { components } from '@/Api/OpenApi';
 import { queryKeys } from '@/Api/query';
+import { BaseTable } from '@/Components/Base/BaseTable';
 import { RouteAdminHeader, RouteCard } from '@/Components/RouteAdmin';
 import {
   AddRouteSystemModal,
@@ -38,7 +39,6 @@ import {
   DeleteRouteSystemModal,
   EditRouteModal,
 } from '@/Components/RouteAdmin/Modals';
-import BaseTable from '@/Components/Tables/BaseTable/BaseTable';
 import type { FreightCorridor } from '@/types';
 
 type RouteSystemItem = components['schemas']['RouteSystemSchema'];
@@ -513,7 +513,6 @@ export default function RouteAdmin() {
               <BaseTable
                 data={filteredSystems}
                 columns={systemColumns}
-                variant="fenrir"
                 itemLabel={t('systems')}
                 initialState={{
                   pagination: { pageSize: 10 },

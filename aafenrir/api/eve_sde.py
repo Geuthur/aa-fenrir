@@ -13,6 +13,7 @@ from eve_sde.models import SolarSystem
 # AA Fenrir
 from aafenrir import __title__
 from aafenrir.api import schema
+from aafenrir.models.general import General
 
 
 class EveSdeApiEndpoints:
@@ -29,7 +30,7 @@ class EveSdeApiEndpoints:
             tags=self.tags,
         )
         def get_solar_system(request, eve_id: int):
-            if not request.user.has_perm("aafenrir.basic_access"):
+            if not General.has_basic_access(request.user):
                 return HTTPStatus.FORBIDDEN, {
                     "detail": _("You do not have access to this resource.")
                 }
@@ -50,7 +51,7 @@ class EveSdeApiEndpoints:
             tags=self.tags,
         )
         def search_solar_systems(request, query: str = ""):
-            if not request.user.has_perm("aafenrir.basic_access"):
+            if not General.has_basic_access(request.user):
                 return HTTPStatus.FORBIDDEN, {
                     "detail": _("You do not have access to this resource.")
                 }
