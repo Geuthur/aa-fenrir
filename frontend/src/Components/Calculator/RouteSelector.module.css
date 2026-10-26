@@ -1,12 +1,13 @@
 @reference "@/App.css";
 
 /* Main Container */
+/* No overflow-hidden here: it would clip the absolutely positioned system dropdowns */
 .container {
-  @apply rounded-xl p-5 shadow-lg relative overflow-hidden bg-slate-800/80;
+  @apply rounded-xl p-5 shadow-lg relative bg-slate-800/80;
 }
 
 .cornerGradient {
-  @apply absolute top-0 right-0 w-48 h-48 bg-gradient-to-bl from-cyan-500/10 via-transparent to-transparent pointer-events-none;
+  @apply absolute top-0 right-0 w-48 h-48 rounded-tr-xl bg-gradient-to-bl from-cyan-500/10 via-transparent to-transparent pointer-events-none;
 }
 
 /* Header */
@@ -181,18 +182,23 @@
 }
 
 .dropdownMenu {
-  @apply absolute top-full left-0 right-0 mt-1.5 border border-slate-800 rounded-lg shadow-2xl z-30 max-h-60 overflow-y-auto p-2;
+  @apply absolute top-full left-0 right-0 mt-1.5 border border-slate-800 rounded-lg shadow-2xl z-50 max-h-60 overflow-y-auto p-2;
   background-color: #0c1018;
 }
 
 .searchInput {
-  @apply w-full px-2.5 py-1.5 text-xs rounded text-slate-200 mb-2 font-mono;
+  @apply w-full px-2.5 py-1.5 text-xs rounded mb-2 font-mono;
   background-color: #0f172a !important;
   border: 1px solid #334155 !important;
+  color: #ffffff !important;
 }
 .searchInput:focus {
   outline: none;
   border-color: #06b6d4 !important;
+  color: #ffffff !important;
+}
+.searchInput::placeholder {
+  color: #94a3b8;
 }
 
 .dropdownList {

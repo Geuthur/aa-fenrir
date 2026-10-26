@@ -44,6 +44,9 @@ Section Order:
 
 ### Fixed
 
+- **Calculator System Dropdowns**: The *Origin* and *Destination* system dropdowns are no longer cut off by the route container.
+- **Calculator System Search**: The search text in the system dropdowns stays white instead of turning dark when focused.
+- **Calculator on Mobile**: The quick-select collateral buttons and card headers stay inside their container on small screens.
 - **Smooth Modal Exit Transitions (`FenrirModal`)**:
   - Resolved premature unmounting and content popping during modal fade-out by centrally caching previous modal content in `FenrirModal` until Bootstrap's transition finishes.
 - **Modal Form Spacing & Alignment**:

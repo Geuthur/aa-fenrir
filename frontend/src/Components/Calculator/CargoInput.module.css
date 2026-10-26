@@ -7,7 +7,7 @@
 
 /* Header */
 .header {
-  @apply flex items-center justify-between pb-2 border-b border-slate-300/60 mb-4;
+  @apply flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-slate-300/60 mb-4;
 }
 
 .cornerGradient {
@@ -87,12 +87,12 @@
 }
 
 .inputCard {
-  @apply rounded-lg p-4 bg-slate-900/60;
+  @apply min-w-0 rounded-lg p-4 bg-slate-900/60;
   border: 1px solid rgba(6, 182, 212, 0.5);
 }
 
 .inputCardHeader {
-  @apply flex items-center justify-between mb-1.5;
+  @apply flex flex-wrap items-center justify-between gap-1 mb-1.5;
 }
 
 .inputCardLabel {
@@ -182,11 +182,11 @@
 }
 
 .quickIncrementContainer {
-  @apply flex gap-1.5 mt-3;
+  @apply flex gap-1.5 mt-3 max-w-full overflow-x-auto;
 }
 
 .quickIncrementBtn {
-  @apply flex-1 py-1 text-[10px] font-mono rounded transition-colors cursor-pointer;
+  @apply flex-1 shrink-0 whitespace-nowrap px-2 py-1 text-[10px] font-mono rounded transition-colors cursor-pointer;
   background-color: #1e293b !important;
   border: 1px solid #334155 !important;
   --bs-btn-border-color: #334155 !important;
