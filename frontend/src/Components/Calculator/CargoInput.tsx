@@ -221,11 +221,6 @@ export function CargoInput({
             />
             <span className={styles.inputSuffix}>ISK</span>
           </div>
-          {maxCollateralAllowed !== undefined && collateralIsk > maxCollateralAllowed && (
-            <div className={styles.errorText}>
-              {t('Exceeds max allowed collateral of {{max}}', { max: formatIskCompact(maxCollateralAllowed) })}
-            </div>
-          )}
 
           {/* Quick Increment Buttons */}
           <div className={styles.quickIncrementContainer}>

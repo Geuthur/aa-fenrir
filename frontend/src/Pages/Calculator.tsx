@@ -220,7 +220,11 @@ export default function Calculator() {
 
     // Cargo & Rates State
     const [volumeM3, setVolumeM3] = useState(65000);
-    const [collateralIsk, setCollateralIsk] = useState(1500000000); // 1.5B
+    const [requestedCollateralIsk, setRequestedCollateralIsk] = useState(1500000000); // 1.5B
+    const maxCollateralAllowed = effectiveCorridor?.max_collateral || 15000000000;
+    // Derived, so a corridor with a lower limit also caps a value entered earlier
+    const collateralIsk = Math.min(requestedCollateralIsk, maxCollateralAllowed);
+    const setCollateralIsk = (value: number) => setRequestedCollateralIsk(Math.min(value, maxCollateralAllowed));
     const [isRush, setIsRush] = useState(false);
     const [isCorpSubsidized, setIsCorpSubsidized] = useState(true);
     const [selectedShipId,] = useState('rhea');
@@ -285,7 +289,7 @@ export default function Calculator() {
                     setIsCorpSubsidized={setIsCorpSubsidized}
                     selectedShipId={selectedShipId}
                     maxVolumeAllowed={effectiveCorridor?.max_volume || 360000}
-                    maxCollateralAllowed={effectiveCorridor?.max_collateral || 15000000000}
+                    maxCollateralAllowed={maxCollateralAllowed}
                     corridor={effectiveCorridor}
                 />
                 </div>
