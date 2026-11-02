@@ -13,6 +13,8 @@ from aafenrir.api import api
 app_name: str = "aafenrir"  # pylint: disable=invalid-name
 
 urlpatterns = [
+    # -- Contract Handler, must stay in front of the React catch-all
+    path("handler/add/", views.add_contract_handler, name="add_contract_handler"),
     # Use this part if you use frontend via React
     # -- Catch-all / React Frontend Routing
     path("", views.react_base, name="index"),

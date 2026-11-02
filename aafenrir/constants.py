@@ -15,3 +15,6 @@ DISCORD_EMBED_COLOR_MAP = {
     "warning": DISCORD_EMBED_COLOR_WARNING,
     "danger": DISCORD_EMBED_COLOR_DANGER,
 }
+
+# Lowest ID of a player corporation, lower IDs are NPC corporations
+MIN_PLAYER_CORPORATION_ID = 10_000_000

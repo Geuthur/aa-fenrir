@@ -43,7 +43,7 @@ class GeneralApiEndpoints:
                 right_menu.append(
                     schema.MenuLink(
                         name=_("Add Company"),
-                        link=reverse("voicesofwar:add_freight"),
+                        link=reverse("aafenrir:add_contract_handler"),
                         is_external=True,
                     )
                 )

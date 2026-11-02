@@ -23,7 +23,6 @@ from aafenrir.tests.testdata.fenrir import (
 
 API_URL = "aafenrir:api"
 TASK_PATH = "aafenrir.tasks"
-GENERAL_API_PATH = "aafenrir.api.general"
 
 
 class TestAdministrationApi(AuthTestCase):
@@ -298,8 +297,7 @@ class TestAdministrationApi(AuthTestCase):
         self.assertEqual(response_superuser.status_code, HTTPStatus.OK)
         mock_task.apply_async.assert_called_once_with(kwargs={"force_refresh": False})
 
-    @patch(f"{GENERAL_API_PATH}.reverse", return_value="/voicesofwar/add/")
-    def test_get_menu_should_include_administration_for_admin_only(self, _):
+    def test_get_menu_should_include_administration_for_admin_only(self):
         # Test Data / Test Action
         admin_menu = self._get(self.admin, "get_menu").json()
         user_menu = self._get(self.user, "get_menu").json()

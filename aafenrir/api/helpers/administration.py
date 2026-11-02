@@ -21,11 +21,9 @@ from esi.errors import TokenError
 
 # AA Fenrir
 from aafenrir.api import schema
+from aafenrir.constants import MIN_PLAYER_CORPORATION_ID
 from aafenrir.helpers.choice import Status
 from aafenrir.models import Contract, ContractCustomerNotification, ContractHandler
-
-# Lowest ID of a player corporation, lower IDs are NPC corporations
-MIN_PLAYER_CORPORATION_ID = 10_000_000
 
 RECENT_NOTIFICATIONS_LIMIT = 10
 

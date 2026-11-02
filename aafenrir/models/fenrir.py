@@ -644,7 +644,7 @@ class Contract(models.Model):
             )
             managers = User.objects.filter(is_active=True)
 
-            url = urljoin(site_absolute_url(), reverse("aafenrir:freight_contracts"))
+            url = urljoin(site_absolute_url(), f"{reverse('aafenrir:index')}queue/")
 
             title = (
                 f"{self.start_location.solar_system_name} >> "
