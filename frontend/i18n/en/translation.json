@@ -216,6 +216,8 @@
   "Preset Available": "Preset Available",
   "Currently using standard base rates. You can apply the configured route preset tariffs.": "Currently using standard base rates. You can apply the configured route preset tariffs.",
   "Apply Preset Rates": "Apply Preset Rates",
+  "Apply Route Preset": "Apply Route Preset",
+  "A route preset exists for this route. Apply it to use its corridor tariffs.": "A route preset exists for this route. Apply it to use its corridor tariffs.",
   "Standard Base Tariffs": "Standard Base Tariffs",
   "Custom Route": "Custom Route",
   "No predefined corridor found for {{origin}} ➔ {{destination}}. Standard base rates are applied.": "No predefined corridor found for {{origin}} ➔ {{destination}}. Standard base rates are applied.",

@@ -7,34 +7,49 @@ import {
   Building2,
   Calculator,
   Check,
+  CircleAlert,
   Clock,
   Copy,
   Fuel,
   MapPin,
   ShieldCheck,
+  Sparkles,
 } from 'lucide-react';
-import { Button } from 'react-bootstrap';
+import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 // Styles
 import styles from '@/Components/Calculator/QuoteBreakdown.module.css';
 
 import { formatIsk, formatIskCompact, formatM3 } from '@/Components/Calculator/calculator';
-import type { QuoteCalculation } from '@/types';
+import { MatchedCorridorIndicator } from '@/Components/Calculator/MatchedCorridorIndicator';
+import type { MatchedCorridorIndicatorProps } from '@/Components/Calculator/MatchedCorridorIndicator';
+import type { FreightCorridor, QuoteCalculation } from '@/types';
 
-interface QuoteBreakdownProps {
+interface QuoteBreakdownProps extends MatchedCorridorIndicatorProps {
+  /** Callback to apply the matching corridor's tariffs */
+  onApplyCorridor: (corridor: FreightCorridor) => void;
   quote: QuoteCalculation;
   onOpenContractModal: () => void;
 }
 
 export function QuoteBreakdown({
   quote,
+  selectedCorridor,
+  matchingCorridor,
+  origin,
+  destination,
+  onApplyCorridor,
+  onUseBaseRates,
   onOpenContractModal,
 }: QuoteBreakdownProps) {
   const { t } = useTranslation();
   const [rewardCopied, setRewardCopied] = useState(false);
   const [corpCopied, setCorpCopied] = useState(false);
   const [logoError, setLogoError] = useState(false);
+
+  // A preset exists for this route, but the quote is still calculated with base rates
+  const availablePreset = selectedCorridor ? null : matchingCorridor;
 
   const assigneeCorp =
     quote.corridor?.assign_corp_name || 'Voices of War Inc.';
@@ -108,7 +123,32 @@ export function QuoteBreakdown({
               <span className={styles.heroCompactBadge}>
                 ({formatIskCompact(quote.totalReward)})
               </span>
+              {availablePreset && (
+                <OverlayTrigger
+                  placement="top"
+                  overlay={
+                    <Tooltip id="route-preset-hint">
+                      {t('A route preset exists for this route. Apply it to use its corridor tariffs.')}
+                    </Tooltip>
+                  }
+                >
+                  <span
+                    id="route-preset-hint-icon"
+                    className={styles.presetAlert}
+                    role="img"
+                    tabIndex={0}
+                    aria-label={t('A route preset exists for this route. Apply it to use its corridor tariffs.')}
+                  >
+                    <CircleAlert className={styles.presetAlertIcon} />
+                  </span>
+                </OverlayTrigger>
+              )}
             </div>
+            {availablePreset && (
+              <div className={styles.presetHintText}>
+                {t('A route preset exists for this route. Apply it to use its corridor tariffs.')}
+              </div>
+            )}
             <div className={styles.heroFormula}>
               {t('Alliance formula: Base + Volume + Distance + Collateral Risk - Subsidies')}
             </div>
@@ -133,10 +173,30 @@ export function QuoteBreakdown({
                 </>
               )}
             </Button>
+            {availablePreset && (
+              <Button
+                id="apply-route-preset-btn"
+                variant="success"
+                onClick={() => onApplyCorridor(availablePreset)}
+                className={styles.applyPresetBtn}
+              >
+                <Sparkles className={styles.applyPresetIcon} />
+                <span>{t('Apply Route Preset')}</span>
+              </Button>
+            )}
           </div>
         </div>
       </div>
               
+      {/* Corridor status and the tariffs behind this quote */}
+      <MatchedCorridorIndicator
+        selectedCorridor={selectedCorridor}
+        matchingCorridor={matchingCorridor}
+        origin={origin}
+        destination={destination}
+        onUseBaseRates={onUseBaseRates}
+      />
+
       {/* Itemized Fee Breakdown Table */}
       <div className={styles.tariffCard}>
         <h3 className={styles.tariffTitle}>

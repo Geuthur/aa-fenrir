@@ -22,23 +22,20 @@ export interface MatchedCorridorIndicatorProps {
   origin: EveSolarSystem;
   /** Currently selected destination system */
   destination: EveSolarSystem;
-  /** Callback to apply the matching corridor's tariffs */
-  onApplyCorridor: (corridor: FreightCorridor) => void;
   /** Callback to switch to standard base rates */
   onUseBaseRates: () => void;
 }
 
 /**
- * Dedicated component displaying route corridor preset adoption status in the Calculator.
+ * Section of the quote breakdown displaying the route corridor preset adoption status.
  * Shows whether an alliance corridor preset was automatically adopted and its tariffs applied,
- * or allows switching between preset rates and standard base rates.
+ * or allows switching to standard base rates.
  */
 export function MatchedCorridorIndicator({
   selectedCorridor,
   matchingCorridor,
   origin,
   destination,
-  onApplyCorridor,
   onUseBaseRates,
 }: MatchedCorridorIndicatorProps) {
   const { t } = useTranslation();
@@ -48,12 +45,12 @@ export function MatchedCorridorIndicator({
     const badge = getServiceBadge(selectedCorridor.service_type);
 
     return (
-      <div className={`${styles.container} ${styles.activeContainer} mt-4 fenrir-gradient fenrir-border-500`}>
+      <div className={`${styles.container} ${styles.activeContainer}`}>
         <div className={styles.headerRow}>
           <div className={styles.titleGroup}>
             <CheckCircle2 className={styles.iconActive} />
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <span className={styles.titleText}>{selectedCorridor.name}</span>
                 <span className={styles.badgeActive}>
                   {t('Corridor Tariffs Applied')}
@@ -111,12 +108,12 @@ export function MatchedCorridorIndicator({
   // State 2: A matching corridor exists, but the user explicitly toggled to base rates
   if (matchingCorridor) {
     return (
-      <div className={`${styles.container} ${styles.availableContainer} mt-4 fenrir-gradient fenrir-border-500`}>
+      <div className={`${styles.container} ${styles.availableContainer}`}>
         <div className={styles.headerRow}>
           <div className={styles.titleGroup}>
             <Sparkles className={styles.iconAvailable} />
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <span className={styles.titleText}>{matchingCorridor.name}</span>
                 <span className={styles.badgeAvailable}>
                   {t('Preset Available')}
@@ -127,15 +124,6 @@ export function MatchedCorridorIndicator({
               </p>
             </div>
           </div>
-
-          <Button
-            variant="success"
-            size="sm"
-            onClick={() => onApplyCorridor(matchingCorridor)}
-            className={styles.applyBtn}
-          >
-            {t('Apply Preset Rates')}
-          </Button>
         </div>
       </div>
     );
@@ -143,12 +131,12 @@ export function MatchedCorridorIndicator({
 
   // State 3: No corridor matches the selected systems (standard base rates)
   return (
-    <div className={`${styles.container} ${styles.standardContainer} mt-4 fenrir-gradient fenrir-border-700`}>
+    <div className={`${styles.container} ${styles.standardContainer}`}>
       <div className={styles.headerRow}>
         <div className={styles.titleGroup}>
           <Compass className={styles.iconStandard} />
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <span className={styles.titleText}>{t('Standard Base Tariffs')}</span>
               <span className={styles.badgeStandard}>
                 {t('Custom Route')}

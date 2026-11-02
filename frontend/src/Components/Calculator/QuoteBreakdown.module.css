@@ -66,7 +66,7 @@
 }
 
 .heroAmountRow {
-  @apply flex items-baseline gap-2 mt-1;
+  @apply flex flex-wrap items-baseline gap-2 mt-1;
 }
 
 .heroAmount {
@@ -78,7 +78,7 @@
 }
 
 .heroCompactBadge {
-  @apply text-xs font-mono px-2 py-0.5 rounded bg-cyan-950/60 text-cyan-300 border border-cyan-500/30;
+  @apply text-xs font-mono px-2 py-0.5 rounded bg-cyan-950/60 text-cyan-300 border border-cyan-500/30 whitespace-nowrap;
 }
 
 .heroFormula {
@@ -112,6 +112,58 @@
 
 .copyIcon {
   @apply w-3.5 h-3.5 text-slate-400;
+}
+
+/* Route preset available for a manually entered route */
+.presetAlert {
+  @apply inline-flex items-center justify-center self-center rounded-full cursor-help;
+  animation: pulse-red 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.presetAlertIcon {
+  @apply w-6 h-6 text-red-500;
+}
+
+/* Touch devices cannot hover the exclamation mark, so they get the hint as text */
+.presetHintText {
+  @apply hidden text-[11px] font-mono text-red-300 mt-1;
+}
+@media (hover: none) {
+  .presetHintText {
+    @apply block;
+  }
+}
+
+.applyPresetBtn {
+  @apply flex items-center gap-1.5 px-3 py-2 text-xs font-mono font-semibold rounded-lg cursor-pointer;
+  @apply !bg-emerald-600 hover:!bg-emerald-500 !text-white !border-emerald-400;
+  animation: pulse-emerald 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.applyPresetIcon {
+  @apply w-3.5 h-3.5;
+}
+
+@keyframes pulse-red {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 14px 4px rgba(239, 68, 68, 0.55);
+    transform: scale(1.1);
+  }
+}
+
+@keyframes pulse-emerald {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 16px 4px rgba(16, 185, 129, 0.5);
+    transform: scale(1.02);
+  }
 }
 
 /* Itemized Tariff Calculation */

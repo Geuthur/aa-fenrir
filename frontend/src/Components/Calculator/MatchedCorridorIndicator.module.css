@@ -1,19 +1,22 @@
 @reference "@/App.css";
 
 .container {
-  @apply mt-4 relative p-4 rounded-xl border transition-all;
+  @apply relative p-4 rounded-lg border transition-all mb-4;
 }
 
 .activeContainer {
-  @apply bg-slate-900/80 border-cyan-500/40 shadow-[0_0_15px_rgba(6,182,212,0.15)];
+  @apply bg-slate-900/60;
+  border-color: rgba(6, 182, 212, 0.5);
 }
 
 .availableContainer {
-  @apply bg-slate-900/70 border-emerald-500/40 shadow-[0_0_15px_rgba(16,185,129,0.15)];
+  @apply bg-slate-900/60;
+  border-color: rgba(16, 185, 129, 0.5);
 }
 
 .standardContainer {
-  @apply bg-slate-900/40 border-slate-800;
+  @apply bg-slate-900/60;
+  border-color: rgba(6, 182, 212, 0.5);
 }
 
 .headerRow {
@@ -53,7 +56,7 @@
 }
 
 .ratesGrid {
-  @apply mt-3 pt-3 border-t border-slate-800/80 grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs font-mono;
+  @apply mt-3 pt-3 border-t border-slate-800/80 grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-2 text-xs font-mono;
 }
 
 .rateItem {
@@ -71,21 +74,3 @@
 .toggleBtn {
   @apply text-xs font-mono px-3 py-1 rounded border transition-colors shrink-0;
 }
-
-.applyBtn {
-  @apply text-xs font-mono px-3.5 py-1.5 rounded-lg border font-semibold transition-all shrink-0;
-  @apply !bg-emerald-600 hover:!bg-emerald-500 !text-white !border-emerald-400;
-  animation: pulse-emerald 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-@keyframes pulse-emerald {
-  0%, 100% {
-    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
-    transform: scale(1);
-  }
-  50% {
-    box-shadow: 0 0 16px 4px rgba(16, 185, 129, 0.5);
-    transform: scale(1.02);
-  }
-}
-
