@@ -93,7 +93,7 @@ ______________________________________________________________________
 The operational hub for haulers and freight managers:
 
 - **Real-Time KPI Metrics:**
-  - **Pending Contracts:** Number of contracts awaiting hauler acceptance.
+  - **Pending Contracts:** Number of contracts awaiting hauler acceptance. Contracts past their expiry date no longer count as pending, they are listed as *Expired* under `Failed / Canceled` and are not part of the in-transit cargo or the rewards pool.
   - **Active In-Transit Cargo:** Total volume currently moving across shipping lanes.
   - **Outstanding Rewards Pool:** Total ISK awaiting payout upon contract completion.
 - **Status Filtering:**
