@@ -12,6 +12,7 @@ from django.utils.translation import gettext as _
 # AA Fenrir
 from aafenrir import __title__, forms
 from aafenrir.api import schema
+from aafenrir.app_settings import AA_FENRIR_MAX_COLLATERAL, AA_FENRIR_MAX_VOLUME
 from aafenrir.helpers.eveonline import get_character_portrait_url
 from aafenrir.models.general import General, UserSettings
 
@@ -98,6 +99,8 @@ class GeneralApiEndpoints:
                 has_manage_access=General.has_management_access(request.user),
                 has_admin_access=General.has_admin_access(request.user),
                 is_superuser=request.user.is_superuser,
+                calculator_max_volume=AA_FENRIR_MAX_VOLUME,
+                calculator_max_collateral=AA_FENRIR_MAX_COLLATERAL,
             )
 
         @api.post(

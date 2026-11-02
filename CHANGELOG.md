@@ -47,6 +47,7 @@ Section Order:
 - **Enhanced Validations & Safety Warnings**:
   - Warning when cargo collateral exceeds corridor insurance maximum (`exceeds corridor insurance maximum`).
   - Stargate safety warning when attempting to route Standard Freighters through Nullsec stargates (`Standard Freighters cannot safely transit Nullsec stargates! Please use Jump Freighter service.`).
+- **Calculator Limits**: Volume and collateral stay within the limits of the active route. Without a route `AA_FENRIR_MAX_VOLUME` (default 10,000,000 m³) and `AA_FENRIR_MAX_COLLATERAL` (default 1,000,000,000,000 ISK) apply, both can be set in `local.py`.
 - **Calculator Route Preset Hint**: If a route preset exists for the entered route but base rates are in use, a red pulsing exclamation mark appears next to the reward, and a green pulsing *Apply Route Preset* button next to *Copy ISK*.
 - **Internationalization (i18n)**:
   - Added full German (`de/translation.json`) and English (`en/translation.json`) translations for new table pagination items, warnings, and cyno waypoint controls.

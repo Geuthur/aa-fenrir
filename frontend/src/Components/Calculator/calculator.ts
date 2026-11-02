@@ -91,17 +91,6 @@ export function calculateTransportQuote({
     : 0.01;
   const minReward = corridor ? Number(corridor.min_reward ?? 35_000_000) : 35_000_000;
 
-  // Maximum caps check
-  const maxAllowedVol = corridor ? Number(corridor.max_volume ?? 360_000) : 360_000;
-  if (volumeM3 > maxAllowedVol) {
-    warnings.push(`Volume (${volumeM3.toLocaleString()} m³) exceeds maximum allowed limit (${maxAllowedVol.toLocaleString()} m³) for this corridor.`);
-  }
-
-  const maxAllowedCol = corridor ? Number(corridor.max_collateral ?? 15_000_000_000) : 15_000_000_000;
-  if (collateralIsk > maxAllowedCol) {
-    warnings.push(`${t('Collateral')} (${formatIskCompact(collateralIsk)}) ${t('exceeds corridor insurance maximum')} (${formatIskCompact(maxAllowedCol)}).`);
-  }
-
   // Security warnings
   if ((origin.securityClass === 'nullsec' || destination.securityClass === 'nullsec') && corridor?.service_type === 'standard_freighter') {
     warnings.push(`${t('Standard Freighters cannot safely transit Nullsec stargates! Please use Jump Freighter service.')}`);

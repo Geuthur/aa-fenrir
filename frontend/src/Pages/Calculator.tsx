@@ -219,8 +219,16 @@ export default function Calculator() {
     };
 
     // Cargo & Rates State
-    const [volumeM3, setVolumeM3] = useState(65000);
-    const [collateralIsk, setCollateralIsk] = useState(1500000000); // 1.5B
+    const [requestedVolumeM3, setRequestedVolumeM3] = useState(65000);
+    const [requestedCollateralIsk, setRequestedCollateralIsk] = useState(1500000000); // 1.5B
+    // An active route uses its own limits, otherwise the general limits from the app settings apply
+    const maxVolumeAllowed = effectiveCorridor?.max_volume || userData?.user.calculator_max_volume || 0;
+    const maxCollateralAllowed = effectiveCorridor?.max_collateral || userData?.user.calculator_max_collateral || 0;
+    // Derived, so a corridor with a lower limit also caps a value entered earlier
+    const volumeM3 = maxVolumeAllowed ? Math.min(requestedVolumeM3, maxVolumeAllowed) : requestedVolumeM3;
+    const collateralIsk = maxCollateralAllowed ? Math.min(requestedCollateralIsk, maxCollateralAllowed) : requestedCollateralIsk;
+    const setVolumeM3 = (value: number) => setRequestedVolumeM3(maxVolumeAllowed ? Math.min(value, maxVolumeAllowed) : value);
+    const setCollateralIsk = (value: number) => setRequestedCollateralIsk(maxCollateralAllowed ? Math.min(value, maxCollateralAllowed) : value);
     const [isRush, setIsRush] = useState(false);
     const [isCorpSubsidized, setIsCorpSubsidized] = useState(true);
     const [selectedShipId,] = useState('rhea');
@@ -284,8 +292,8 @@ export default function Calculator() {
                     isCorpSubsidized={isCorpSubsidized}
                     setIsCorpSubsidized={setIsCorpSubsidized}
                     selectedShipId={selectedShipId}
-                    maxVolumeAllowed={effectiveCorridor?.max_volume || 360000}
-                    maxCollateralAllowed={effectiveCorridor?.max_collateral || 15000000000}
+                    maxVolumeAllowed={maxVolumeAllowed}
+                    maxCollateralAllowed={maxCollateralAllowed}
                     corridor={effectiveCorridor}
                 />
                 </div>

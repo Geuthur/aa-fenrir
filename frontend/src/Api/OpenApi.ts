@@ -378,6 +378,10 @@ export interface components {
              * @default false
              */
             is_superuser: boolean;
+            /** Calculator Max Volume */
+            calculator_max_volume: number;
+            /** Calculator Max Collateral */
+            calculator_max_collateral: number;
         };
         /**
          * AdministrationHandlerSchema
