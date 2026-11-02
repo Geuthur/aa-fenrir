@@ -47,13 +47,14 @@ Section Order:
 - **Enhanced Validations & Safety Warnings**:
   - Warning when cargo collateral exceeds corridor insurance maximum (`exceeds corridor insurance maximum`).
   - Stargate safety warning when attempting to route Standard Freighters through Nullsec stargates (`Standard Freighters cannot safely transit Nullsec stargates! Please use Jump Freighter service.`).
+- **Calculator Route Preset Hint**: If a route preset exists for the entered route but base rates are in use, a red pulsing exclamation mark appears next to the reward, and a green pulsing *Apply Route Preset* button next to *Copy ISK*.
 - **Internationalization (i18n)**:
   - Added full German (`de/translation.json`) and English (`en/translation.json`) translations for new table pagination items, warnings, and cyno waypoint controls.
 
 ### Fixed
 
 - **Calculator System Dropdowns**: The *Origin* and *Destination* system dropdowns are no longer cut off by the route container.
-- **Calculator System Search**: The search text in the system dropdowns stays white instead of turning dark when focused.
+- **Calculator Input Fields**: Cargo volume, collateral, station, system search, corridor preset and paste fields stay readable when focused. Their colors now come from Bootstrap and follow the Dark and Light theme.
 - **Calculator on Mobile**: The quick-select collateral buttons and card headers stay inside their container on small screens.
 - **Smooth Modal Exit Transitions (`FenrirModal`)**:
   - Resolved premature unmounting and content popping during modal fade-out by centrally caching previous modal content in `FenrirModal` until Bootstrap's transition finishes.

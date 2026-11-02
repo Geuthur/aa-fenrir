@@ -116,9 +116,7 @@
 }
 
 .volumeInput {
-  @apply w-full px-3 py-2 text-sm rounded-lg text-white font-mono;
-  background-color: #0c1018 !important;
-  border: 1px solid #334155 !important;
+  @apply w-full px-3 py-2 text-sm rounded-lg font-mono;
 }
 .volumeInput:focus {
   outline: none;
@@ -127,9 +125,7 @@
 }
 
 .collateralInput {
-  @apply w-full px-3 py-2 text-sm rounded-lg text-white font-mono;
-  background-color: #0c1018 !important;
-  border: 1px solid #334155 !important;
+  @apply w-full px-3 py-2 text-sm rounded-lg font-mono;
 }
 .collateralInput:focus {
   outline: none;
@@ -271,9 +267,7 @@
 }
 
 .modalTextarea {
-  @apply w-full p-3 text-xs font-mono rounded-lg text-slate-200;
-  background-color: #0a0d14 !important;
-  border: 1px solid #334155 !important;
+  @apply w-full p-3 text-xs font-mono rounded-lg;
 }
 .modalTextarea:focus {
   outline: none;

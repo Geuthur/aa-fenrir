@@ -114,6 +114,48 @@
   @apply w-3.5 h-3.5 text-slate-400;
 }
 
+/* Route preset available for a manually entered route */
+.presetAlert {
+  @apply inline-flex items-center justify-center self-center rounded-full cursor-help;
+  animation: pulse-red 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.presetAlertIcon {
+  @apply w-6 h-6 text-red-500;
+}
+
+.applyPresetBtn {
+  @apply flex items-center gap-1.5 px-3 py-2 text-xs font-mono font-semibold rounded-lg cursor-pointer;
+  @apply !bg-emerald-600 hover:!bg-emerald-500 !text-white !border-emerald-400;
+  animation: pulse-emerald 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.applyPresetIcon {
+  @apply w-3.5 h-3.5;
+}
+
+@keyframes pulse-red {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 14px 4px rgba(239, 68, 68, 0.55);
+    transform: scale(1.1);
+  }
+}
+
+@keyframes pulse-emerald {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 16px 4px rgba(16, 185, 129, 0.5);
+    transform: scale(1.02);
+  }
+}
+
 /* Itemized Tariff Calculation */
 .tariffCard {
   @apply bg-slate-900/60 rounded-lg p-4 mb-4;

@@ -61,9 +61,11 @@
 }
 
 .presetSelectControl {
-  @apply w-full px-3 py-2 text-xs rounded-lg text-slate-200 font-medium;
-  background-color: #0f172a !important;
-  border: 1px solid #0f172a !important;
+  @apply w-full px-3 py-2 text-xs rounded-lg font-medium;
+}
+/* Darkly keeps Bootstrap's dark chevron, which would vanish on the dark field */
+:global(html[data-theme="darkly"]) .presetSelectControl {
+  --bs-form-select-bg-img: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23dee2e6' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
 }
 .presetSelectControl:focus {
   outline: none;
@@ -188,17 +190,10 @@
 
 .searchInput {
   @apply w-full px-2.5 py-1.5 text-xs rounded mb-2 font-mono;
-  background-color: #0f172a !important;
-  border: 1px solid #334155 !important;
-  color: #ffffff !important;
 }
 .searchInput:focus {
   outline: none;
   border-color: #06b6d4 !important;
-  color: #ffffff !important;
-}
-.searchInput::placeholder {
-  color: #94a3b8;
 }
 
 .dropdownList {
@@ -241,9 +236,7 @@
 }
 
 .stationInput {
-  @apply w-full px-2.5 py-1.5 text-xs rounded text-slate-300;
-  background-color: #0c1018 !important;
-  border: 1px solid #1e293b !important;
+  @apply w-full px-2.5 py-1.5 text-xs rounded;
 }
 .stationInput:focus {
   outline: none;

@@ -1,19 +1,22 @@
 @reference "@/App.css";
 
 .container {
-  @apply mt-4 relative p-4 rounded-xl border transition-all;
+  @apply relative p-4 rounded-lg border transition-all mb-4;
 }
 
 .activeContainer {
-  @apply bg-slate-900/80 border-cyan-500/40 shadow-[0_0_15px_rgba(6,182,212,0.15)];
+  @apply bg-slate-900/60;
+  border-color: rgba(6, 182, 212, 0.5);
 }
 
 .availableContainer {
-  @apply bg-slate-900/70 border-emerald-500/40 shadow-[0_0_15px_rgba(16,185,129,0.15)];
+  @apply bg-slate-900/60;
+  border-color: rgba(16, 185, 129, 0.5);
 }
 
 .standardContainer {
-  @apply bg-slate-900/40 border-slate-800;
+  @apply bg-slate-900/60;
+  border-color: rgba(6, 182, 212, 0.5);
 }
 
 .headerRow {
@@ -53,7 +56,7 @@
 }
 
 .ratesGrid {
-  @apply mt-3 pt-3 border-t border-slate-800/80 grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs font-mono;
+  @apply mt-3 pt-3 border-t border-slate-800/80 grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-2 text-xs font-mono;
 }
 
 .rateItem {

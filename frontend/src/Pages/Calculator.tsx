@@ -9,7 +9,6 @@ import { loadRoutePresets, loadRouteSystems, loadUserData, updateUserSettings } 
 import { queryKeys } from '@/Api/query';
 import {
   CargoInput,
-  MatchedCorridorIndicator,
   QuoteBreakdown,
   RouteSelector,
   calculateDistanceLy,
@@ -272,18 +271,6 @@ export default function Calculator() {
                 systems={availableSystems}
             />
 
-            {/* Dedicated Matched Corridor Status Component */}
-            <MatchedCorridorIndicator
-                selectedCorridor={effectiveCorridor}
-                matchingCorridor={matchingCorridor}
-                origin={origin}
-                destination={destination}
-                onApplyCorridor={handleApplyCorridor}
-                onUseBaseRates={() => {
-                    setSelectedCorridor(null);
-                }}
-            />
-
             {/* Two Column Layout: Cargo Inputs & Live Tariff Breakdown */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
                 <div className="lg:col-span-6 space-y-6">
@@ -306,6 +293,14 @@ export default function Calculator() {
                 <div className="lg:col-span-6 space-y-6">
                 <QuoteBreakdown
                     quote={quote}
+                    selectedCorridor={effectiveCorridor}
+                    matchingCorridor={matchingCorridor}
+                    origin={origin}
+                    destination={destination}
+                    onApplyCorridor={handleApplyCorridor}
+                    onUseBaseRates={() => {
+                        setSelectedCorridor(null);
+                    }}
                     onOpenContractModal={() => setShowContractModal(true)}
                 />
                 </div>

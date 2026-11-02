@@ -177,7 +177,7 @@ export function RouteSelector({
             id="corridor-preset-select"
             value={selectedCorridor?.id ? String(selectedCorridor.id) : ''}
             onChange={(e) => handleCorridorSelect(e.target.value)}
-            className={styles.presetSelectControl}
+            className={`${styles.presetSelectControl} bg-body text-body border-secondary`}
           >
             <option value="">{t('-- Custom / Manual Route --')}</option>
             {corridors.map((c) => (
@@ -256,7 +256,7 @@ export function RouteSelector({
                   placeholder={t('Search system or region...')}
                   value={originSearch}
                   onChange={(e) => setOriginSearch(e.target.value)}
-                  className={styles.searchInput}
+                  className={`${styles.searchInput} bg-body text-body border-secondary`}
                   autoFocus
                 />
                 <div className={styles.dropdownList}>
@@ -304,7 +304,7 @@ export function RouteSelector({
               id="origin-station-input"
               value={originStation}
               onChange={(e) => setOriginStation(e.target.value)}
-              className={styles.stationInput}
+              className={`${styles.stationInput} bg-body text-body border-secondary`}
               placeholder={t('e.g. Jita IV - Moon 4 - Caldari Navy Assembly Plant')}
             />
           </div>
@@ -356,7 +356,7 @@ export function RouteSelector({
                   placeholder={t('Search destination system...')}
                   value={destSearch}
                   onChange={(e) => setDestSearch(e.target.value)}
-                  className={styles.searchInput}
+                  className={`${styles.searchInput} bg-body text-body border-secondary`}
                   autoFocus
                 />
                 <div className={styles.dropdownList}>
@@ -405,7 +405,7 @@ export function RouteSelector({
               id="destination-station-input"
               value={destinationStation}
               onChange={(e) => setDestinationStation(e.target.value)}
-              className={styles.stationInput}
+              className={`${styles.stationInput} bg-body text-body border-secondary`}
               placeholder={t('e.g. 1DQ1-A 1 - Imperial Palace Keepstar')}
             />
           </div>

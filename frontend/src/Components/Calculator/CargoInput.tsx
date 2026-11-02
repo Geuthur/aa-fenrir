@@ -159,7 +159,7 @@ export function CargoInput({
               id="cargo-volume-input"
               value={volumeM3 || ''}
               onChange={(e) => setVolumeM3(Math.max(0, Number(e.target.value)))}
-              className={styles.volumeInput}
+              className={`${styles.volumeInput} bg-body text-body border-secondary`}
               placeholder={t('e.g. 50000')}
               step="1000"
               min="0"
@@ -212,7 +212,7 @@ export function CargoInput({
               id="cargo-collateral-input"
               value={collateralIsk || ''}
               onChange={(e) => setCollateralIsk(Math.max(0, Number(e.target.value)))}
-              className={styles.collateralInput}
+              className={`${styles.collateralInput} bg-body text-body border-secondary`}
               placeholder={t('e.g. 2000000000')}
               step="50000000"
               min="0"
@@ -338,7 +338,7 @@ export function CargoInput({
               value={pastedText}
               onChange={(e) => handleParseText(e.target.value)}
               placeholder={t('Paste EVE clipboard text here (e.g. Megathron 1 Battleship 50,000 m3 450,000,000 ISK or 50000 Helium Isotopes)...')}
-              className={styles.modalTextarea}
+              className={`${styles.modalTextarea} bg-body text-body border-secondary`}
             />
 
             {/* Appraisal summary preview */}
