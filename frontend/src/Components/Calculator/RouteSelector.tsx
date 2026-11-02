@@ -9,7 +9,8 @@ import { useTranslation } from 'react-i18next';
 // Styles
 import styles from '@/Components/Calculator/RouteSelector.module.css';
 
-import { getSecurityColor, getServiceBadge } from '@/Components/Calculator/calculator';
+import { getSecurityColor } from '@/Components/Calculator/calculator';
+import { ServiceBadge } from '@/Components/Calculator/ServiceBadge';
 import type { EveSolarSystem, FreightCorridor } from '@/types';
 
 interface RouteSelectorProps {
@@ -129,7 +130,6 @@ export function RouteSelector({
 
   const originSec = getSecurityColor(origin.security);
   const destSec = getSecurityColor(destination.security);
-  const serviceBadge = getServiceBadge(serviceType);
 
   const isCynoGuarded = Boolean(
     selectedCorridor?.is_cyno_route ||
@@ -417,9 +417,7 @@ export function RouteSelector({
           {/* Buttons */}
           <div className={styles.telemetryCard}>
             <span className={styles.telemetryLabel}>{t('Service Profile')}</span>
-            <span className={`${styles.serviceBadge} ${serviceBadge.color}`}>
-              {t(serviceBadge.label)}
-            </span>
+            <ServiceBadge serviceType={serviceType} />
           </div>
 
           <div className={styles.telemetryCard}>

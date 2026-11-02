@@ -9,8 +9,8 @@ import styles from '@/Components/Calculator/MatchedCorridorIndicator.module.css'
 import {
   formatIskCompact,
   formatM3,
-  getServiceBadge,
 } from '@/Components/Calculator/calculator';
+import { ServiceBadge } from '@/Components/Calculator/ServiceBadge';
 import type { EveSolarSystem, FreightCorridor } from '@/types';
 
 export interface MatchedCorridorIndicatorProps {
@@ -42,7 +42,6 @@ export function MatchedCorridorIndicator({
 
   // State 1: A corridor is currently applied
   if (selectedCorridor) {
-    const badge = getServiceBadge(selectedCorridor.service_type);
 
     return (
       <div className={`${styles.container} ${styles.activeContainer}`}>
@@ -55,9 +54,7 @@ export function MatchedCorridorIndicator({
                 <span className={styles.badgeActive}>
                   {t('Corridor Tariffs Applied')}
                 </span>
-                <span className={`text-[10px] font-mono px-2 py-0.5 rounded border ${badge.color}`}>
-                  {t(badge.label)}
-                </span>
+                <ServiceBadge serviceType={selectedCorridor.service_type} />
               </div>
               <p className="text-[11px] !text-slate-400 font-mono m-0 mt-0.5">
                 {t('Rates automatically adopted from alliance route preset.')}

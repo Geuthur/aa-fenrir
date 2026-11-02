@@ -1,9 +1,7 @@
 // Third Party
-import { AlertTriangle } from 'lucide-react';
-import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { FenrirModal } from '@/Components/Modals';
+import { ConfirmDeleteModal } from '@/Components/Base/ConfirmDeleteModal';
 import type { FreightCorridor } from '@/types';
 
 export interface DeleteRouteModalProps {
@@ -19,7 +17,7 @@ export interface DeleteRouteModalProps {
 
 /**
  * Confirmation modal for permanently deleting a route preset.
- * Built on top of react-bootstrap Modal via FenrirModal.
+ * Built on `ConfirmDeleteModal`.
  * Belongs to the RouteAdmin page (`src/Pages/RouteAdmin.tsx`).
  */
 export function DeleteRouteModal({
@@ -31,65 +29,30 @@ export function DeleteRouteModal({
   const { t } = useTranslation();
 
   return (
-    <FenrirModal
+    <ConfirmDeleteModal
       isOpen={Boolean(preset)}
       onClose={onClose}
-      size="lg"
+      onConfirm={() => preset && onConfirm(Number(preset.id))}
+      isPending={isPending}
+      title={t('DELETE ROUTE PRESET')}
+      subtitle={t('Confirm permanent removal of this corridor.')}
+      confirmText={t('Delete Route')}
+      pendingText={t('Deleting...')}
     >
-      <FenrirModal.Header>
-        <div className="flex items-center gap-2.5">
-          <div className="p-2 rounded-lg !bg-red-950/60 border !border-red-500/40 !text-red-400">
-            <AlertTriangle className="w-5 h-5" />
-          </div>
-          <div>
-            <FenrirModal.Title>{t('DELETE ROUTE PRESET')}</FenrirModal.Title>
-            <p className="text-[11px] !text-slate-400 font-mono m-0">
-              {t('Confirm permanent removal of this corridor.')}
-            </p>
-          </div>
-        </div>
-      </FenrirModal.Header>
-
       {preset && (
-        <FenrirModal.Body>
-          <div className="space-y-3 text-sm !text-slate-300">
-            <p>{t('Are you sure you want to delete this route preset?')}</p>
-            <div className="p-3.5 rounded-lg !bg-slate-900/80 border !border-slate-800 space-y-1.5 font-mono text-xs">
-              <div className="font-bold !text-white text-sm">{preset.name}</div>
-              <div className="flex items-center gap-1.5 !text-slate-400">
-                <span className="!text-cyan-400">{preset.origin_system}</span>
-                <span>➔</span>
-                <span className="!text-indigo-400">{preset.destination_system}</span>
-              </div>
+        <>
+          <p>{t('Are you sure you want to delete this route preset?')}</p>
+          <div className="p-3 rounded-3 border bg-body-tertiary font-monospace small">
+            <div className="fw-bold">{preset.name}</div>
+            <div className="d-flex flex-wrap align-items-center gap-2 text-body-secondary">
+              <span className="text-info">{preset.origin_system}</span>
+              <span>➔</span>
+              <span className="text-warning">{preset.destination_system}</span>
             </div>
-            <p className="text-xs !text-red-400/90 font-mono m-0">
-              {t('This action cannot be undone.')}
-            </p>
           </div>
-        </FenrirModal.Body>
+          <p className="small font-monospace text-danger mt-3 mb-0">{t('This action cannot be undone.')}</p>
+        </>
       )}
-
-      {preset && (
-        <FenrirModal.Footer>
-          <div className="flex justify-end gap-3 w-full">
-            <Button
-              variant="primary"
-              onClick={onClose}
-              className="text-xs font-semibold"
-            >
-              {t('Cancel')}
-            </Button>
-            <Button
-              variant="danger"
-              onClick={() => onConfirm(Number(preset.id))}
-              disabled={isPending}
-              className="text-xs font-semibold"
-            >
-              {isPending ? t('Deleting...') : t('Delete Route')}
-            </Button>
-          </div>
-        </FenrirModal.Footer>
-      )}
-    </FenrirModal>
+    </ConfirmDeleteModal>
   );
 }

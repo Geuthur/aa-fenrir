@@ -2,15 +2,14 @@
 import { useState } from 'react';
 
 // Third Party
-import { Check, Copy, Info, Shield } from 'lucide-react';
-import { Button } from 'react-bootstrap';
+import { Info, Shield } from 'lucide-react';
+import { Alert } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-// Styles
-import styles from '@/Components/Calculator/Modals/ContractModal.module.css';
-
+import { BaseModal } from '@/Components/Base/BaseModal';
+import { ModalTitle } from '@/Components/Base/ModalTitle';
 import { formatIsk } from '@/Components/Calculator/calculator';
-import { FenrirModal } from '@/Components/Modals';
+import { ContractParamCard } from '@/Components/Calculator/Modals/ContractParamCard';
 import type { QuoteCalculation } from '@/types';
 
 export interface ContractModalProps {
@@ -26,7 +25,7 @@ export interface ContractModalProps {
 
 /**
  * In-game Courier Contract Assistant Modal.
- * Built on top of react-bootstrap Modal via FenrirModal.
+ * Built on `BaseModal`.
  * Displays step-by-step instructions and copyable fields to quickly create the contract in EVE Online.
  * Belongs to the Calculator page (`src/Pages/Calculator.tsx`).
  */
@@ -52,191 +51,92 @@ export function ContractModal({
     ? 1
     : (quote.corridor?.days_to_complete || quote.corridor?.estimated_days || 3);
 
+  const destination = destinationStation || `${quote.destination.name} - Upwell Citadel`;
+
   return (
-    <FenrirModal isOpen={isOpen} onClose={onClose} size="xl">
-      <FenrirModal.Header>
-        <div className={styles.headerContent}>
-          <div className={styles.headerIcon}>
-            <Shield className={styles.headerShieldIcon} />
-          </div>
-          <div>
-            <FenrirModal.Title>{t('IN-GAME COURIER CONTRACT ASSISTANT')}</FenrirModal.Title>
-            <p className={styles.headerSubtitle}>
-              {t('Copy values directly into the EVE Online contract creation wizard.')}
-            </p>
-          </div>
+    <BaseModal
+      show={isOpen}
+      onHide={onClose}
+      size="xl"
+      title={
+        <ModalTitle
+          icon={<Shield size={20} />}
+          title={t('IN-GAME COURIER CONTRACT ASSISTANT')}
+          subtitle={t('Copy values directly into the EVE Online contract creation wizard.')}
+        />
+      }
+    >
+      {/* Step-by-Step EVE Instructions */}
+      <Alert variant="info" className="d-flex align-items-start gap-3 small">
+        <Info size={16} className="flex-shrink-0 mt-1" />
+        <div>
+          <div className="fw-semibold">{t('How to create this contract in EVE Online:')}</div>
+          <p className="mb-1">
+            {t('1. Select your cargo in your hangar, right-click and choose')}{' '}
+            <span className="font-monospace">{t('Create Contract')}</span>.
+          </p>
+          <p className="mb-1">
+            {t('2. Select Contract Type:')} <span className="font-monospace fw-bold">{t('Courier')}</span>{' '}
+            {t('and Availability:')} <span className="font-monospace fw-bold">{t('Private')}</span>.
+          </p>
+          <p className="mb-0">{t('3. Paste the Name / Corporation and parameters below into each field.')}</p>
         </div>
-      </FenrirModal.Header>
+      </Alert>
 
-      <FenrirModal.Body>
-        <div className={styles.bodyContainer}>
-          {/* Step-by-Step EVE Instructions */}
-          <div className={styles.instructionBox}>
-            <Info className={styles.instructionIcon} />
-            <div className={styles.instructionContent}>
-              <div className={styles.instructionTitle}>
-                {t('How to create this contract in EVE Online:')}
-              </div>
-              <p className={styles.instructionText}>
-                {t('1. Select your cargo in your hangar, right-click and choose')}{' '}
-                <span className={styles.instructionCode}>{t('Create Contract')}</span>.
-              </p>
-              <p className={styles.instructionText}>
-                {t('2. Select Contract Type:')}{' '}
-                <span className={styles.instructionCodeBold}>{t('Courier')}</span>{' '}
-                {t('and Availability:')}{' '}
-                <span className={styles.instructionCodeBold}>{t('Private')}</span>.
-              </p>
-              <p className={styles.instructionText}>
-                {t('3. Paste the Name / Corporation and parameters below into each field.')}
-              </p>
-            </div>
-          </div>
-
-          {/* Copyable Parameters Grid */}
-          <div className={styles.paramsGrid}>
-            {/* Assign To Corporation */}
-            <div className={`${styles.paramCard} ${styles.paramCardDefault}`}>
-              <div>
-                <div className={styles.paramLabel}>
-                  {t('Assign To (Private)')}
-                </div>
-                <div className={styles.paramValueWhite}>
-                  {assigneeCorp}
-                </div>
-              </div>
-              <Button
-                variant="outline-secondary"
-                size="sm"
-                onClick={() => handleCopy('assignee', assigneeCorp)}
-                className={styles.copyIconBtn}
-              >
-                {copiedField === 'assignee' ? (
-                  <Check className={styles.copyStatusIconEmerald} />
-                ) : (
-                  <Copy className={styles.copyStatusIconSlate} />
-                )}
-              </Button>
-            </div>
-
-            {/* Destination Citadel */}
-            <div className={`${styles.paramCard} ${styles.paramCardDefault}`}>
-              <div className={styles.destInfo}>
-                <div className={styles.paramLabel}>
-                  {t('Destination Citadel')}
-                </div>
-                <div className={styles.paramValueIndigo}>
-                  {destinationStation || `${quote.destination.name} - Upwell Citadel`}
-                </div>
-              </div>
-              <Button
-                variant="outline-secondary"
-                size="sm"
-                onClick={() =>
-                  handleCopy(
-                    'dest',
-                    destinationStation || `${quote.destination.name} - Upwell Citadel`
-                  )
-                }
-                className={styles.copyIconBtn}
-              >
-                {copiedField === 'dest' ? (
-                  <Check className={styles.copyStatusIconEmerald} />
-                ) : (
-                  <Copy className={styles.copyStatusIconSlate} />
-                )}
-              </Button>
-            </div>
-
-            {/* Reward */}
-            <div className={styles.paramCardReward}>
-              <div>
-                <div className={styles.paramLabel}>
-                  {t('Reward (ISK)')}
-                </div>
-                <div className={styles.paramValueReward}>
-                  {formatIsk(quote.totalReward)}
-                </div>
-              </div>
-              <Button
-                variant="outline-secondary"
-                size="sm"
-                onClick={() => handleCopy('reward', String(quote.totalReward))}
-                className={styles.copyRewardBtn}
-              >
-                {copiedField === 'reward' ? (
-                  <Check className={styles.copyStatusIconEmerald} />
-                ) : (
-                  <Copy className={styles.copyStatusIconEmerald} />
-                )}
-                <span>{copiedField === 'reward' ? t('Copied') : t('Copy')}</span>
-              </Button>
-            </div>
-
-            {/* Collateral */}
-            <div className={styles.paramCardCollateral}>
-              <div>
-                <div className={styles.paramLabel}>
-                  {t('Collateral (ISK)')}
-                </div>
-                <div className={styles.paramValueCollateral}>
-                  {formatIsk(quote.collateralIsk)}
-                </div>
-              </div>
-              <Button
-                variant="outline-secondary"
-                size="sm"
-                onClick={() => handleCopy('collateral', String(quote.collateralIsk))}
-                className={styles.copyCollateralBtn}
-              >
-                {copiedField === 'collateral' ? (
-                  <Check className={styles.copyStatusIconAmber} />
-                ) : (
-                  <Copy className={styles.copyStatusIconAmber} />
-                )}
-                <span>{copiedField === 'collateral' ? t('Copied') : t('Copy')}</span>
-              </Button>
-            </div>
-
-            {/* Expiration Days */}
-            <div className={`${styles.paramCard} ${styles.paramCardDefault}`}>
-              <div>
-                <div className={styles.paramLabel}>
-                  {t('Expiration')}
-                </div>
-                <div className={styles.paramValueWhite}>
-                  {expirationDays} {t('Days')}
-                </div>
-              </div>
-            </div>
-
-            {/* Days to Complete */}
-            <div className={`${styles.paramCard} ${styles.paramCardDefault}`}>
-              <div>
-                <div className={styles.paramLabel}>
-                  {t('Days to Complete')}
-                </div>
-                <div className={styles.paramValueWhite}>
-                  {daysToComplete} {t('Days')}
-                </div>
-              </div>
-            </div>
-          </div>
+      {/* Copyable Parameters Grid */}
+      <div className="row g-3">
+        <div className="col-12 col-md-6">
+          <ContractParamCard
+            label={t('Assign To (Private)')}
+            value={assigneeCorp}
+            copyText={assigneeCorp}
+            isCopied={copiedField === 'assignee'}
+            onCopy={(text) => handleCopy('assignee', text)}
+          />
         </div>
-      </FenrirModal.Body>
-
-      <FenrirModal.Footer>
-        <div className={styles.footerActions}>
-          <Button
-            variant="primary"
-            onClick={onClose}
-            className={styles.footerDoneBtn}
-          >
-            {t('Close')}
-          </Button>
+        <div className="col-12 col-md-6">
+          <ContractParamCard
+            label={t('Destination Citadel')}
+            value={destination}
+            valueClassName="text-info"
+            copyText={destination}
+            isCopied={copiedField === 'dest'}
+            onCopy={(text) => handleCopy('dest', text)}
+          />
         </div>
-      </FenrirModal.Footer>
-    </FenrirModal>
-
+        <div className="col-12 col-md-6">
+          <ContractParamCard
+            label={t('Reward (ISK)')}
+            value={formatIsk(quote.totalReward)}
+            valueClassName="text-success"
+            borderClassName="border-success"
+            copyIconClassName="text-success"
+            copyText={String(quote.totalReward)}
+            isCopied={copiedField === 'reward'}
+            onCopy={(text) => handleCopy('reward', text)}
+            showCopyLabel
+          />
+        </div>
+        <div className="col-12 col-md-6">
+          <ContractParamCard
+            label={t('Collateral (ISK)')}
+            value={formatIsk(quote.collateralIsk)}
+            valueClassName="text-warning"
+            borderClassName="border-warning"
+            copyIconClassName="text-warning"
+            copyText={String(quote.collateralIsk)}
+            isCopied={copiedField === 'collateral'}
+            onCopy={(text) => handleCopy('collateral', text)}
+            showCopyLabel
+          />
+        </div>
+        <div className="col-12 col-md-6">
+          <ContractParamCard label={t('Expiration')} value={`${expirationDays} ${t('Days')}`} />
+        </div>
+        <div className="col-12 col-md-6">
+          <ContractParamCard label={t('Days to Complete')} value={`${daysToComplete} ${t('Days')}`} />
+        </div>
+      </div>
+    </BaseModal>
   );
 }

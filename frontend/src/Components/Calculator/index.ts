@@ -5,3 +5,4 @@ export * from '@/Components/Calculator/MatchedCorridorIndicator';
 export * from '@/Components/Calculator/calculator';
 export * from '@/Components/Calculator/Modals';
 
+export * from '@/Components/Calculator/ServiceBadge';

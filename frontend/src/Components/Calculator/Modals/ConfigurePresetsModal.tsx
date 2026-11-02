@@ -3,14 +3,12 @@ import { useEffect, useState } from 'react';
 
 // Third Party
 import { SlidersHorizontal, Sparkles } from 'lucide-react';
-import { Button, Form } from 'react-bootstrap';
+import { Badge, Button, Form, ListGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-// Styles
-import styles from '@/Components/Calculator/Modals/ConfigurePresetsModal.module.css';
-
-import { getServiceBadge } from '@/Components/Calculator/calculator';
-import { FenrirModal } from '@/Components/Modals';
+import { BaseModal } from '@/Components/Base/BaseModal';
+import { ModalTitle } from '@/Components/Base/ModalTitle';
+import { ServiceBadge } from '@/Components/Calculator/ServiceBadge';
 import type { FreightCorridor } from '@/types';
 
 export interface ConfigurePresetsModalProps {
@@ -32,7 +30,7 @@ const MAX_QUICK_PRESETS = 5;
 
 /**
  * Modal dialog for customizing user's Quick-Select Route Presets (up to 5).
- * Built with react-bootstrap Modal via FenrirModal.
+ * Built on `BaseModal`.
  * Belongs to the Calculator page (`src/Pages/Calculator.tsx`).
  */
 export function ConfigurePresetsModal({
@@ -75,119 +73,83 @@ export function ConfigurePresetsModal({
   };
 
   return (
-    <FenrirModal
-      isOpen={isOpen}
-      onClose={handleClose}
+    <BaseModal
+      show={isOpen}
+      onHide={handleClose}
       onExited={() => setSelectedIds(currentSelectedIds)}
-      size="lg"
-    >
-      <FenrirModal.Header>
-        <div className={styles.headerContent}>
-          <div className={styles.headerIcon}>
-            <SlidersHorizontal className="w-5 h-5" />
-          </div>
-          <div>
-            <FenrirModal.Title>{t('CONFIGURE QUICK-SELECT ROUTES')}</FenrirModal.Title>
-            <p className={styles.headerSubtitle}>
-              {t('Select up to 5 favorite routes to display as quick-access buttons.')}
-            </p>
-          </div>
-        </div>
-      </FenrirModal.Header>
-
-      <FenrirModal.Body>
-        <div className={styles.bodyContainer}>
-          {/* Header count info */}
-          <div className={styles.summaryBox}>
-            <span className={styles.summaryLabel}>
-              <Sparkles className={styles.summaryIcon} />
-              {t('Favorite Corridor Buttons')}
-            </span>
-            <span
-              className={`${styles.countBadge} ${
-                selectedIds.length >= MAX_QUICK_PRESETS
-                  ? styles.countBadgeAmber
-                  : styles.countBadgeCyan
-              }`}
-            >
-              {selectedIds.length} / {MAX_QUICK_PRESETS} {t('selected')}
-            </span>
-          </div>
-
-          {corridors.length === 0 ? (
-            <div className={styles.emptyState}>
-              {t('No route presets available to configure.')}
-            </div>
-          ) : (
-            <div className={styles.corridorList}>
-              {corridors.map((corridor) => {
-                const id = Number(corridor.id);
-                const isSelected = selectedIds.includes(id);
-                const isDisabled = !isSelected && selectedIds.length >= MAX_QUICK_PRESETS;
-                const badge = getServiceBadge(corridor.service_type);
-
-                return (
-                  <div
-                    key={id}
-                    onClick={() => !isDisabled && handleToggle(id)}
-                    className={`${styles.corridorCard} ${
-                      isSelected
-                        ? styles.corridorCardSelected
-                        : isDisabled
-                        ? styles.corridorCardDisabled
-                        : styles.corridorCardDefault
-                    }`}
-                  >
-                    <div className={styles.corridorInfo}>
-                      <Form.Check
-                        type="checkbox"
-                        id={`corridor-check-${id}`}
-                        checked={isSelected}
-                        disabled={isDisabled}
-                        onChange={() => handleToggle(id)}
-                        onClick={(e) => e.stopPropagation()}
-                        className={styles.corridorCheck}
-                      />
-                      <div>
-                        <div className={styles.corridorTitle}>{corridor.name}</div>
-                        <div className={styles.corridorRoute}>
-                          <span className={styles.originText}>{corridor.origin_system}</span>
-                          <span> ➔ </span>
-                          <span className={styles.destText}>{corridor.destination_system}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <span className={`${styles.serviceBadge} ${badge.color}`}>
-                      {t(badge.label)}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      </FenrirModal.Body>
-
-      <FenrirModal.Footer>
-        <div className={styles.footerActions}>
-          <Button
-            variant="primary"
-            onClick={handleClose}
-            className={styles.modalBtn}
-          >
+      title={
+        <ModalTitle
+          icon={<SlidersHorizontal size={20} />}
+          title={t('CONFIGURE QUICK-SELECT ROUTES')}
+          subtitle={t('Select up to 5 favorite routes to display as quick-access buttons.')}
+        />
+      }
+      footer={
+        <>
+          <Button variant="secondary" onClick={handleClose}>
             {t('Cancel')}
           </Button>
-          <Button
-            variant="success"
-            onClick={handleSave}
-            disabled={isPending}
-            className={styles.modalBtn}
-          >
+          <Button variant="success" onClick={handleSave} disabled={isPending}>
             {isPending ? t('Saving...') : t('Save Selection')}
           </Button>
+        </>
+      }
+    >
+      {/* Header count info */}
+      <div className="d-flex flex-wrap gap-2 align-items-center justify-content-between p-3 mb-3 rounded-3 border bg-body-tertiary small font-monospace">
+        <span className="d-flex align-items-center gap-2">
+          <Sparkles size={14} className="text-info" />
+          {t('Favorite Corridor Buttons')}
+        </span>
+        <Badge bg={selectedIds.length >= MAX_QUICK_PRESETS ? 'warning' : 'info'}>
+          {selectedIds.length} / {MAX_QUICK_PRESETS} {t('selected')}
+        </Badge>
+      </div>
+
+      {corridors.length === 0 ? (
+        <div className="text-center py-4 small font-monospace text-body-secondary">
+          {t('No route presets available to configure.')}
         </div>
-      </FenrirModal.Footer>
-    </FenrirModal>
+      ) : (
+        <ListGroup className="overflow-y-auto" variant="flush">
+          {corridors.map((corridor) => {
+            const id = Number(corridor.id);
+            const isSelected = selectedIds.includes(id);
+            const isDisabled = !isSelected && selectedIds.length >= MAX_QUICK_PRESETS;
+
+            return (
+              <ListGroup.Item
+                key={id}
+                action={!isDisabled}
+                active={isSelected}
+                disabled={isDisabled}
+                onClick={() => !isDisabled && handleToggle(id)}
+                className="d-flex flex-wrap gap-2 align-items-center justify-content-between"
+              >
+                <div className="d-flex align-items-center gap-3">
+                  <Form.Check
+                    type="checkbox"
+                    id={`corridor-check-${id}`}
+                    checked={isSelected}
+                    disabled={isDisabled}
+                    onChange={() => handleToggle(id)}
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                  <div>
+                    <div className="fw-semibold small">{corridor.name}</div>
+                    <div className="small font-monospace">
+                      <span className="text-info">{corridor.origin_system}</span>
+                      <span> ➔ </span>
+                      <span className="text-warning">{corridor.destination_system}</span>
+                    </div>
+                  </div>
+                </div>
+                <ServiceBadge serviceType={corridor.service_type} />
+              </ListGroup.Item>
+            );
+          })}
+        </ListGroup>
+      )}
+    </BaseModal>
   );
 }
