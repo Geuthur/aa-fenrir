@@ -114,7 +114,6 @@ function CreateRouteModalContent({
       show={isOpen}
       onHide={onClose}
       onExited={onExited}
-      size="xl"
       title={
         <ModalTitle
           icon={<Sparkles size={20} />}
