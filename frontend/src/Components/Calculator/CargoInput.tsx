@@ -9,10 +9,11 @@ import { useTranslation } from 'react-i18next';
 // Styles
 import styles from '@/Components/Calculator/CargoInput.module.css';
 
+import { BaseModal } from '@/Components/Base/BaseModal';
+import { ModalTitle } from '@/Components/Base/ModalTitle';
 import { formatIskCompact, formatM3 } from '@/Components/Calculator/calculator';
 import { parseEveClipboard } from '@/Components/Fenrir/cargoParser';
 import { JUMP_FREIGHTERS, POPULAR_CARGO_PRESETS } from '@/Components/Fenrir/eveData';
-import { FenrirModal } from '@/Components/Modals';
 import type { CargoAppraisalItem, FreightCorridor, JumpFreighterShip } from '@/types';
 
 interface CargoInputProps {
@@ -311,106 +312,91 @@ export function CargoInput({
       </div>
 
       {/* Clipboard Inventory Appraisal Modal */}
-      <FenrirModal
-        isOpen={showClipboardModal}
-        onClose={() => setShowClipboardModal(false)}
-        size="lg"
-      >
-        <FenrirModal.Header>
-          <div className={styles.modalHeaderTitleGroup}>
-            <Clipboard className={styles.modalHeaderIcon} />
-            <FenrirModal.Title>{t('EVE INVENTORY CLIPBOARD APPRAISER')}</FenrirModal.Title>
-          </div>
-        </FenrirModal.Header>
-
-        <FenrirModal.Body>
-          <div className={styles.modalBodyContainer}>
-            <p className={styles.modalDescription}>
-              {t('In the EVE Online client, select items in your asset list, press Ctrl+C, and paste here. Our parser calculates volume and estimated market collateral automatically.')}
-            </p>
-            <p className="text-[11px] !text-amber-400/90 font-mono mt-1 mb-2 flex items-center gap-1.5">
-              <Info className="w-3.5 h-3.5 shrink-0" />
-              <span>{t('Note: This feature works best with the English version of the EVE Online client.')}</span>
-            </p>
-
-            <textarea
-              rows={6}
-              value={pastedText}
-              onChange={(e) => handleParseText(e.target.value)}
-              placeholder={t('Paste EVE clipboard text here (e.g. Megathron 1 Battleship 50,000 m3 450,000,000 ISK or 50000 Helium Isotopes)...')}
-              className={`${styles.modalTextarea} bg-body text-body border-secondary`}
-            />
-
-            {/* Appraisal summary preview */}
-            <div className={styles.appraisalSummary}>
-              <div>
-                <span className={styles.summaryItemLabel}>{t('Items Detected:')}</span>{' '}
-                <span className={styles.summaryValueWhite}>{t('{{count}} items', { count: appraisedItems.length })}</span>
-              </div>
-              <div>
-                <span className={styles.summaryItemLabel}>{t('Total Volume:')}</span>{' '}
-                <span className={styles.summaryValueCyan}>{formatM3(appraisedVol)}</span>
-              </div>
-              <div>
-                <span className={styles.summaryItemLabel}>{t('Estimated Collateral:')}</span>{' '}
-                <span className={styles.summaryValueAmber}>{formatIskCompact(appraisedVal)}</span>
-              </div>
-            </div>
-
-            {/* Preview items table */}
-            {appraisedItems.length > 0 && (
-              <div className={styles.previewTableContainer}>
-                {appraisedItems.slice(0, 10).map((item, idx) => (
-                  <div key={idx} className={styles.previewItemRow}>
-                    <span className={styles.previewItemName}>
-                      {item.name} × {item.quantity.toLocaleString()}
-                    </span>
-                    <div className={styles.previewItemStats}>
-                      <span className={styles.previewItemVolume}>{formatM3(item.totalVolume)}</span>
-                      <span className={styles.previewItemValue}>{formatIskCompact(item.totalValue)}</span>
-                    </div>
-                  </div>
-                ))}
-                {appraisedItems.length > 10 && (
-                  <div className={styles.previewTableMore}>
-                    {t('...and {{count}} more items', { count: appraisedItems.length - 10 })}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        </FenrirModal.Body>
-
-        <FenrirModal.Footer>
-          <div className={styles.modalFooterActions}>
-            <Button
-              variant="outline-secondary"
-              onClick={() => setShowClipboardModal(false)}
-              className={styles.modalCancelBtn}
-            >
+      <BaseModal
+        show={showClipboardModal}
+        onHide={() => setShowClipboardModal(false)}
+        title={<ModalTitle icon={<Clipboard size={20} />} title={t('EVE INVENTORY CLIPBOARD APPRAISER')} />}
+        footer={
+          <>
+            <Button variant="secondary" onClick={() => setShowClipboardModal(false)}>
               {t('Cancel')}
             </Button>
             <Button
               id="apply-appraisal-btn"
+              variant="success"
               onClick={applyAppraisal}
               disabled={appraisedItems.length === 0}
-              className={styles.modalApplyBtn}
             >
               {appliedCopied ? (
                 <>
-                  <Check className={styles.modalBtnIcon} />
+                  <Check size={16} />
                   <span>{t('Applied to Calculator!')}</span>
                 </>
               ) : (
                 <>
-                  <Clipboard className={styles.modalBtnIcon} />
+                  <Clipboard size={16} />
                   <span>{t('Apply to Calculator')}</span>
                 </>
               )}
             </Button>
+          </>
+        }
+      >
+        <p className="small text-body-secondary mb-2">
+          {t('In the EVE Online client, select items in your asset list, press Ctrl+C, and paste here. Our parser calculates volume and estimated market collateral automatically.')}
+        </p>
+        <p className="d-flex align-items-center gap-2 small font-monospace text-warning mb-3">
+          <Info size={14} className="flex-shrink-0" />
+          <span>{t('Note: This feature works best with the English version of the EVE Online client.')}</span>
+        </p>
+
+        <Form.Control
+          as="textarea"
+          rows={6}
+          value={pastedText}
+          onChange={(e) => handleParseText(e.target.value)}
+          placeholder={t('Paste EVE clipboard text here (e.g. Megathron 1 Battleship 50,000 m3 450,000,000 ISK or 50000 Helium Isotopes)...')}
+          className="font-monospace mb-3"
+        />
+
+        {/* Appraisal summary preview */}
+        <div className="aa-modal-card d-flex flex-wrap align-items-center justify-content-between gap-2 small font-monospace">
+          <div>
+            <span className="text-body-secondary">{t('Items Detected:')}</span>{' '}
+            <span className="fw-bold">{t('{{count}} items', { count: appraisedItems.length })}</span>
           </div>
-        </FenrirModal.Footer>
-      </FenrirModal>
+          <div>
+            <span className="text-body-secondary">{t('Total Volume:')}</span>{' '}
+            <span className="fw-bold text-info">{formatM3(appraisedVol)}</span>
+          </div>
+          <div>
+            <span className="text-body-secondary">{t('Estimated Collateral:')}</span>{' '}
+            <span className="fw-bold text-warning">{formatIskCompact(appraisedVal)}</span>
+          </div>
+        </div>
+
+        {/* Preview items table */}
+        {appraisedItems.length > 0 && (
+          <div className="aa-modal-scroll aa-modal-row mt-3 small font-monospace">
+            {appraisedItems.slice(0, 10).map((item, idx) => (
+              <div key={idx} className="d-flex justify-content-between align-items-center gap-3 border-bottom py-1">
+                <span className="text-truncate">
+                  {item.name} × {item.quantity.toLocaleString()}
+                </span>
+                <div className="d-flex gap-3 flex-shrink-0 text-end">
+                  <span className="text-info">{formatM3(item.totalVolume)}</span>
+                  <span className="text-warning">{formatIskCompact(item.totalValue)}</span>
+                </div>
+              </div>
+            ))}
+            {appraisedItems.length > 10 && (
+              <div className="text-center text-body-secondary pt-1">
+                {t('...and {{count}} more items', { count: appraisedItems.length - 10 })}
+              </div>
+            )}
+          </div>
+        )}
+      </BaseModal>
     </div>
   );
 }

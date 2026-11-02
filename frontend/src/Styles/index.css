@@ -512,6 +512,11 @@ html[data-bs-theme="light"] .modal-content.aa-react {
     width: 2.5rem;
 }
 
+.aa-modal-scroll {
+    max-height: 10rem;
+    overflow-y: auto;
+}
+
 .aa-modal-dropdown {
     left: 0;
     margin-top: 0.25rem;
