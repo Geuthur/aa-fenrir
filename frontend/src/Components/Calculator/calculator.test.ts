@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 import {
   calculateDistanceLy,
   calculateTransportQuote,
+  collateralFractionToPercent,
   doesCorridorMatch,
   estimateStargateJumps,
   formatDuration,
@@ -212,5 +213,18 @@ describe('formatDuration', () => {
     [2880, '48 h'],
   ])('formats %d minutes as %s', (minutes, expected) => {
     expect(formatDuration(minutes)).toBe(expected);
+  });
+});
+
+describe('collateralFractionToPercent', () => {
+  it.each([
+    [0, 0],
+    [0.005, 0.5],
+    [0.01, 1],
+    [0.07, 7],
+    [1, 100],
+    [1.5, 150],
+  ])('converts %d to %d percent', (fraction, percent) => {
+    expect(collateralFractionToPercent(fraction)).toBe(percent);
   });
 });

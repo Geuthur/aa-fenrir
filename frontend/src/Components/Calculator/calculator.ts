@@ -214,6 +214,11 @@ export function getSecurityColor(sec: number): { bg: string; text: string; borde
 }
 
 /** Bootstrap variant for the security status of a solar system (high/low/null). */
+/** The API returns the collateral percent as a fraction, the form edits the percent value. */
+export function collateralFractionToPercent(fraction: number): number {
+  return Number((fraction * 100).toFixed(4));
+}
+
 /** The API returns the display text of the danger level, the form and the API input need its value. */
 export function normalizeDangerLevel(dangerLevel?: string): 'safe' | 'cyno_guarded' {
   return dangerLevel?.toLowerCase().includes('cyno') ? 'cyno_guarded' : 'safe';

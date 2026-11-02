@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import type { components } from '@/Api/OpenApi';
 import { BaseModal } from '@/Components/Base/BaseModal';
 import { ModalTitle } from '@/Components/Base/ModalTitle';
-import { normalizeDangerLevel } from '@/Components/Calculator/calculator';
+import { collateralFractionToPercent, normalizeDangerLevel } from '@/Components/Calculator/calculator';
 import type { CynoWaypointItem } from '@/Components/RouteAdmin/CynoWaypointManager';
 import { useRouteFormOptions } from '@/Components/RouteAdmin/Hooks';
 import { RouteForm } from '@/Components/RouteAdmin/RouteForm';
@@ -58,10 +58,7 @@ function EditRouteModalContent({
     base_fee: Number(preset.base_fee || 0),
     fee_per_m3: Number(preset.fee_per_m3 || 0),
     fee_per_ly: Number(preset.fee_per_ly || 0),
-    collateral_percent:
-      preset.collateral_percent < 1
-        ? preset.collateral_percent * 100
-        : Number(preset.collateral_percent || 0),
+    collateral_percent: collateralFractionToPercent(Number(preset.collateral_percent || 0)),
     min_reward: Number(preset.min_reward || 0),
     estimated_time: Number(
       preset.estimated_time || (preset.estimated_days ? Math.round(preset.estimated_days * 24 * 60) : 0)
@@ -174,6 +171,8 @@ function EditRouteModalContent({
     onSubmit({
       ...formData,
       name: formData.name.trim(),
+      // The update endpoint only removes the corporation on 0, null keeps it
+      assign_corp_id: formData.assign_corp_id ?? 0,
       cyno_waypoint_ids: formData.is_cyno_route ? waypointSystems.map((w) => w.id) : [],
     });
   };
