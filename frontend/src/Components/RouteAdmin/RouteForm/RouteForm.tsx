@@ -8,6 +8,7 @@ import { Alert, Button, Form, InputGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import type { components } from '@/Api/OpenApi';
+import { formatDuration, formatIskExact, formatM3 } from '@/Components/Calculator/calculator';
 import { CynoWaypointManager, type CynoWaypointItem } from '@/Components/RouteAdmin/CynoWaypointManager';
 import { RouteNumberField } from '@/Components/RouteAdmin/RouteForm/RouteNumberField';
 import { RouteSystemPicker } from '@/Components/RouteAdmin/RouteForm/RouteSystemPicker';
@@ -206,33 +207,35 @@ export function RouteForm({
       <div className="aa-modal-card mb-3">
         <div className="row g-3">
           <div className="col-6 col-lg-3">
-            <RouteNumberField label={t('Max Volume (m³)')} value={formData.max_volume} onChange={(v) => updateField('max_volume', v)} />
+            <RouteNumberField label={t('Max Volume (m³)')} value={formData.max_volume} hint={formatM3(formData.max_volume)} hintClassName="text-info" onChange={(v) => updateField('max_volume', v)} />
           </div>
           <div className="col-6 col-lg-3">
-            <RouteNumberField label={t('Max Collateral (ISK)')} value={formData.max_collateral} onChange={(v) => updateField('max_collateral', v)} />
+            <RouteNumberField label={t('Max Collateral (ISK)')} value={formData.max_collateral} hint={formatIskExact(formData.max_collateral)} onChange={(v) => updateField('max_collateral', v)} />
           </div>
           <div className="col-6 col-lg-3">
-            <RouteNumberField label={t('Base Booking Fee (ISK)')} value={formData.base_fee} onChange={(v) => updateField('base_fee', v)} />
+            <RouteNumberField label={t('Base Booking Fee (ISK)')} value={formData.base_fee} hint={formatIskExact(formData.base_fee)} onChange={(v) => updateField('base_fee', v)} />
           </div>
           <div className="col-6 col-lg-3">
-            <RouteNumberField label={t('Fee per m³ (ISK)')} value={formData.fee_per_m3} onChange={(v) => updateField('fee_per_m3', v)} />
+            <RouteNumberField label={t('Fee per m³ (ISK)')} value={formData.fee_per_m3} hint={formatIskExact(formData.fee_per_m3)} onChange={(v) => updateField('fee_per_m3', v)} />
           </div>
           <div className="col-6 col-lg-3">
-            <RouteNumberField label={t('Fee per Light-Year (ISK)')} value={formData.fee_per_ly} onChange={(v) => updateField('fee_per_ly', v)} />
+            <RouteNumberField label={t('Fee per Light-Year (ISK)')} value={formData.fee_per_ly} hint={formatIskExact(formData.fee_per_ly)} onChange={(v) => updateField('fee_per_ly', v)} />
           </div>
           <div className="col-6 col-lg-3">
             <RouteNumberField
               label={t('Collateral Insurance (%)')}
               step={collateralStep}
               value={formData.collateral_percent}
+              hint={`${formData.collateral_percent}%`}
+              hintClassName="text-info"
               onChange={(v) => updateField('collateral_percent', v)}
             />
           </div>
           <div className="col-6 col-lg-3">
-            <RouteNumberField label={t('Min Reward (ISK)')} value={formData.min_reward} onChange={(v) => updateField('min_reward', v)} />
+            <RouteNumberField label={t('Min Reward (ISK)')} value={formData.min_reward} hint={formatIskExact(formData.min_reward)} onChange={(v) => updateField('min_reward', v)} />
           </div>
           <div className="col-6 col-lg-3">
-            <RouteNumberField label={t('Estimated Time (Mins)')} value={formData.estimated_time} onChange={(v) => updateField('estimated_time', v)} />
+            <RouteNumberField label={t('Estimated Time (Mins)')} value={formData.estimated_time} hint={formatDuration(formData.estimated_time)} hintClassName="text-info" onChange={(v) => updateField('estimated_time', v)} />
           </div>
         </div>
       </div>
