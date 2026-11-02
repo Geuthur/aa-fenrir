@@ -8,8 +8,11 @@ from unittest.mock import Mock, patch
 from django.contrib.messages import get_messages
 from django.urls import reverse
 
+# Alliance Auth
+from allianceauth.eveonline.models import EveCharacter
+
 # AA Fenrir
-from aafenrir.models import ContractHandler
+from aafenrir.models import ContractHandler, EveEntity
 from aafenrir.tests import AuthTestCase
 from aafenrir.tests.testdata.factory import UserMainFactory
 from aafenrir.tests.testdata.fenrir import EveEntityFactory
@@ -110,6 +113,25 @@ class TestAddContractHandler(AuthTestCase):
             response, reverse("aafenrir:index"), fetch_redirect_response=False
         )
         self.assertFalse(ContractHandler.objects.exists())
+        mock_task.apply_async.assert_not_called()
+        self.assertEqual(len(list(get_messages(response.wsgi_request))), 1)
+
+    @patch(f"{VIEWS_PATH}.update_freight")
+    def test_should_reject_npc_corporation(self, mock_task):
+        # Test Data
+        EveCharacter.objects.filter(pk=self.character.pk).update(
+            corporation_id=1_000_125
+        )
+
+        # Test Action
+        response = self._get_with_token(self.manager)
+
+        # Expected Result
+        self.assertRedirects(
+            response, reverse("aafenrir:index"), fetch_redirect_response=False
+        )
+        self.assertFalse(ContractHandler.objects.exists())
+        self.assertFalse(EveEntity.objects.filter(eve_id=1_000_125).exists())
         mock_task.apply_async.assert_not_called()
         self.assertEqual(len(list(get_messages(response.wsgi_request))), 1)
 

@@ -14,6 +14,7 @@ from esi.decorators import token_required
 
 # AA Fenrir
 from aafenrir import __app_name__, __title__, __version__
+from aafenrir.constants import MIN_PLAYER_CORPORATION_ID
 from aafenrir.models import ContractHandler, EveEntity, General
 from aafenrir.providers import AppLogger
 from aafenrir.tasks import update_freight
@@ -49,6 +50,10 @@ def add_contract_handler(request: WSGIRequest, token):
         return redirect("aafenrir:index")
 
     character = ownership.character
+    if character.corporation_id < MIN_PLAYER_CORPORATION_ID:
+        messages.error(request, _("NPC corporations can not be added."))
+        return redirect("aafenrir:index")
+
     organization, __ = EveEntity.objects.get_or_create(
         eve_id=character.corporation_id,
         defaults={"category": "corporation", "name": character.corporation_name},
