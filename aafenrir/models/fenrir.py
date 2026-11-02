@@ -475,6 +475,23 @@ class Contract(models.Model):
         return self.date_expired < now()
 
     @property
+    def is_pending_expired(self) -> bool:
+        """whether this contract is still stored as pending but has expired"""
+        return self.status == Status.PENDING and self.has_expired
+
+    @property
+    def effective_status(self) -> str:
+        """status to report, an expired pending contract counts as failed"""
+        return str(Status.FAILED) if self.is_pending_expired else self.status
+
+    @property
+    def effective_status_display(self) -> str:
+        """display name of the status to report"""
+        if self.is_pending_expired:
+            return str(_("Expired"))
+        return self.get_status_display()
+
+    @property
     def date_latest(self) -> bool:
         """latest status related date of this contract"""
         if self.date_completed:

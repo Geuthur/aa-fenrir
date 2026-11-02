@@ -669,12 +669,8 @@ class ContractApiEndpoints:
                         id=c.id,
                         contract_id=c.contract_id,
                         title=c.title or "",
-                        status=c.status,
-                        status_display=(
-                            c.get_status_display()
-                            if hasattr(c, "get_status_display")
-                            else c.status
-                        ),
+                        status=c.effective_status,
+                        status_display=c.effective_status_display,
                         issuer_name=c.issuer_name or "",
                         issuer_corporation_name=issuer_corp_name,
                         issuer_corporation_ticker=issuer_corp_ticker,
