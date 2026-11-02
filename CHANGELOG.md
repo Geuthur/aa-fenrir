@@ -45,9 +45,9 @@ Section Order:
   - Sortable columns for solar system name, security status (with color-coded badges for highsec, lowsec, and nullsec), and region.
   - Dynamic pagination (10, 25, 50, 100, Show All) with localized item count labels.
 - **Enhanced Validations & Safety Warnings**:
-  - Warning when cargo collateral exceeds corridor insurance maximum (`exceeds corridor insurance maximum`).
   - Stargate safety warning when attempting to route Standard Freighters through Nullsec stargates (`Standard Freighters cannot safely transit Nullsec stargates! Please use Jump Freighter service.`).
 - **Calculator Limits**: Volume and collateral stay within the limits of the active route. Without a route `AA_FENRIR_MAX_VOLUME` (default 10,000,000 m³) and `AA_FENRIR_MAX_COLLATERAL` (default 1,000,000,000,000 ISK) apply, both can be set in `local.py`.
+- **Route Form Value Hints**: The number fields of the create and edit route modals show the entered value in a readable form, for example `15.00 B ISK`, `330,000 m³` or `1.5 h`.
 - **Calculator Route Preset Hint**: If a route preset exists for the entered route but base rates are in use, a red pulsing exclamation mark appears next to the reward, and a green pulsing *Apply Route Preset* button next to *Copy ISK*.
 - **Internationalization (i18n)**:
   - Added full German (`de/translation.json`) and English (`en/translation.json`) translations for new table pagination items, warnings, and cyno waypoint controls.
@@ -56,9 +56,15 @@ Section Order:
 
 - **Calculator System Dropdowns**: The *Origin* and *Destination* system dropdowns are no longer cut off by the route container.
 - **Calculator Input Fields**: Cargo volume, collateral, station, system search, corridor preset and paste fields stay readable when focused. Their colors now come from Bootstrap and follow the Dark and Light theme.
+- **Route Edit Form**:
+  - Cyno guarded routes show the correct danger level, and saving no longer stores the display text instead of the value.
+  - Selecting no corporation now removes the assigned corporation.
+  - The collateral percent is shown exactly, for example `7` instead of `7.000000000000001`.
+  - The collateral percent stays within the model limit of 9.9999.
+- **Calculator Number Fields**: The `m³` and `ISK` units are no longer covered by the spin buttons on hover and focus.
 - **Calculator on Mobile**: The quick-select collateral buttons and card headers stay inside their container on small screens.
-- **Smooth Modal Exit Transitions (`FenrirModal`)**:
-  - Resolved premature unmounting and content popping during modal fade-out by centrally caching previous modal content in `FenrirModal` until Bootstrap's transition finishes.
+- **Smooth Modal Exit Transitions (`BaseModal`)**:
+  - Resolved premature unmounting and content popping during modal fade-out by keeping the previous modal content in `BaseModal`.
 - **Modal Form Spacing & Alignment**:
   - Removed excessive `mt-4` margins above *Service Type* and *Danger Rating* form controls.
   - Replaced Bootstrap `Form.Check` with a clean flexbox layout to ensure checkboxes align perfectly alongside labels without vertical offset.
@@ -67,6 +73,9 @@ Section Order:
 
 ### Changed
 
+- **Modal Design**: Modals match the calculator view through Bootstrap overrides under `.modal-content.aa-react`, with cards, uppercase labels and a boxed title icon. They follow the Darkly and Flatly themes. The clipboard appraiser moved to `BaseModal`, `FenrirModal` is removed, and `CynoWaypointManager` moved from Tailwind to Bootstrap.
+- **Calculator Layout**: Thin theme-coloured scrollbars on aa-fenrir pages. Collateral buttons and quick load presets wrap instead of scrolling or squeezing their text.
+- **Tables**: Migrated to `@tanstack/react-table` 9.
 - **Modals and Forms**: Calculator, Route Admin and Administration modals now share `BaseModal` and `ConfirmDeleteModal`, and the route forms share `RouteForm`. They use Bootstrap instead of Tailwind and CSS modules.
 - **Shared `BaseTable`**: Replaced the Fenrir-specific table with the shared `BaseTable` used in the other plugins (moved to `Components/Base/BaseTable`). The tables in *Route Admin* and *Contracts Queue* now use its default look. Formatting helpers moved to `Utils/format`.
 - **Central Permissions**: All permission checks use the `General` model (`General.Permission`, `has_perm`, `has_basic_access`, `has_management_access`, `has_admin_access`). The helper `aafenrir.helpers.permission` was removed.
