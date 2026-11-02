@@ -181,7 +181,6 @@ function EditRouteModalContent({
     <BaseModal
       show={isOpen}
       onHide={onClose}
-      size="xl"
       title={
         <ModalTitle
           icon={<Pencil size={20} />}

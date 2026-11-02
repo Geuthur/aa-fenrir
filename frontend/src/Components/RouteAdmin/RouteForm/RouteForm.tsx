@@ -120,7 +120,7 @@ export function RouteForm({
 
       {/* Origin & Destination */}
       <div className="row g-3 mb-3">
-        <div className="col-12 col-md-6">
+        <div className="col-12 col-lg-6">
           <RouteSystemPicker
             label={t('Origin Solar System')}
             stationLabel={t('Origin Station / Structure Name')}
@@ -132,7 +132,7 @@ export function RouteForm({
             onStationChange={(value) => updateField('origin_system_station', value)}
           />
         </div>
-        <div className="col-12 col-md-6">
+        <div className="col-12 col-lg-6">
           <RouteSystemPicker
             label={t('Destination Solar System')}
             stationLabel={t('Destination Station / Structure Name')}
@@ -147,45 +147,47 @@ export function RouteForm({
       </div>
 
       {/* Service & Flags */}
-      <div className="row g-3 mb-3 align-items-end">
-        <div className="col-12 col-sm-6">
-          <Form.Label className="small text-body-secondary">{t('Service Type')}</Form.Label>
-          <Form.Select
-            value={formData.service_type}
-            onChange={(e) => updateField('service_type', e.target.value as RouteFormData['service_type'])}
-          >
-            <option value="jumpfreighter">{t('Jump Freighter (JF)')}</option>
-            <option value="freighter">{t('Standard Freighter')}</option>
-            <option value="deep_space_transport">{t('Deep Space Transport (DST)')}</option>
-          </Form.Select>
-        </div>
-        <div className="col-12 col-sm-6">
-          <Form.Label className="small text-body-secondary">{t('Danger Rating')}</Form.Label>
-          <Form.Select
-            value={formData.danger_level}
-            onChange={(e) => updateField('danger_level', e.target.value as RouteFormData['danger_level'])}
-          >
-            <option value="safe">{t('Safe')}</option>
-            <option value="cyno_guarded">{t('Cyno-Guarded')}</option>
-          </Form.Select>
-        </div>
-        <div className="col-12 col-sm-6">
-          <Form.Check
-            type="switch"
-            id={`${idPrefix}-is-cyno-route`}
-            label={t('Is Cyno Pipeline Route')}
-            checked={formData.is_cyno_route}
-            onChange={(e) => updateField('is_cyno_route', e.target.checked)}
-          />
-        </div>
-        <div className="col-12 col-sm-6">
-          <Form.Check
-            type="switch"
-            id={`${idPrefix}-has-alliance-subsidy`}
-            label={t('Alliance Subsidy Enabled')}
-            checked={formData.has_alliance_subsidy ?? true}
-            onChange={(e) => updateField('has_alliance_subsidy', e.target.checked)}
-          />
+      <div className="aa-modal-card mb-3">
+        <div className="row g-3 align-items-end">
+          <div className="col-12 col-sm-6 col-lg-3">
+            <Form.Label>{t('Service Type')}</Form.Label>
+            <Form.Select
+              value={formData.service_type}
+              onChange={(e) => updateField('service_type', e.target.value as RouteFormData['service_type'])}
+            >
+              <option value="jumpfreighter">{t('Jump Freighter (JF)')}</option>
+              <option value="freighter">{t('Standard Freighter')}</option>
+              <option value="deep_space_transport">{t('Deep Space Transport (DST)')}</option>
+            </Form.Select>
+          </div>
+          <div className="col-12 col-sm-6 col-lg-3">
+            <Form.Label>{t('Danger Rating')}</Form.Label>
+            <Form.Select
+              value={formData.danger_level}
+              onChange={(e) => updateField('danger_level', e.target.value as RouteFormData['danger_level'])}
+            >
+              <option value="safe">{t('Safe')}</option>
+              <option value="cyno_guarded">{t('Cyno-Guarded')}</option>
+            </Form.Select>
+          </div>
+          <div className="col-12 col-sm-6 col-lg-3">
+            <Form.Check
+              type="switch"
+              id={`${idPrefix}-is-cyno-route`}
+              label={t('Is Cyno Pipeline Route')}
+              checked={formData.is_cyno_route}
+              onChange={(e) => updateField('is_cyno_route', e.target.checked)}
+            />
+          </div>
+          <div className="col-12 col-sm-6 col-lg-3">
+            <Form.Check
+              type="switch"
+              id={`${idPrefix}-has-alliance-subsidy`}
+              label={t('Alliance Subsidy Enabled')}
+              checked={formData.has_alliance_subsidy ?? true}
+              onChange={(e) => updateField('has_alliance_subsidy', e.target.checked)}
+            />
+          </div>
         </div>
       </div>
 
@@ -201,48 +203,50 @@ export function RouteForm({
       )}
 
       {/* Rates Breakdown */}
-      <div className="row g-3 my-1">
-        <div className="col-6">
-          <RouteNumberField label={t('Max Volume (m³)')} value={formData.max_volume} onChange={(v) => updateField('max_volume', v)} />
-        </div>
-        <div className="col-6">
-          <RouteNumberField label={t('Max Collateral (ISK)')} value={formData.max_collateral} onChange={(v) => updateField('max_collateral', v)} />
-        </div>
-        <div className="col-6">
-          <RouteNumberField label={t('Base Booking Fee (ISK)')} value={formData.base_fee} onChange={(v) => updateField('base_fee', v)} />
-        </div>
-        <div className="col-6">
-          <RouteNumberField label={t('Fee per m³ (ISK)')} value={formData.fee_per_m3} onChange={(v) => updateField('fee_per_m3', v)} />
-        </div>
-        <div className="col-6">
-          <RouteNumberField label={t('Fee per Light-Year (ISK)')} value={formData.fee_per_ly} onChange={(v) => updateField('fee_per_ly', v)} />
-        </div>
-        <div className="col-6">
-          <RouteNumberField
-            label={t('Collateral Insurance (%)')}
-            step={collateralStep}
-            value={formData.collateral_percent}
-            onChange={(v) => updateField('collateral_percent', v)}
-          />
-        </div>
-        <div className="col-6">
-          <RouteNumberField label={t('Min Reward (ISK)')} value={formData.min_reward} onChange={(v) => updateField('min_reward', v)} />
-        </div>
-        <div className="col-6">
-          <RouteNumberField label={t('Estimated Time (Mins)')} value={formData.estimated_time} onChange={(v) => updateField('estimated_time', v)} />
+      <div className="aa-modal-card mb-3">
+        <div className="row g-3">
+          <div className="col-6 col-lg-3">
+            <RouteNumberField label={t('Max Volume (m³)')} value={formData.max_volume} onChange={(v) => updateField('max_volume', v)} />
+          </div>
+          <div className="col-6 col-lg-3">
+            <RouteNumberField label={t('Max Collateral (ISK)')} value={formData.max_collateral} onChange={(v) => updateField('max_collateral', v)} />
+          </div>
+          <div className="col-6 col-lg-3">
+            <RouteNumberField label={t('Base Booking Fee (ISK)')} value={formData.base_fee} onChange={(v) => updateField('base_fee', v)} />
+          </div>
+          <div className="col-6 col-lg-3">
+            <RouteNumberField label={t('Fee per m³ (ISK)')} value={formData.fee_per_m3} onChange={(v) => updateField('fee_per_m3', v)} />
+          </div>
+          <div className="col-6 col-lg-3">
+            <RouteNumberField label={t('Fee per Light-Year (ISK)')} value={formData.fee_per_ly} onChange={(v) => updateField('fee_per_ly', v)} />
+          </div>
+          <div className="col-6 col-lg-3">
+            <RouteNumberField
+              label={t('Collateral Insurance (%)')}
+              step={collateralStep}
+              value={formData.collateral_percent}
+              onChange={(v) => updateField('collateral_percent', v)}
+            />
+          </div>
+          <div className="col-6 col-lg-3">
+            <RouteNumberField label={t('Min Reward (ISK)')} value={formData.min_reward} onChange={(v) => updateField('min_reward', v)} />
+          </div>
+          <div className="col-6 col-lg-3">
+            <RouteNumberField label={t('Estimated Time (Mins)')} value={formData.estimated_time} onChange={(v) => updateField('estimated_time', v)} />
+          </div>
         </div>
       </div>
 
       {/* EVE Contract Assistant Settings */}
-      <div className="mt-4 p-3 rounded-3 border bg-body">
-        <h3 className="d-flex align-items-center gap-2 fs-6 text-uppercase mb-3">
+      <div className="aa-modal-card aa-modal-card-accent">
+        <h3 className="aa-modal-section-title mb-3">
           <Shield size={16} className="text-info" />
           {t('In-Game Contract Assistant Settings')}
         </h3>
 
         <div className="row g-3">
           <div className="col-12 col-sm-4">
-            <Form.Label className="small text-body-secondary">{t('Assign To Corporation')}</Form.Label>
+            <Form.Label>{t('Assign To Corporation')}</Form.Label>
             <Form.Select
               value={formData.assign_corp_id || ''}
               onChange={(e) => updateField('assign_corp_id', e.target.value ? Number(e.target.value) : null)}

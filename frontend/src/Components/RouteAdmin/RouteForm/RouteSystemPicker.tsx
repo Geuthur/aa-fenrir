@@ -66,8 +66,8 @@ export function RouteSystemPicker({
       : t('-- Select a system ({{count}} found) --', { count: filtered.length });
 
   return (
-    <Form.Group>
-      <Form.Label className="small text-body-secondary">{label}</Form.Label>
+    <Form.Group className="aa-modal-card h-100">
+      <Form.Label>{label}</Form.Label>
       <Form.Control
         type="text"
         placeholder={t('Filter system...')}
@@ -107,7 +107,7 @@ export function RouteSystemPicker({
         ))}
       </Form.Select>
 
-      <Form.Label className="small text-body-secondary mt-3">{stationLabel}</Form.Label>
+      <Form.Label className="mt-3">{stationLabel}</Form.Label>
       <Form.Control
         value={station}
         onChange={(e) => onStationChange(e.target.value)}

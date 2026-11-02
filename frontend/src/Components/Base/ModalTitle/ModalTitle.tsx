@@ -13,8 +13,8 @@ export interface ModalTitleProps {
 /** Title block for `BaseModal` (icon, title and optional subtitle). */
 export function ModalTitle({ icon, title, subtitle }: ModalTitleProps) {
   return (
-    <div className="d-flex align-items-center gap-2">
-      {icon && <span className="text-info flex-shrink-0">{icon}</span>}
+    <div className="d-flex align-items-center gap-3">
+      {icon && <span className="aa-modal-title-icon text-info">{icon}</span>}
       <div>
         <div>{title}</div>
         {subtitle && <p className="small fw-normal font-monospace text-body-secondary mb-0">{subtitle}</p>}

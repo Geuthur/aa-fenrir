@@ -96,7 +96,7 @@ export function ConfigurePresetsModal({
       }
     >
       {/* Header count info */}
-      <div className="d-flex flex-wrap gap-2 align-items-center justify-content-between p-3 mb-3 rounded-3 border bg-body small font-monospace">
+      <div className="d-flex flex-wrap gap-2 align-items-center justify-content-between mb-3 aa-modal-card small font-monospace">
         <span className="d-flex align-items-center gap-2">
           <Sparkles size={14} className="text-info" />
           {t('Favorite Corridor Buttons')}

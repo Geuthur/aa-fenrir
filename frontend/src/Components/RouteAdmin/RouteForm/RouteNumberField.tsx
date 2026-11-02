@@ -17,7 +17,7 @@ export interface RouteNumberFieldProps {
 export function RouteNumberField({ label, value, onChange, step, min, max }: RouteNumberFieldProps) {
   return (
     <Form.Group>
-      <Form.Label className="small text-body-secondary">{label}</Form.Label>
+      <Form.Label>{label}</Form.Label>
       <Form.Control
         type="number"
         step={step}
