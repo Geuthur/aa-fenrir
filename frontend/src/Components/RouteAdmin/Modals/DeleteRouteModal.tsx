@@ -42,7 +42,7 @@ export function DeleteRouteModal({
       {preset && (
         <>
           <p>{t('Are you sure you want to delete this route preset?')}</p>
-          <div className="p-3 rounded-3 border bg-body-tertiary font-monospace small">
+          <div className="p-3 rounded-3 border bg-body font-monospace small">
             <div className="fw-bold">{preset.name}</div>
             <div className="d-flex flex-wrap align-items-center gap-2 text-body-secondary">
               <span className="text-info">{preset.origin_system}</span>

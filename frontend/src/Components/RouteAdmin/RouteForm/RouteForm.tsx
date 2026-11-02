@@ -234,7 +234,7 @@ export function RouteForm({
       </div>
 
       {/* EVE Contract Assistant Settings */}
-      <div className="mt-4 p-3 rounded-3 border bg-body-tertiary">
+      <div className="mt-4 p-3 rounded-3 border bg-body">
         <h3 className="d-flex align-items-center gap-2 fs-6 text-uppercase mb-3">
           <Shield size={16} className="text-info" />
           {t('In-Game Contract Assistant Settings')}

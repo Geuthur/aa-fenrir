@@ -39,7 +39,7 @@ export function DeleteRouteSystemModal({
               name: system.name,
             })}
           </p>
-          <div className="p-3 rounded-3 border bg-body-tertiary font-monospace small">
+          <div className="p-3 rounded-3 border bg-body font-monospace small">
             <div className="fw-bold">{system.name}</div>
             {system.region_name && (
               <div className="text-body-secondary">

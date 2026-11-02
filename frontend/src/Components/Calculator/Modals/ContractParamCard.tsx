@@ -40,7 +40,7 @@ export function ContractParamCard({
 
   return (
     <div
-      className={`d-flex align-items-center justify-content-between gap-2 p-3 rounded-3 border bg-body-tertiary ${borderClassName}`}
+      className={`d-flex align-items-center justify-content-between gap-2 p-3 rounded-3 border bg-body ${borderClassName}`}
     >
       <div className="text-truncate">
         <div className="small text-uppercase font-monospace text-body-secondary">{label}</div>
