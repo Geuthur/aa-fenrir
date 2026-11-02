@@ -67,6 +67,24 @@ class TestAdministrationApi(AuthTestCase):
         self.assertEqual(row["contracts_in_progress"], 1)
         self.assertEqual(row["status"], "no_character")
 
+    def test_list_handlers_should_not_count_expired_contracts_as_pending(self):
+        # Test Data
+        handler = ContractHandlerFactory()
+        ContractFactory(handler=handler, status=Status.PENDING)
+        ContractFactory(
+            handler=handler,
+            status=Status.PENDING,
+            date_expired=timezone.now() - timedelta(minutes=1),
+        )
+
+        # Test Action
+        response = self._get(self.admin, "list_administration_handlers")
+
+        # Expected Result
+        row = next(r for r in response.json() if r["id"] == handler.organization_id)
+        self.assertEqual(row["contracts_total"], 2)
+        self.assertEqual(row["contracts_pending"], 1)
+
     def test_list_handlers_should_exclude_npc_corporations(self):
         # Test Data
         npc = ContractHandlerFactory(organization=EveEntityFactory(eve_id=1000125))
@@ -119,6 +137,33 @@ class TestAdministrationApi(AuthTestCase):
         self.assertEqual(
             data["recent_notifications"][0]["contract_id"], first.contract_id
         )
+
+    def test_get_handler_should_count_expired_pending_contracts_as_failed(self):
+        # Test Data
+        handler = ContractHandlerFactory()
+        ContractFactory(handler=handler, status=Status.PENDING, reward=1.0)
+        ContractFactory(handler=handler, status=Status.FAILED, reward=2.0)
+        ContractFactory(
+            handler=handler,
+            status=Status.PENDING,
+            reward=4.0,
+            date_expired=timezone.now() - timedelta(minutes=1),
+        )
+
+        # Test Action
+        response = self._get(
+            self.admin, "get_administration_handler", corporation_id=handler.pk
+        )
+
+        # Expected Result
+        data = response.json()
+        stats = {s["status"]: s for s in data["stats"]}
+        self.assertEqual(stats[Status.PENDING]["count"], 1)
+        self.assertEqual(stats[Status.PENDING]["reward"], 1.0)
+        self.assertEqual(stats[Status.FAILED]["count"], 2)
+        self.assertEqual(stats[Status.FAILED]["reward"], 6.0)
+        self.assertEqual(data["contracts_total"], 3)
+        self.assertEqual(data["contracts_pending"], 1)
 
     def test_get_handler_should_return_404_for_npc_corporation(self):
         # Test Data

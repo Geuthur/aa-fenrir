@@ -2,7 +2,19 @@
 
 # Django
 from django.db import models
-from django.db.models import Count, Max, Min, QuerySet, Sum
+from django.db.models import (
+    Case,
+    CharField,
+    Count,
+    F,
+    Max,
+    Min,
+    QuerySet,
+    Sum,
+    Value,
+    When,
+)
+from django.utils.timezone import now
 
 # Alliance Auth
 from esi.errors import TokenError
@@ -45,6 +57,11 @@ def get_handler_status(handler: ContractHandler) -> str:
     return "ok"
 
 
+def _is_active_pending() -> models.Q:
+    """Return the filter for pending contracts which have not expired."""
+    return models.Q(status=Status.PENDING, date_expired__gte=now())
+
+
 def _contract_counts(handler_ids: list[int]) -> dict[int, dict[str, int]]:
     """Return contract counts per handler: total, pending, in_progress."""
     rows = (
@@ -52,7 +69,7 @@ def _contract_counts(handler_ids: list[int]) -> dict[int, dict[str, int]]:
         .values("handler_id")
         .annotate(
             total=Count("pk"),
-            pending=Count("pk", filter=models.Q(status=Status.PENDING)),
+            pending=Count("pk", filter=_is_active_pending()),
             in_progress=Count("pk", filter=models.Q(status=Status.IN_PROGRESS)),
         )
     )
@@ -99,24 +116,35 @@ def handler_detail(
 
     stats = [
         schema.AdministrationStatusStatsSchema(
-            status=row["status"],
+            status=row["effective_status"],
             count=row["count"],
             reward=row["reward"] or 0,
             collateral=row["collateral"] or 0,
             volume=row["volume"] or 0,
         )
-        for row in contracts.values("status")
+        for row in contracts.annotate(
+            effective_status=Case(
+                When(
+                    status=Status.PENDING,
+                    date_expired__lt=now(),
+                    then=Value(str(Status.FAILED)),
+                ),
+                default=F("status"),
+                output_field=CharField(),
+            )
+        )
+        .values("effective_status")
         .annotate(
             count=Count("pk"),
             reward=Sum("reward"),
             collateral=Sum("collateral"),
             volume=Sum("volume"),
         )
-        .order_by("status")
+        .order_by("effective_status")
     ]
     totals = contracts.aggregate(
         total=Count("pk"),
-        pending=Count("pk", filter=models.Q(status=Status.PENDING)),
+        pending=Count("pk", filter=_is_active_pending()),
         in_progress=Count("pk", filter=models.Q(status=Status.IN_PROGRESS)),
         reward=Sum("reward"),
         collateral=Sum("collateral"),
