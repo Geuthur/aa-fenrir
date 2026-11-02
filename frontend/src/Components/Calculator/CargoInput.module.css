@@ -119,6 +119,20 @@
   box-shadow: 0 0 0 1px #f59e0b;
 }
 
+/* The native spin buttons would cover the unit, arrow keys still step the value */
+.volumeInput,
+.collateralInput {
+  appearance: textfield;
+  padding-right: 3rem;
+}
+.volumeInput::-webkit-inner-spin-button,
+.volumeInput::-webkit-outer-spin-button,
+.collateralInput::-webkit-inner-spin-button,
+.collateralInput::-webkit-outer-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
 .inputSuffix {
   @apply absolute right-3 top-2.5 text-xs text-slate-500 font-mono pointer-events-none;
 }
