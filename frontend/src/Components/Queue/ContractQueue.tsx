@@ -2,13 +2,13 @@
 import { useMemo, useState } from 'react';
 
 // Third Party
-import { createColumnHelper } from '@tanstack/react-table';
-import type { ColumnDef } from '@tanstack/react-table';
 import { CheckCircle, Clock, Search, Truck, XCircle } from 'lucide-react';
 import { Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import { BaseTable } from '@/Components/Base/BaseTable';
+import { createBaseColumnHelper } from '@/Components/Base/BaseTable/tableFeatures';
+import type { BaseColumnDef } from '@/Components/Base/BaseTable/tableFeatures';
 // AA Fenrir
 import { formatIskCompact, formatM3 } from '@/Components/Calculator/calculator';
 import QueueFilter from '@/Components/Queue/Partial/QueueFilter';
@@ -62,8 +62,8 @@ export function ContractQueue({ contracts, onNewQuoteClick }: ContractQueueProps
 
   const pendingCount = contracts.filter((c) => c.status === 'pending').length;
 
-  const columns = useMemo<ColumnDef<ContractItem, unknown>[]>(() => {
-    const columnHelper = createColumnHelper<ContractItem>();
+  const columns = useMemo<BaseColumnDef<ContractItem, unknown>[]>(() => {
+    const columnHelper = createBaseColumnHelper<ContractItem>();
 
     return [
       columnHelper.accessor('contract_id', {
@@ -201,7 +201,7 @@ export function ContractQueue({ contracts, onNewQuoteClick }: ContractQueueProps
           );
         },
       }),
-    ] as ColumnDef<ContractItem, unknown>[];
+    ] as BaseColumnDef<ContractItem, unknown>[];
   }, [t]);
 
   return (

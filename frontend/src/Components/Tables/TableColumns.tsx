@@ -1,8 +1,8 @@
 // Third Party
-import { createColumnHelper } from "@tanstack/react-table";
-import type { ColumnDef } from "@tanstack/react-table";
 import type { TFunction } from "i18next";
 
+import { createBaseColumnHelper } from "@/Components/Base/BaseTable/tableFeatures";
+import type { BaseColumnDef } from "@/Components/Base/BaseTable/tableFeatures";
 import { formatNumber } from "@/Utils/format";
 
 type ExampleRow = {
@@ -16,8 +16,8 @@ type ExampleRow = {
 
 export function getExampleColumns(
     t: TFunction,
-): ColumnDef<ExampleRow, unknown>[] {
-    const columnHelper = createColumnHelper<ExampleRow>();
+): BaseColumnDef<ExampleRow, unknown>[] {
+    const columnHelper = createBaseColumnHelper<ExampleRow>();
 
     // Translations for tooltips and titles
     const tOre = t("Ore");
@@ -51,5 +51,5 @@ export function getExampleColumns(
             header: tIncomeCompressed,
             cell: ({ getValue }) => formatNumber(Number(getValue())),
         }),
-    ] as ColumnDef<ExampleRow, unknown>[];
+    ] as BaseColumnDef<ExampleRow, unknown>[];
 }

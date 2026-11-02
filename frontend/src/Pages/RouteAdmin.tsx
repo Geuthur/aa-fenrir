@@ -3,7 +3,6 @@ import { useMemo, useState } from 'react';
 
 // Third Party
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createColumnHelper, type ColumnDef } from '@tanstack/react-table';
 import {
   AlertTriangle,
   CheckCircle2,
@@ -31,6 +30,8 @@ import {
 import type { components } from '@/Api/OpenApi';
 import { queryKeys } from '@/Api/query';
 import { BaseTable } from '@/Components/Base/BaseTable';
+import { createBaseColumnHelper } from '@/Components/Base/BaseTable/tableFeatures';
+import type { BaseColumnDef } from '@/Components/Base/BaseTable/tableFeatures';
 import { RouteAdminHeader, RouteCard } from '@/Components/RouteAdmin';
 import {
   AddRouteSystemModal,
@@ -43,7 +44,7 @@ import type { FreightCorridor } from '@/types';
 
 type RouteSystemItem = components['schemas']['RouteSystemSchema'];
 
-const systemColumnHelper = createColumnHelper<RouteSystemItem>();
+const systemColumnHelper = createBaseColumnHelper<RouteSystemItem>();
 
 /**
  * RouteAdmin Page.
@@ -269,7 +270,7 @@ export default function RouteAdmin() {
           );
         },
       }),
-    ] as ColumnDef<RouteSystemItem, unknown>[],
+    ] as BaseColumnDef<RouteSystemItem, unknown>[],
     [t]
   );
 
