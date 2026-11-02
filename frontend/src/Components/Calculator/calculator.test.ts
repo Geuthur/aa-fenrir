@@ -6,6 +6,7 @@ import {
   calculateTransportQuote,
   doesCorridorMatch,
   estimateStargateJumps,
+  normalizeDangerLevel,
 } from '@/Components/Calculator/calculator';
 import type { EveSolarSystem } from '@/types';
 
@@ -178,3 +179,12 @@ describe('Calculator doesCorridorMatch (Bidirectional Preset Matching)', () => {
   });
 });
 
+describe('normalizeDangerLevel', () => {
+  it.each(['cyno_guarded', 'Cyno Guarded', 'Cyno-Guarded', ' cyno guarded '])('maps %s to cyno_guarded', (value) => {
+    expect(normalizeDangerLevel(value)).toBe('cyno_guarded');
+  });
+
+  it.each(['safe', 'Safe', 'N/A', '', undefined])('maps %s to safe', (value) => {
+    expect(normalizeDangerLevel(value)).toBe('safe');
+  });
+});
