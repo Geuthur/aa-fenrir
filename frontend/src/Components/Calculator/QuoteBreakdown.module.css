@@ -66,7 +66,7 @@
 }
 
 .heroAmountRow {
-  @apply flex items-baseline gap-2 mt-1;
+  @apply flex flex-wrap items-baseline gap-2 mt-1;
 }
 
 .heroAmount {
@@ -78,7 +78,7 @@
 }
 
 .heroCompactBadge {
-  @apply text-xs font-mono px-2 py-0.5 rounded bg-cyan-950/60 text-cyan-300 border border-cyan-500/30;
+  @apply text-xs font-mono px-2 py-0.5 rounded bg-cyan-950/60 text-cyan-300 border border-cyan-500/30 whitespace-nowrap;
 }
 
 .heroFormula {
@@ -122,6 +122,16 @@
 
 .presetAlertIcon {
   @apply w-6 h-6 text-red-500;
+}
+
+/* Touch devices cannot hover the exclamation mark, so they get the hint as text */
+.presetHintText {
+  @apply hidden text-[11px] font-mono text-red-300 mt-1;
+}
+@media (hover: none) {
+  .presetHintText {
+    @apply block;
+  }
 }
 
 .applyPresetBtn {

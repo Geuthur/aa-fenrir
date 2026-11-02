@@ -144,6 +144,11 @@ export function QuoteBreakdown({
                 </OverlayTrigger>
               )}
             </div>
+            {availablePreset && (
+              <div className={styles.presetHintText}>
+                {t('A route preset exists for this route. Apply it to use its corridor tariffs.')}
+              </div>
+            )}
             <div className={styles.heroFormula}>
               {t('Alliance formula: Base + Volume + Distance + Collateral Risk - Subsidies')}
             </div>
