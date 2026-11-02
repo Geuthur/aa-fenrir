@@ -74,21 +74,3 @@
 .toggleBtn {
   @apply text-xs font-mono px-3 py-1 rounded border transition-colors shrink-0;
 }
-
-.applyBtn {
-  @apply text-xs font-mono px-3.5 py-1.5 rounded-lg border font-semibold transition-all shrink-0;
-  @apply !bg-emerald-600 hover:!bg-emerald-500 !text-white !border-emerald-400;
-  animation: pulse-emerald 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-@keyframes pulse-emerald {
-  0%, 100% {
-    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
-    transform: scale(1);
-  }
-  50% {
-    box-shadow: 0 0 16px 4px rgba(16, 185, 129, 0.5);
-    transform: scale(1.02);
-  }
-}
-

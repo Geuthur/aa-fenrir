@@ -24,9 +24,11 @@ import styles from '@/Components/Calculator/QuoteBreakdown.module.css';
 import { formatIsk, formatIskCompact, formatM3 } from '@/Components/Calculator/calculator';
 import { MatchedCorridorIndicator } from '@/Components/Calculator/MatchedCorridorIndicator';
 import type { MatchedCorridorIndicatorProps } from '@/Components/Calculator/MatchedCorridorIndicator';
-import type { QuoteCalculation } from '@/types';
+import type { FreightCorridor, QuoteCalculation } from '@/types';
 
 interface QuoteBreakdownProps extends MatchedCorridorIndicatorProps {
+  /** Callback to apply the matching corridor's tariffs */
+  onApplyCorridor: (corridor: FreightCorridor) => void;
   quote: QuoteCalculation;
   onOpenContractModal: () => void;
 }
@@ -187,7 +189,6 @@ export function QuoteBreakdown({
         matchingCorridor={matchingCorridor}
         origin={origin}
         destination={destination}
-        onApplyCorridor={onApplyCorridor}
         onUseBaseRates={onUseBaseRates}
       />
 

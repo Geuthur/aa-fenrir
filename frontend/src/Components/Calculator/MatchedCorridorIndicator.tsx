@@ -22,8 +22,6 @@ export interface MatchedCorridorIndicatorProps {
   origin: EveSolarSystem;
   /** Currently selected destination system */
   destination: EveSolarSystem;
-  /** Callback to apply the matching corridor's tariffs */
-  onApplyCorridor: (corridor: FreightCorridor) => void;
   /** Callback to switch to standard base rates */
   onUseBaseRates: () => void;
 }
@@ -31,14 +29,13 @@ export interface MatchedCorridorIndicatorProps {
 /**
  * Section of the quote breakdown displaying the route corridor preset adoption status.
  * Shows whether an alliance corridor preset was automatically adopted and its tariffs applied,
- * or allows switching between preset rates and standard base rates.
+ * or allows switching to standard base rates.
  */
 export function MatchedCorridorIndicator({
   selectedCorridor,
   matchingCorridor,
   origin,
   destination,
-  onApplyCorridor,
   onUseBaseRates,
 }: MatchedCorridorIndicatorProps) {
   const { t } = useTranslation();
@@ -127,15 +124,6 @@ export function MatchedCorridorIndicator({
               </p>
             </div>
           </div>
-
-          <Button
-            variant="success"
-            size="sm"
-            onClick={() => onApplyCorridor(matchingCorridor)}
-            className={styles.applyBtn}
-          >
-            {t('Apply Preset Rates')}
-          </Button>
         </div>
       </div>
     );
