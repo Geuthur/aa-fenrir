@@ -2,8 +2,6 @@
 import { useMemo } from "react";
 
 // Third Party
-import { createColumnHelper } from "@tanstack/react-table";
-import type { ColumnDef } from "@tanstack/react-table";
 import { Eye, RefreshCw, Trash2 } from "lucide-react";
 import { Button, ButtonGroup, Spinner } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
@@ -11,6 +9,8 @@ import { useTranslation } from "react-i18next";
 import type { components } from "@/Api/OpenApi";
 import { HandlerStatusBadge } from "@/Components/Administration/HandlerStatusBadge";
 import { BaseTable } from "@/Components/Base/BaseTable";
+import { createBaseColumnHelper } from "@/Components/Base/BaseTable/tableFeatures";
+import type { BaseColumnDef } from "@/Components/Base/BaseTable/tableFeatures";
 import { renderTooltip } from "@/Utils/bootsTrap";
 import { formatDate } from "@/Utils/format";
 
@@ -24,7 +24,7 @@ export interface AdministrationHandlersTableProps {
   onDelete: (handler: Handler) => void;
 }
 
-const columnHelper = createColumnHelper<Handler>();
+const columnHelper = createBaseColumnHelper<Handler>();
 
 /** Table of all contract handlers with inspect, update and delete actions. */
 export function AdministrationHandlersTable({
@@ -119,7 +119,7 @@ export function AdministrationHandlersTable({
             );
           },
         }),
-      ] as ColumnDef<Handler, unknown>[],
+      ] as BaseColumnDef<Handler, unknown>[],
     [t, updatingId, onInspect, onUpdate, onDelete],
   );
 
