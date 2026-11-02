@@ -9,8 +9,8 @@ import styles from '@/Components/RouteAdmin/RouteCard.module.css';
 import {
   formatIskCompact,
   formatM3,
-  getServiceBadge,
 } from '@/Components/Calculator/calculator';
+import { ServiceBadge } from '@/Components/Calculator/ServiceBadge';
 import type { FreightCorridor } from '@/types';
 
 export interface RouteCardProps {
@@ -35,7 +35,6 @@ export function RouteCard({
   isDeletePending,
 }: RouteCardProps) {
   const { t } = useTranslation();
-  const badge = getServiceBadge(preset.service_type);
 
   const isCynoGuarded = Boolean(
     preset.is_cyno_route ||
@@ -55,9 +54,7 @@ export function RouteCard({
       <div>
         <div className={styles.routeLabel + "  mb-2"}>
           <h3 className="font-eve font-bold text-base !text-white">{preset.name}</h3>
-          <span className={`text-[10px] font-mono px-2 py-0.5 rounded border ${badge.color}`}>
-            {t(badge.label)}
-          </span>
+          <ServiceBadge serviceType={preset.service_type} />
         </div>
 
         <div className="text-xs !text-slate-400 flex items-center gap-1.5 mb-3 font-mono">

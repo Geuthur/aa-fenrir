@@ -214,20 +214,27 @@ export function getSecurityColor(sec: number): { bg: string; text: string; borde
   return { bg: '!bg-red-950/40', text: '!text-red-400', border: '!border-red-500/30', label: `${sec.toFixed(1)} Null` };
 }
 
+/** Bootstrap variant for the security status of a solar system (high/low/null). */
+export function getSecurityVariant(sec: number): 'success' | 'warning' | 'danger' {
+  if (sec >= 0.5) return 'success';
+  if (sec > 0.0) return 'warning';
+  return 'danger';
+}
+
 export function getServiceBadge(service: string) {
   switch (service) {
     case 'jump_freighter':
     case 'jumpfreighter':
-      return { label: 'Jump Freighter (JF)', color: '!bg-cyan-500/15 !text-cyan-300 !border-cyan-500/30' };
+      return { label: 'Jump Freighter (JF)', variant: 'info' };
     case 'standard_freighter':
     case 'freighter':
-      return { label: 'Highsec Freighter', color: '!bg-blue-500/15 !text-blue-300 !border-blue-500/30' };
+      return { label: 'Highsec Freighter', variant: 'primary' };
     case 'deep_space_transport':
-      return { label: 'Deep Space Transport (DST)', color: '!bg-purple-500/15 !text-purple-300 !border-purple-500/30' };
+      return { label: 'Deep Space Transport (DST)', variant: 'success' };
     case 'blockade_runner':
-      return { label: 'Blockade Runner (BR)', color: '!bg-amber-500/15 !text-amber-300 !border-amber-500/30' };
+      return { label: 'Blockade Runner (BR)', variant: 'warning' };
     default:
-      return { label: 'Courier Service', color: '!bg-slate-500/15 !text-slate-300 !border-slate-500/30' };
+      return { label: 'Courier Service', variant: 'secondary' };
   }
 }
 
