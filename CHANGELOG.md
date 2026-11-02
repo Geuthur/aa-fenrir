@@ -49,6 +49,7 @@ Section Order:
 - **Calculator Limits**: Volume and collateral stay within the limits of the active route. Without a route `AA_FENRIR_MAX_VOLUME` (default 10,000,000 m³) and `AA_FENRIR_MAX_COLLATERAL` (default 1,000,000,000,000 ISK) apply, both can be set in `local.py`.
 - **Route Form Value Hints**: The number fields of the create and edit route modals show the entered value in a readable form, for example `15.00 B ISK`, `330,000 m³` or `1.5 h`.
 - **Calculator Route Preset Hint**: If a route preset exists for the entered route but base rates are in use, a red pulsing exclamation mark appears next to the reward, and a green pulsing *Apply Route Preset* button next to *Copy ISK*.
+- **Add Company**: The menu entry now adds or updates the contract handler in AA Fenrir itself, using the corporation of the selected ESI token character, and queues its contract update. It requires `manage_access` or `full_access` and no longer depends on `aa-voicesofwar`.
 - **Internationalization (i18n)**:
   - Added full German (`de/translation.json`) and English (`en/translation.json`) translations for new table pagination items, warnings, and cyno waypoint controls.
 
