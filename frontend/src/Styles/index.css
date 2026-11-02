@@ -79,6 +79,8 @@
     --aa-input-color: #ffffff;
     --aa-input-border: #343439;
 
+    --aa-scrollbar-thumb: #475569;
+
     --aa-shadow: 0 4px 6px rgba(0, 0, 0, var(--aa-shadow-opacity));
     --aa-shadow-opacity: 0.1;
 }
@@ -127,6 +129,8 @@ html[data-bs-theme="light"] {
     --aa-input-color: var(--bs-body-color, #2c3e50);
     --aa-input-border: var(--bs-border-color, #ced4da);
 
+    --aa-scrollbar-thumb: #95a5a6;
+
     --aa-shadow-opacity: 0.05;
 }
 
@@ -174,7 +178,15 @@ html[data-bs-theme="dark"] {
     --aa-input-color: #ffffff;
     --aa-input-border: #343439;
 
+    --aa-scrollbar-thumb: #475569;
+
     --aa-shadow-opacity: 0.1;
+}
+
+/* Both properties inherit, so this also covers Auth's page scroller and inner scroll areas */
+html {
+    scrollbar-color: var(--aa-scrollbar-thumb) transparent;
+    scrollbar-width: thin;
 }
 
 .aa-react.container {
