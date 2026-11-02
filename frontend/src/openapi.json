@@ -1270,13 +1270,23 @@
             "default": false,
             "title": "Is Superuser",
             "type": "boolean"
+          },
+          "calculator_max_volume": {
+            "title": "Calculator Max Volume",
+            "type": "integer"
+          },
+          "calculator_max_collateral": {
+            "title": "Calculator Max Collateral",
+            "type": "integer"
           }
         },
         "required": [
           "user_id",
           "character_id",
           "character_name",
-          "notification"
+          "notification",
+          "calculator_max_volume",
+          "calculator_max_collateral"
         ],
         "title": "UserData",
         "type": "object"

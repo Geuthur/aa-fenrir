@@ -8,6 +8,13 @@ from django.conf import settings
 # Set Naming on Auth Hook
 AA_FENRIR_APP_NAME = getattr(settings, "AA_FENRIR_APP_NAME", "AA Fenrir")
 
+# Calculator Limits
+# Upper limits of the calculator when no route is active, a route uses its own limits.
+AA_FENRIR_MAX_VOLUME = getattr(settings, "AA_FENRIR_MAX_VOLUME", 10_000_000)  # m3
+AA_FENRIR_MAX_COLLATERAL = getattr(
+    settings, "AA_FENRIR_MAX_COLLATERAL", 1_000_000_000_000
+)  # ISK
+
 # Task Settings
 # Global timeout for tasks in seconds to reduce task accumulation during outages.
 AA_FENRIR_TASKS_TIME_LIMIT = getattr(

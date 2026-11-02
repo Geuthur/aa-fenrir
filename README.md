@@ -130,6 +130,8 @@ With the Following IDs you can set up the permissions for the Fenrir
 The Following Settings can be setting up in the `local.py`
 
 - AA_FENRIR_APP_NAME: `"YOURNAME"` - Set the name of the APP
+- AA_FENRIR_MAX_VOLUME: `10000000` - Upper limit of the cargo volume in m³ in the calculator when no route is active
+- AA_FENRIR_MAX_COLLATERAL: `1000000000000` - Upper limit of the collateral in ISK in the calculator when no route is active
 - AA_FENRIR_TASKS_TIME_LIMIT: `7200` - Defines the time (in seconds) a task will timeout
 
 ## Translations<a name="translations"></a>

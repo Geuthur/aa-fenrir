@@ -28,6 +28,8 @@ class UserData(Schema):
     has_manage_access: bool = False
     has_admin_access: bool = False
     is_superuser: bool = False
+    calculator_max_volume: int
+    calculator_max_collateral: int
 
 
 class DataTableSchema(Schema):
