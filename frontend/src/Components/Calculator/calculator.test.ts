@@ -6,6 +6,8 @@ import {
   calculateTransportQuote,
   doesCorridorMatch,
   estimateStargateJumps,
+  formatDuration,
+  formatIskExact,
   normalizeDangerLevel,
 } from '@/Components/Calculator/calculator';
 import type { EveSolarSystem } from '@/types';
@@ -186,5 +188,29 @@ describe('normalizeDangerLevel', () => {
 
   it.each(['safe', 'Safe', 'N/A', '', undefined])('maps %s to safe', (value) => {
     expect(normalizeDangerLevel(value)).toBe('safe');
+  });
+});
+
+describe('formatIskExact', () => {
+  it.each([
+    [0, '0 ISK'],
+    [850, '850 ISK'],
+    [1500, '1,500 ISK'],
+    [999999, '999,999 ISK'],
+    [3500000, '3.5 M ISK'],
+    [15000000000, '15.00 B ISK'],
+  ])('formats %d as %s', (amount, expected) => {
+    expect(formatIskExact(amount)).toBe(expected);
+  });
+});
+
+describe('formatDuration', () => {
+  it.each([
+    [0, '0 min'],
+    [45, '45 min'],
+    [90, '1.5 h'],
+    [2880, '48 h'],
+  ])('formats %d minutes as %s', (minutes, expected) => {
+    expect(formatDuration(minutes)).toBe(expected);
   });
 });

@@ -201,6 +201,16 @@ export function formatIskCompact(amount: number): string {
   return `${amount.toLocaleString('en-US')} ISK`;
 }
 
+/** Short only from one million on, because `formatIskCompact` would round 1,500 to 2 K. */
+export function formatIskExact(amount: number): string {
+  return amount >= 1000000 ? formatIskCompact(amount) : formatIsk(amount);
+}
+
+export function formatDuration(minutes: number): string {
+  if (minutes < 60) return `${minutes} min`;
+  return `${Number((minutes / 60).toFixed(1))} h`;
+}
+
 export function formatM3(vol: number): string {
   return `${vol.toLocaleString('en-US', { maximumFractionDigits: 1 })} m³`;
 }
