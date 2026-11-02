@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import type { components } from '@/Api/OpenApi';
 import { BaseModal } from '@/Components/Base/BaseModal';
 import { ModalTitle } from '@/Components/Base/ModalTitle';
+import { normalizeDangerLevel } from '@/Components/Calculator/calculator';
 import type { CynoWaypointItem } from '@/Components/RouteAdmin/CynoWaypointManager';
 import { useRouteFormOptions } from '@/Components/RouteAdmin/Hooks';
 import { RouteForm } from '@/Components/RouteAdmin/RouteForm';
@@ -67,7 +68,7 @@ function EditRouteModalContent({
     ),
     is_cyno_route: Boolean(preset.is_cyno_route),
     cyno_waypoint_ids: preset.cyno_waypoint_ids || [],
-    danger_level: preset.danger_level || 'safe',
+    danger_level: normalizeDangerLevel(preset.danger_level),
     has_alliance_subsidy: preset.has_alliance_subsidy !== false,
     assign_corp_id: preset.assign_corp_id || null,
     expiration_days: preset.expiration_days ?? 7,

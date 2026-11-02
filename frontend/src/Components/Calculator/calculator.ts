@@ -215,6 +215,11 @@ export function getSecurityColor(sec: number): { bg: string; text: string; borde
 }
 
 /** Bootstrap variant for the security status of a solar system (high/low/null). */
+/** The API returns the display text of the danger level, the form and the API input need its value. */
+export function normalizeDangerLevel(dangerLevel?: string): 'safe' | 'cyno_guarded' {
+  return dangerLevel?.toLowerCase().includes('cyno') ? 'cyno_guarded' : 'safe';
+}
+
 export function getSecurityVariant(sec: number): 'success' | 'warning' | 'danger' {
   if (sec >= 0.5) return 'success';
   if (sec > 0.0) return 'warning';
