@@ -17,6 +17,9 @@ import type { EveSolarSystem } from '@/types';
 export type RouteFormData = components['schemas']['CreateRoutePresetSchema'];
 type ContractHandler = { id: number; name: string };
 
+/** Largest value the model field `collateral_percent` can store. */
+const MAX_COLLATERAL_PERCENT = 9.9999;
+
 export interface RouteFormProps {
   /** Current form values */
   formData: RouteFormData;
@@ -228,7 +231,8 @@ export function RouteForm({
               value={formData.collateral_percent}
               hint={`${formData.collateral_percent}%`}
               hintClassName="text-info"
-              onChange={(v) => updateField('collateral_percent', v)}
+              max={String(MAX_COLLATERAL_PERCENT)}
+              onChange={(v) => updateField('collateral_percent', Math.min(v, MAX_COLLATERAL_PERCENT))}
             />
           </div>
           <div className="col-6 col-lg-3">
