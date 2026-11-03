@@ -90,6 +90,7 @@ Section Order:
 - **CSS Modularization**:
   - Extracted header action button styling (`Create New Route`, `Add System`) into `RouteAdminHeader.module.css`.
 - Replaced `pook` with `pookx` in the test dependencies.
+- **Contract Manager Tests**: `test_contract_manager.py` now runs through `update_corporation_contract` and the real ESI client with `pookx`, instead of a rebuilt ESI response and patched `_identify_*` helpers.
 
 ### Removed
 
