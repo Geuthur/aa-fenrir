@@ -56,6 +56,7 @@ Section Order:
 ### Fixed
 
 - **Contract Notifications**: Notifications for new pending contracts no longer fail because of a missing URL, which also stopped the customer notifications. The link now opens the *Contracts Queue*.
+- **Contract Status**: The ESI status values `outstanding` and `cancelled` are now stored as `pending` and `canceled`. New open contracts are counted as pending, are listed in the *Pending* tab, count towards in-transit cargo and trigger pilot notifications. Cancelled contracts count as completed.
 - **Contract Queue**: Pending contracts past their expiry date are listed as *Expired* under *Failed / Canceled* and no longer count towards pending contracts, active in-transit cargo or the rewards pool. The Administration page counts them as failed too. The stored status stays unchanged.
 - **Calculator System Dropdowns**: The *Origin* and *Destination* system dropdowns are no longer cut off by the route container.
 - **Calculator Input Fields**: Cargo volume, collateral, station, system search, corridor preset and paste fields stay readable when focused. Their colors now come from Bootstrap and follow the Dark and Light theme.

@@ -34,6 +34,13 @@ class Status(models.TextChoices):
     REVERSED = "reversed", _("Reversed")
 
     @classmethod
+    def from_esi(cls, status: str) -> str:
+        """Return the status for a value from ESI, which names two of them differently."""
+        return {"outstanding": cls.PENDING, "cancelled": cls.CANCELED}.get(
+            status, status
+        )
+
+    @classmethod
     def completed(cls) -> set["Status"]:
         """Return status representing a completed contract."""
         return {

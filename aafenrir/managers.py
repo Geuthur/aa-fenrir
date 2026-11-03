@@ -516,7 +516,7 @@ class ContractManager(models.Manager["ContractContext"]):
                 "issuer": issuer,
                 "reward": contract.reward,
                 "start_location": start_location,
-                "status": contract.status,
+                "status": Status.from_esi(contract.status),
                 "title": title,
                 "volume": contract.volume,
             },
