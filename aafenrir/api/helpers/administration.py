@@ -57,7 +57,7 @@ def get_handler_status(handler: ContractHandler) -> str:
 
 def _is_active_pending() -> models.Q:
     """Return the filter for pending contracts which have not expired."""
-    return models.Q(status=Status.PENDING, date_expired__gte=now())
+    return models.Q(status=Status.OUTSTANDING, date_expired__gte=now())
 
 
 def _contract_counts(handler_ids: list[int]) -> dict[int, dict[str, int]]:
@@ -123,7 +123,7 @@ def handler_detail(
         for row in contracts.annotate(
             effective_status=Case(
                 When(
-                    status=Status.PENDING,
+                    status=Status.OUTSTANDING,
                     date_expired__lt=now(),
                     then=Value(str(Status.FAILED)),
                 ),

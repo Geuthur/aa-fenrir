@@ -78,7 +78,7 @@ class ContractFactory(
 
     handler = factory.SubFactory(ContractHandlerFactory)
     contract_id = factory.Sequence(lambda n: 100_000 + n)
-    status = Status.PENDING
+    status = Status.OUTSTANDING
     collateral = 1_000_000_000.0
     reward = 50_000_000.0
     volume = 100_000.0
@@ -102,5 +102,5 @@ class ContractCustomerNotificationFactory(
         model = ContractCustomerNotification
 
     contract = factory.SubFactory(ContractFactory)
-    status = Status.PENDING
+    status = Status.OUTSTANDING
     date_notified = factory.LazyFunction(timezone.now)

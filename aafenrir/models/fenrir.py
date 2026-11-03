@@ -477,7 +477,7 @@ class Contract(models.Model):
     @property
     def is_pending_expired(self) -> bool:
         """whether this contract is still stored as pending but has expired"""
-        return self.status == Status.PENDING and self.has_expired
+        return self.status == Status.OUTSTANDING and self.has_expired
 
     @property
     def effective_status(self) -> str:
@@ -563,7 +563,7 @@ class Contract(models.Model):
             acceptor_text = f"by {self.acceptor_name} "
         else:
             acceptor_text = ""
-        if status_to_report == Status.PENDING:
+        if status_to_report == Status.OUTSTANDING:
             contents += "We have received your contract"
             contents += " and it will be picked up by one of our pilots shortly."
         elif status_to_report == Status.IN_PROGRESS:

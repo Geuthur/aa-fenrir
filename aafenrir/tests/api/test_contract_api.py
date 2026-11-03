@@ -28,7 +28,7 @@ class TestContractQueueApi(AuthTestCase):
         # Test Data
         expired = ContractFactory(
             handler=ContractHandlerFactory(),
-            status=Status.PENDING,
+            status=Status.OUTSTANDING,
             date_expired=timezone.now() - timedelta(minutes=1),
         )
 
@@ -43,7 +43,7 @@ class TestContractQueueApi(AuthTestCase):
         # Test Data
         expired = ContractFactory(
             handler=ContractHandlerFactory(),
-            status=Status.PENDING,
+            status=Status.OUTSTANDING,
             date_expired=timezone.now() - timedelta(minutes=1),
         )
 
@@ -51,13 +51,13 @@ class TestContractQueueApi(AuthTestCase):
         self._get_queue()
 
         # Expected Result
-        self.assertEqual(Contract.objects.get(pk=expired.pk).status, Status.PENDING)
+        self.assertEqual(Contract.objects.get(pk=expired.pk).status, Status.OUTSTANDING)
 
     def test_should_keep_pending_contract_which_has_not_expired(self):
         # Test Data
         pending = ContractFactory(
             handler=ContractHandlerFactory(),
-            status=Status.PENDING,
+            status=Status.OUTSTANDING,
             date_expired=timezone.now() + timedelta(minutes=1),
         )
 
@@ -65,7 +65,7 @@ class TestContractQueueApi(AuthTestCase):
         row = self._get_queue()[pending.contract_id]
 
         # Expected Result
-        self.assertEqual(row["status"], Status.PENDING)
+        self.assertEqual(row["status"], Status.OUTSTANDING)
         self.assertEqual(row["status_display"], "Pending")
 
     def test_should_keep_in_progress_contract_past_its_expiry(self):

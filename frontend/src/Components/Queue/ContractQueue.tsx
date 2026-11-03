@@ -35,7 +35,7 @@ export function ContractQueue({ contracts, onNewQuoteClick }: ContractQueueProps
             c.status === 'finished_issuer' ||
             c.status === 'finished_contractor')) ||
         (filterStatus === 'failed' &&
-          (c.status === 'failed' || c.status === 'canceled' || c.status === 'rejected'));
+          (c.status === 'failed' || c.status === 'cancelled' || c.status === 'rejected'));
 
       const searchLower = searchTerm.toLowerCase();
       const matchesSearch =
@@ -53,14 +53,14 @@ export function ContractQueue({ contracts, onNewQuoteClick }: ContractQueueProps
   }, [contracts, filterStatus, searchTerm]);
 
   const totalVolume = contracts
-    .filter((c) => c.status === 'pending' || c.status === 'in_progress')
+    .filter((c) => c.status === 'outstanding' || c.status === 'in_progress')
     .reduce((sum, c) => sum + (c.volume || 0), 0);
 
   const totalRewards = contracts
-    .filter((c) => c.status === 'pending' || c.status === 'in_progress')
+    .filter((c) => c.status === 'outstanding' || c.status === 'in_progress')
     .reduce((sum, c) => sum + (c.reward || 0), 0);
 
-  const pendingCount = contracts.filter((c) => c.status === 'pending').length;
+  const pendingCount = contracts.filter((c) => c.status === 'outstanding').length;
 
   const columns = useMemo<BaseColumnDef<ContractItem, unknown>[]>(() => {
     const columnHelper = createBaseColumnHelper<ContractItem>();
@@ -162,7 +162,7 @@ export function ContractQueue({ contracts, onNewQuoteClick }: ContractQueueProps
           const c = row.original;
           return (
             <div>
-              {c.status === 'pending' && (
+              {c.status === 'outstanding' && (
                 <span className="px-2 py-0.5 rounded-full text-[10px] !bg-amber-500/15 !text-amber-300 border !border-amber-500/30 flex items-center gap-1 w-max">
                   <Clock className="w-3 h-3" /> {t('Pending')}
                 </span>
@@ -180,18 +180,18 @@ export function ContractQueue({ contracts, onNewQuoteClick }: ContractQueueProps
                   <CheckCircle className="w-3 h-3" /> {t('Finished')}
                 </span>
               )}
-              {(c.status === 'failed' || c.status === 'canceled' || c.status === 'rejected') && (
+              {(c.status === 'failed' || c.status === 'cancelled' || c.status === 'rejected') && (
                 <span className="px-2 py-0.5 rounded-full text-[10px] !bg-rose-500/15 !text-rose-300 border !border-rose-500/30 flex items-center gap-1 w-max">
                   <XCircle className="w-3 h-3" /> {c.status_display || t('Failed')}
                 </span>
               )}
-              {c.status !== 'pending' &&
+              {c.status !== 'outstanding' &&
                 c.status !== 'in_progress' &&
                 c.status !== 'finished' &&
                 c.status !== 'finished_issuer' &&
                 c.status !== 'finished_contractor' &&
                 c.status !== 'failed' &&
-                c.status !== 'canceled' &&
+                c.status !== 'cancelled' &&
                 c.status !== 'rejected' && (
                   <span className="px-2 py-0.5 rounded-full text-[10px] !bg-slate-500/15 !text-slate-300 border !border-slate-500/30 flex items-center gap-1 w-max">
                     {c.status_display || c.status}

@@ -27,7 +27,7 @@ class TestSendCompanyNotification(AuthTestCase):
     def test_should_notify_admin_with_link_to_contract_queue(self, mock_notification):
         # Test Data
         contract = ContractFactory(
-            status=Status.PENDING,
+            status=Status.OUTSTANDING,
             date_notified=None,
             date_expired=timezone.now() + timedelta(days=1),
         )
