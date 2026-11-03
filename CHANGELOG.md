@@ -92,6 +92,7 @@ Section Order:
 - **CSS Modularization**:
   - Extracted header action button styling (`Create New Route`, `Add System`) into `RouteAdminHeader.module.css`.
 - Replaced `pook` with `pookx` in the test dependencies.
+- **ESI Client**: The client now loads its spec from the bundled `aafenrir/openapi_2026-08-18.json` instead of fetching it at runtime. The ESI compatibility date moved from `2025-12-16` to `2026-08-18`. Added the `make update-compatibility-date` target.
 - **Contract Manager Tests**: `test_contract_manager.py` now runs through `update_corporation_contract` and the real ESI client with `pookx`, instead of a rebuilt ESI response and patched `_identify_*` helpers.
 
 ### Removed

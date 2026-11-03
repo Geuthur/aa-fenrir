@@ -3,7 +3,6 @@
 # Standard Library
 import json
 from datetime import timedelta
-from pathlib import Path
 from unittest.mock import patch
 
 # Third Party
@@ -15,9 +14,9 @@ from django.test import TestCase
 from django.utils import timezone
 
 # AA Fenrir
-import aafenrir
 from aafenrir.helpers.choice import Status
 from aafenrir.models import Contract, ContractCustomerNotification, ContractHandler
+from aafenrir.providers import spec_file
 from aafenrir.tests import AuthTestCase
 from aafenrir.tests.testdata.factory import UserMainFactory
 from aafenrir.tests.testdata.fenrir import ContractHandlerFactory, LocationFactory
@@ -25,9 +24,7 @@ from aafenrir.tests.testdata.fenrir import ContractHandlerFactory, LocationFacto
 MODEL_PATH = "aafenrir.models.fenrir"
 ESI_URL = "https://esi.evetech.net"
 ESI_DATE_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
-OPENAPI_PATH = Path(aafenrir.__file__).parent / "openapi_2026-08-18.json"
-OPENAPI_SPEC = json.loads(OPENAPI_PATH.read_text(encoding="utf-8"))
-ESI_STATUS = OPENAPI_SPEC["components"]["schemas"][
+ESI_STATUS = json.loads(spec_file.read_text(encoding="utf-8"))["components"]["schemas"][
     "CorporationsCorporationIdContractsGet"
 ]["items"]["properties"]["status"]["enum"]
 
@@ -49,10 +46,6 @@ class TestUpdateCorporationContract(AuthTestCase):
         cls.location = LocationFactory()
 
     def setUp(self):
-        # The ESI client loads its spec once per process, on the first request
-        pook.get(
-            f"{ESI_URL}/meta/openapi.json", reply=200, response_json=OPENAPI_SPEC
-        ).persist()
         self.addCleanup(pook.reset)
 
     def _esi_contract(self, status: str, contract_id: int = 1, **kwargs) -> dict:
