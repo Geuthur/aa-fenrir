@@ -1,7 +1,9 @@
 """Tests for the contract manager."""
 
 # Standard Library
+import json
 from datetime import timedelta
+from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
 
@@ -9,9 +11,11 @@ from unittest.mock import patch
 from evesde_factory.allianceauth import EveCharacterFactory, EveCorporationInfoFactory
 
 # Django
+from django.test import TestCase
 from django.utils import timezone
 
 # AA Fenrir
+import aafenrir
 from aafenrir.helpers.choice import Status
 from aafenrir.models import Contract
 from aafenrir.tests import AuthTestCase
@@ -19,6 +23,15 @@ from aafenrir.tests.testdata.fenrir import ContractHandlerFactory, LocationFacto
 
 MANAGER_PATH = "aafenrir.managers.ContractManager"
 MODEL_PATH = "aafenrir.models.fenrir.Contract"
+OPENAPI_PATH = Path(aafenrir.__file__).parent / "openapi_2026-08-18.json"
+ESI_STATUS = json.loads(OPENAPI_PATH.read_text(encoding="utf-8"))["components"][
+    "schemas"
+]["CorporationsCorporationIdContractsGet"]["items"]["properties"]["status"]["enum"]
+
+
+class TestStatusChoices(TestCase):
+    def test_should_match_status_values_of_esi(self):
+        self.assertCountEqual(Status.values, ESI_STATUS)
 
 
 class TestUpdateOrCreateFromDict(AuthTestCase):
@@ -64,31 +77,8 @@ class TestUpdateOrCreateFromDict(AuthTestCase):
                 handler=self.handler, contract=contract, token=None
             )[0]
 
-    def test_should_store_outstanding_as_pending(self):
-        # Test Action
-        contract = self._store_contract("outstanding")
-
-        # Expected Result
-        contract.refresh_from_db()
-        self.assertEqual(contract.status, Status.PENDING)
-        self.assertEqual(contract.get_status_display(), "Pending")
-        self.assertEqual(Contract.objects.pending_count(), 1)
-
-    def test_should_store_cancelled_as_canceled(self):
-        # Test Action
-        contract = self._store_contract("cancelled")
-
-        # Expected Result
-        contract.refresh_from_db()
-        self.assertEqual(contract.status, Status.CANCELED)
-        self.assertEqual(contract.get_status_display(), "Canceled")
-        self.assertTrue(contract.is_completed)
-        self.assertFalse(Contract.objects.filter_not_completed().exists())
-
-    def test_should_keep_status_names_shared_with_esi(self):
-        shared = set(Status.values) - {Status.PENDING, Status.CANCELED}
-
-        for contract_id, status in enumerate(sorted(shared), start=1):
+    def test_should_store_every_status_from_esi(self):
+        for contract_id, status in enumerate(ESI_STATUS, start=1):
             with self.subTest(status=status):
                 # Test Action
                 contract = self._store_contract(status, contract_id)
@@ -96,6 +86,24 @@ class TestUpdateOrCreateFromDict(AuthTestCase):
                 # Expected Result
                 contract.refresh_from_db()
                 self.assertEqual(contract.status, status)
+                self.assertTrue(contract.get_status_display())
+
+    def test_should_count_outstanding_contract_as_pending(self):
+        # Test Action
+        contract = self._store_contract("outstanding")
+
+        # Expected Result
+        self.assertEqual(contract.status, Status.OUTSTANDING)
+        self.assertEqual(Contract.objects.pending_count(), 1)
+
+    def test_should_count_cancelled_contract_as_completed(self):
+        # Test Action
+        contract = self._store_contract("cancelled")
+
+        # Expected Result
+        self.assertEqual(contract.status, Status.CANCELLED)
+        self.assertTrue(contract.is_completed)
+        self.assertFalse(Contract.objects.filter_not_completed().exists())
 
     def test_should_move_stored_contract_on_to_later_status(self):
         # Test Data

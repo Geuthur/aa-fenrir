@@ -20,25 +20,18 @@ class EveType(models.TextChoices):
 
 
 class Status(models.TextChoices):
-    """A contract status."""
+    """A contract status, the values are the ones ESI reports."""
 
-    PENDING = "pending", _("Pending")
+    OUTSTANDING = "outstanding", _("Pending")
     IN_PROGRESS = "in_progress", _("In Progress")
     FINISHED_ISSUER = "finished_issuer", _("Finished Issuer")
     FINISHED_CONTRACTOR = "finished_contractor", _("Finished Contractor")
     FINISHED = "finished", _("Finished")
-    CANCELED = "canceled", _("Canceled")
+    CANCELLED = "cancelled", _("Canceled")
     REJECTED = "rejected", _("Rejected")
     FAILED = "failed", _("Failed")
     DELETED = "deleted", _("Deleted")
     REVERSED = "reversed", _("Reversed")
-
-    @classmethod
-    def from_esi(cls, status: str) -> str:
-        """Return the status for a value from ESI, which names two of them differently."""
-        return {"outstanding": cls.PENDING, "cancelled": cls.CANCELED}.get(
-            status, status
-        )
 
     @classmethod
     def completed(cls) -> set["Status"]:
@@ -47,7 +40,7 @@ class Status(models.TextChoices):
             cls.FINISHED_ISSUER,
             cls.FINISHED_CONTRACTOR,
             cls.FINISHED_ISSUER,
-            cls.CANCELED,
+            cls.CANCELLED,
             cls.REJECTED,
             cls.DELETED,
             cls.FINISHED,
@@ -57,7 +50,7 @@ class Status(models.TextChoices):
     @classmethod
     def for_customer_notification(cls) -> set["Status"]:
         """Return status relevant for custom notification."""
-        return {cls.PENDING, cls.IN_PROGRESS, cls.FINISHED, cls.FAILED}
+        return {cls.OUTSTANDING, cls.IN_PROGRESS, cls.FINISHED, cls.FAILED}
 
 
 class ServiceType(models.TextChoices):

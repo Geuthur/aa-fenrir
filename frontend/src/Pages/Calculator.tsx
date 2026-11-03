@@ -251,7 +251,7 @@ export default function Calculator() {
     const distanceLy = useMemo(() => calculateDistanceLy(origin, destination), [origin, destination]);
     const stargateJumps = useMemo(() => estimateStargateJumps(origin, destination), [origin, destination]);
 
-    //const pendingCount = contracts.filter((c) => c.status === 'pending').length;
+    //const pendingCount = contracts.filter((c) => c.status === 'outstanding').length;
   return (
     <main className="mt-4 min-h-screen !text-slate-200 flex flex-col font-sans selection:!bg-cyan-500/30 selection:!text-cyan-200">
         <div className="flex-1 w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">

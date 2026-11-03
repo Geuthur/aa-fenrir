@@ -51,7 +51,7 @@ class TestAdministrationApi(AuthTestCase):
     def test_list_handlers_should_return_handlers_with_counts(self):
         # Test Data
         handler = ContractHandlerFactory()
-        ContractFactory(handler=handler, status=Status.PENDING)
+        ContractFactory(handler=handler, status=Status.OUTSTANDING)
         ContractFactory(handler=handler, status=Status.IN_PROGRESS)
         ContractFactory(handler=handler, status=Status.FINISHED)
 
@@ -69,10 +69,10 @@ class TestAdministrationApi(AuthTestCase):
     def test_list_handlers_should_not_count_expired_contracts_as_pending(self):
         # Test Data
         handler = ContractHandlerFactory()
-        ContractFactory(handler=handler, status=Status.PENDING)
+        ContractFactory(handler=handler, status=Status.OUTSTANDING)
         ContractFactory(
             handler=handler,
-            status=Status.PENDING,
+            status=Status.OUTSTANDING,
             date_expired=timezone.now() - timedelta(minutes=1),
         )
 
@@ -115,7 +115,7 @@ class TestAdministrationApi(AuthTestCase):
             collateral=200.0,
             volume=7.0,
         )
-        ContractFactory(handler=handler, status=Status.PENDING)
+        ContractFactory(handler=handler, status=Status.OUTSTANDING)
         ContractCustomerNotificationFactory(contract=first, status=Status.FINISHED)
 
         # Test Action
@@ -140,11 +140,11 @@ class TestAdministrationApi(AuthTestCase):
     def test_get_handler_should_count_expired_pending_contracts_as_failed(self):
         # Test Data
         handler = ContractHandlerFactory()
-        ContractFactory(handler=handler, status=Status.PENDING, reward=1.0)
+        ContractFactory(handler=handler, status=Status.OUTSTANDING, reward=1.0)
         ContractFactory(handler=handler, status=Status.FAILED, reward=2.0)
         ContractFactory(
             handler=handler,
-            status=Status.PENDING,
+            status=Status.OUTSTANDING,
             reward=4.0,
             date_expired=timezone.now() - timedelta(minutes=1),
         )
@@ -157,8 +157,8 @@ class TestAdministrationApi(AuthTestCase):
         # Expected Result
         data = response.json()
         stats = {s["status"]: s for s in data["stats"]}
-        self.assertEqual(stats[Status.PENDING]["count"], 1)
-        self.assertEqual(stats[Status.PENDING]["reward"], 1.0)
+        self.assertEqual(stats[Status.OUTSTANDING]["count"], 1)
+        self.assertEqual(stats[Status.OUTSTANDING]["reward"], 1.0)
         self.assertEqual(stats[Status.FAILED]["count"], 2)
         self.assertEqual(stats[Status.FAILED]["reward"], 6.0)
         self.assertEqual(data["contracts_total"], 3)

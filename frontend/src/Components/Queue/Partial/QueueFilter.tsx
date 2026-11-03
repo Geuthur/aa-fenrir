@@ -14,7 +14,7 @@ export default function QueueFilter({
 
   const tabs = [
     { id: 'all', label: t('All Contracts') },
-    { id: 'pending', label: t('Pending') },
+    { id: 'outstanding', label: t('Pending') },
     { id: 'in_progress', label: t('In Progress') },
     { id: 'finished', label: t('Completed') },
     { id: 'failed', label: t('Failed / Canceled') },

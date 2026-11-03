@@ -391,7 +391,9 @@ class ContractQuerySet(models.QuerySet):
     def pending_count(self) -> int:
         """Returns the number of pending contracts."""
         return (
-            self.filter(status=Status.PENDING).exclude(date_expired__lt=now()).count()
+            self.filter(status=Status.OUTSTANDING)
+            .exclude(date_expired__lt=now())
+            .count()
         )
 
     def filter_not_completed(self):
@@ -516,7 +518,7 @@ class ContractManager(models.Manager["ContractContext"]):
                 "issuer": issuer,
                 "reward": contract.reward,
                 "start_location": start_location,
-                "status": Status.from_esi(contract.status),
+                "status": contract.status,
                 "title": title,
                 "volume": contract.volume,
             },
@@ -606,7 +608,7 @@ class ContractManager(models.Manager["ContractContext"]):
         self, force_sent: bool = False, rate_limited: bool = True
     ) -> None:
         """Send notifications to pilots for pending contracts"""
-        contracts_qs = self.filter(status__exact=Status.PENDING)
+        contracts_qs = self.filter(status__exact=Status.OUTSTANDING)
         if not force_sent:
             contracts_qs = contracts_qs.filter(date_notified__exact=None)
         contracts_qs = contracts_qs.select_related()

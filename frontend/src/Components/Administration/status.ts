@@ -32,7 +32,7 @@ export function getHandlerStatus(
 /** Translated label of a contract status. */
 export function getContractStatusLabel(t: TFunction, status: string): string {
   switch (status) {
-    case "pending":
+    case "outstanding":
       return t("Pending");
     case "in_progress":
       return t("In Progress");
@@ -42,7 +42,7 @@ export function getContractStatusLabel(t: TFunction, status: string): string {
       return t("Finished Issuer");
     case "finished_contractor":
       return t("Finished Contractor");
-    case "canceled":
+    case "cancelled":
       return t("Canceled");
     case "rejected":
       return t("Rejected");
