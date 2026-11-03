@@ -7,7 +7,7 @@ from unittest.mock import patch
 
 # Third Party
 import pook
-from evesde_factory.allianceauth import EveCharacterFactory
+from evesde_factory.allianceauth import EveCharacterFactory, EveCorporationInfoFactory
 
 # Django
 from django.test import TestCase
@@ -151,6 +151,35 @@ class TestUpdateCorporationContract(AuthTestCase):
         )
 
     @pook.on
+    def test_should_store_corporation_as_acceptor(self):
+        # Test Data
+        acceptor_corporation = EveCorporationInfoFactory()
+        pook.post(
+            f"{ESI_URL}/universe/names",
+            reply=200,
+            response_json=[
+                {
+                    "category": "corporation",
+                    "id": acceptor_corporation.corporation_id,
+                    "name": acceptor_corporation.corporation_name,
+                }
+            ],
+        )
+
+        # Test Action
+        self._update_contracts(
+            self._esi_contract(
+                "in_progress", acceptor_id=acceptor_corporation.corporation_id
+            )
+        )
+
+        # Expected Result
+        contract = Contract.objects.get()
+        self.assertEqual(contract.status, Status.IN_PROGRESS)
+        self.assertIsNone(contract.acceptor)
+        self.assertEqual(contract.acceptor_corporation, acceptor_corporation)
+
+    @pook.on
     @patch(f"{MODEL_PATH}.send_user_notification")
     def test_should_notify_pilots_and_customer_about_new_outstanding_contract(
         self, mock_notification
@@ -166,6 +195,8 @@ class TestUpdateCorporationContract(AuthTestCase):
             call.kwargs["user_id"] for call in mock_notification.delay.call_args_list
         ]
         self.assertCountEqual(notified_users, [self.superuser.id, self.user.id])
+        for call in mock_notification.delay.call_args_list:
+            self.assertIsInstance(call.kwargs["title"], str)
         contract = Contract.objects.get()
         self.assertIsNotNone(contract.date_notified)
         self.assertTrue(

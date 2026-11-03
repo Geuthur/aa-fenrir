@@ -206,7 +206,7 @@ class EveEntity(models.Model):
 
     def __repr__(self) -> str:
         return (
-            f"{self.__class__.__name__}(id={self.id}, category='{self.category}', "
+            f"{self.__class__.__name__}(id={self.eve_id}, category='{self.category}', "
             f"name='{self.name}')"
         )
 
@@ -228,13 +228,13 @@ class EveEntity(models.Model):
     def icon_url(self, size=128) -> str:
         """Url to an icon image for this organization."""
         if self.category == EveType.ALLIANCE:
-            return EveAllianceInfo.generic_logo_url(self.id, size=size)
+            return EveAllianceInfo.generic_logo_url(self.eve_id, size=size)
 
         if self.category == EveType.CORPORATION:
-            return EveCorporationInfo.generic_logo_url(self.id, size=size)
+            return EveCorporationInfo.generic_logo_url(self.eve_id, size=size)
 
         if self.category == EveType.CHARACTER:
-            return EveCharacter.generic_portrait_url(self.id, size=size)
+            return EveCharacter.generic_portrait_url(self.eve_id, size=size)
 
         raise NotImplementedError(
             f"Avatar URL not implemented for category {self.category}"
@@ -606,11 +606,9 @@ class Contract(models.Model):
         user_id = self.issuer.character_ownership.user.id
 
         title = (
-            (
-                f"{self.start_location.solar_system_name} >> "
-                f"{self.end_location.solar_system_name} "
-                f"| {self.volume:,.0f} m3 | {self.status.upper()}"
-            ),
+            f"{self.start_location.solar_system_name} >> "
+            f"{self.end_location.solar_system_name} "
+            f"| {self.volume:,.0f} m3 | {self.status.upper()}"
         )
         message = self._generate_contents(status)
 
