@@ -580,7 +580,7 @@ class ContractManager(models.Manager["ContractContext"]):
         elif entity.is_corporation:
             acceptor = None
             acceptor_corporation = self.get_or_create_eve_corporation_info(
-                corporation_id=entity.id
+                corporation_id=entity.eve_id
             )[0]
 
         else:

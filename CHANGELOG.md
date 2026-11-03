@@ -55,6 +55,8 @@ Section Order:
 
 ### Fixed
 
+- **Contract Sync**: A contract accepted by a corporation no longer aborts the sync of its contract handler. `EveEntity` now uses `eve_id` in `__repr__` and `icon_url` too.
+- **Customer Notifications**: The title is now plain text instead of a Python tuple.
 - **Contract Notifications**: Notifications for new pending contracts no longer fail because of a missing URL, which also stopped the customer notifications. The link now opens the *Contracts Queue*.
 - **Contract Status**: The status choices now use the ESI values `outstanding` and `cancelled` instead of `pending` and `canceled`, and a migration converts stored contracts and customer notifications. New open contracts are counted as pending, are listed in the *Pending* tab, count towards in-transit cargo and trigger pilot notifications. Cancelled contracts count as completed. The names shown in the interface stay the same.
 - **Contract Queue**: Pending contracts past their expiry date are listed as *Expired* under *Failed / Canceled* and no longer count towards pending contracts, active in-transit cargo or the rewards pool. The Administration page counts them as failed too. The stored status stays unchanged.
