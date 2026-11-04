@@ -99,6 +99,7 @@ Section Order:
 ### Removed
 
 - Unused `BaseModal` component in `Components/Modals` (it was a copy of the table component).
+- Removed the agent rules under `.agents/rules/`. The agent rules for this project now live in the Brain repository.
 
 <!-- Your changes go here -->
 
