@@ -216,6 +216,8 @@
   "Preset Available": "Vorlage verfügbar",
   "Currently using standard base rates. You can apply the configured route preset tariffs.": "Derzeit werden Standard-Basistarife verwendet. Sie können die konfigurierten Routenvorlagen-Tarife anwenden.",
   "Apply Preset Rates": "Vorlagen-Tarife anwenden",
+  "Apply Route Preset": "Routen-Vorlage anwenden",
+  "A route preset exists for this route. Apply it to use its corridor tariffs.": "Für diese Route gibt es eine Vorlage. Wende sie an, um ihre Korridor-Tarife zu nutzen.",
   "Standard Base Tariffs": "Standard-Basistarife",
   "Custom Route": "Benutzerdefinierte Route",
   "No predefined corridor found for {{origin}} ➔ {{destination}}. Standard base rates are applied.": "Kein vordefinierter Korridor zwischen {{origin}} ➔ {{destination}} gefunden. Es gelten die Standard-Basistarife.",
