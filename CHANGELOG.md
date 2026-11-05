@@ -99,6 +99,7 @@ Section Order:
 
 ### Removed
 
+- Own test helper module `testdata/utils.py` (`add_character_to_user` and others, identical to the ones in `aa-evesde-factory`); `aa-evesde-factory` provides it.
 - Unused `BaseModal` component in `Components/Modals` (it was a copy of the table component).
 - Removed the agent rules under `.agents/rules/`. The agent rules for this project now live in the Brain repository.
 
