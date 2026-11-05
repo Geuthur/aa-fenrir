@@ -17,16 +17,7 @@ class SocketAccessError(Exception):
 
 
 class NoSocketsTestCase(TestCase):
-    """Variation of Django's TestCase class that prevents any network use.
-
-    Example:
-
-        .. code-block:: python
-
-            class TestMyStuff(BaseTestCase):
-                def test_should_do_what_i_need(self): ...
-
-    """
+    """Variation of Django's TestCase class that prevents any network use."""
 
     @classmethod
     def setUpClass(cls):
@@ -46,17 +37,15 @@ class NoSocketsTestCase(TestCase):
 
 class AuthTestCase(NoSocketsTestCase):
     """
-    Preloaded Testcase class for Example tests without Network access.
+    Preloaded Testcase class for AllianceAuth tests without Network access.
 
     Available Request Factory:
         `self.factory`
-
-    Example:
-        .. code-block:: python
-
-            class TestMyExampleStuff(ExampleTestCase):
-                def test_should_do_what_i_need(self):
-                    user = self.user
+    Available Django Users:
+        `self.user`
+        `self.superuser`
+    Available methods:
+        `_middleware_process_request(request)`
     """
 
     @classmethod
