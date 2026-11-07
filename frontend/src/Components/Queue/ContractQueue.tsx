@@ -205,7 +205,7 @@ export function ContractQueue({ contracts, onNewQuoteClick }: ContractQueueProps
   }, [t]);
 
   return (
-    <div className="space-y-6">
+    <div>
       {/* Top Metrics Cards */}
       <QueueMetrics pendingCount={pendingCount} totalVolume={totalVolume} totalRewards={totalRewards} />
 

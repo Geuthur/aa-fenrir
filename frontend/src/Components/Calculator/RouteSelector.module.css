@@ -262,7 +262,7 @@
 }
 
 .swapIcon {
-  @apply w-4 h-4;
+  @apply block w-4 h-4;
 }
 
 .swapLabel {

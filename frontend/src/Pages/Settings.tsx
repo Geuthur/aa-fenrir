@@ -46,7 +46,7 @@ function Settings() {
         <main className="mt-4">
             <section className="card" aria-labelledby="settings-heading">
                 <div className="card-header bg-primary rounded">
-                    <h2 id="settings-heading">{t("User Settings")}</h2>
+                    <h2 id="settings-heading" className="fs-6 fw-normal">{t("User Settings")}</h2>
                 </div>
                 <div className="card-body">
                     {successMessage && (

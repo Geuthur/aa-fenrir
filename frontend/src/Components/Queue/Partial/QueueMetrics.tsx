@@ -30,7 +30,7 @@ export function QueueMetrics({
           </div>
         </div>
         <div className="p-3 rounded-xl !bg-cyan-950/40 border !border-cyan-500/30 !text-cyan-400">
-          <Clock className="w-6 h-6" />
+          <Clock className="d-block w-6 h-6" />
         </div>
       </div>
 
@@ -47,7 +47,7 @@ export function QueueMetrics({
           </div>
         </div>
         <div className="p-3 rounded-xl !bg-blue-950/40 border !border-blue-500/30 !text-blue-400">
-          <Truck className="w-6 h-6" />
+          <Truck className="d-block w-6 h-6" />
         </div>
       </div>
 
@@ -64,7 +64,7 @@ export function QueueMetrics({
           </div>
         </div>
         <div className="p-3 rounded-xl !bg-amber-950/40 border !border-amber-500/30 !text-amber-400">
-          <FileText className="w-6 h-6" />
+          <FileText className="d-block w-6 h-6" />
         </div>
       </div>
     </div>

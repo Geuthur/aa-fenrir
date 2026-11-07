@@ -306,7 +306,7 @@ export default function RouteAdmin() {
 
   return (
     <main className="mt-4 min-h-screen !text-slate-200 px-4 sm:px-6 lg:px-8 py-8 font-sans">
-      <div className="max-w-6xl mx-auto space-y-6">
+      <div className="max-w-6xl mx-auto">
         {/* Top Header */}
         <RouteAdminHeader
           onCreateClick={() => setIsCreateModalOpen(true)}
@@ -363,7 +363,7 @@ export default function RouteAdmin() {
 
         {/* TAB 1: Route Presets */}
         {activeTab === 'routes' && (
-          <div className="space-y-4">
+          <div>
             {/* Filter and Search Bar */}
             <div className="!bg-slate-800/80 fenrir-gradient fenrir-border-500 rounded-xl p-4 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
               {/* Service Type Filter Pills */}
@@ -474,7 +474,7 @@ export default function RouteAdmin() {
 
         {/* TAB 2: Available Systems */}
         {activeTab === 'systems' && (
-          <div className="space-y-4">
+          <div>
             {/* Search & Add Action Bar */}
             <div className="!bg-slate-800/80 fenrir-gradient fenrir-border-500 rounded-xl p-4 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div className="relative w-full md:w-80">

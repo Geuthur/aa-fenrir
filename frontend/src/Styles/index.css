@@ -183,8 +183,8 @@ html[data-bs-theme="dark"] {
     --aa-shadow-opacity: 0.1;
 }
 
-/* Both properties inherit, so this also covers Auth's page scroller and inner scroll areas */
-html {
+/* Both properties inherit, so this covers the inner scroll areas of the app (pages and modals) */
+.aa-react {
     scrollbar-color: var(--aa-scrollbar-thumb) transparent;
     scrollbar-width: thin;
 }
@@ -198,8 +198,12 @@ html {
     background-color: var(--aa-body);
 }
 
-/* ═══ BUTTONS (Bootstrap 5.3 + Theme Overrides) ════════════════════════════════ */
-.aa-react .btn {
+/* ═══ BUTTONS (Bootstrap 5.3 + Theme Overrides) ════════════════════════════════
+ * Only on the Administration page (main.aa-react.container) and in BaseModal
+ * (.modal-content.aa-react). The app wrapper is aa-react too, the other pages
+ * keep their own buttons. :where keeps the specificity of .aa-react .btn.
+ */
+.aa-react:where(.container, .modal-content) .btn {
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -214,66 +218,66 @@ html {
     transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
 }
 
-.aa-react .btn-primary {
+.aa-react:where(.container, .modal-content) .btn-primary {
     background-color: var(--aa-color-blue);
     color: var(--aa-color-white-light);
 }
 
-.aa-react .btn-primary:hover:not(:disabled) {
+.aa-react:where(.container, .modal-content) .btn-primary:hover:not(:disabled) {
     background-color: var(--aa-color-blue-light);
     color: var(--aa-color-white);
     border-color: var(--aa-color-blue-light);
 }
 
-.aa-react .btn-secondary {
+.aa-react:where(.container, .modal-content) .btn-secondary {
     background-color: var(--aa-color-grey);
     color: var(--aa-color-white-light);
     border-color: var(--aa-border-light);
 }
 
-.aa-react .btn-secondary:hover:not(:disabled) {
+.aa-react:where(.container, .modal-content) .btn-secondary:hover:not(:disabled) {
     background-color: var(--aa-color-grey-light);
     color: var(--aa-color-white);
     border-color: var(--aa-color-grey-light);
 }
 
-.aa-react .btn-success {
+.aa-react:where(.container, .modal-content) .btn-success {
     background-color: var(--aa-color-emerald-dark);
     color: var(--aa-color-emerald-light);
     border-color: var(--aa-color-emerald);
 }
 
-.aa-react .btn-success:hover:not(:disabled) {
+.aa-react:where(.container, .modal-content) .btn-success:hover:not(:disabled) {
     background-color: var(--aa-color-emerald);
     color: var(--aa-color-white);
     border-color: var(--aa-color-emerald);
 }
 
-.aa-react .btn-warning {
+.aa-react:where(.container, .modal-content) .btn-warning {
     background-color: var(--aa-color-amber-dark);
     color: var(--aa-color-amber-light);
     border-color: var(--aa-border-amber);
 }
 
-.aa-react .btn-warning:hover:not(:disabled) {
+.aa-react:where(.container, .modal-content) .btn-warning:hover:not(:disabled) {
     background-color: var(--aa-color-amber);
     color: var(--aa-color-black);
     border-color: var(--aa-color-amber);
 }
 
-.aa-react .btn-danger {
+.aa-react:where(.container, .modal-content) .btn-danger {
     background-color: var(--aa-color-rose-dark);
     color: var(--aa-color-rose-light);
     border-color: var(--aa-border-rose);
 }
 
-.aa-react .btn-danger:hover:not(:disabled) {
+.aa-react:where(.container, .modal-content) .btn-danger:hover:not(:disabled) {
     background-color: var(--aa-color-red);
     color: var(--aa-color-white);
     border-color: var(--aa-color-red);
 }
 
-.aa-react .btn-sm {
+.aa-react:where(.container, .modal-content) .btn-sm {
     padding: 4px 10px;
     font-size: var(--aa-font-size-xs);
 }

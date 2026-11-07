@@ -270,7 +270,7 @@ export default function Calculator() {
   return (
     <main className="mt-4 min-h-screen !text-slate-200 flex flex-col font-sans selection:!bg-cyan-500/30 selection:!text-cyan-200">
         <div className="flex-1 w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <div className="space-y-6">
+            <div>
             {/* Top Route & Flight Corridor Selector */}
             <RouteSelector
                 origin={origin}
@@ -296,7 +296,7 @@ export default function Calculator() {
 
             {/* Two Column Layout: Cargo Inputs & Live Tariff Breakdown */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-                <div className="lg:col-span-6 space-y-6">
+                <div className="lg:col-span-6">
                 <CargoInput
                     volumeM3={volumeM3}
                     setVolumeM3={setVolumeM3}
@@ -313,7 +313,7 @@ export default function Calculator() {
                 />
                 </div>
 
-                <div className="lg:col-span-6 space-y-6">
+                <div className="lg:col-span-6">
                 <QuoteBreakdown
                     quote={quote}
                     selectedCorridor={effectiveCorridor}

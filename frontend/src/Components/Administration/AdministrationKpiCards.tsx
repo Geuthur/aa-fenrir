@@ -19,15 +19,15 @@ export function AdministrationKpiCards({ metrics }: AdministrationKpiCardsProps)
   const { t } = useTranslation();
 
   const cards = [
-    { label: t("Handlers"), value: metrics.total, icon: <Truck size={24} />, tone: "secondary" },
-    { label: t("Synced"), value: metrics.synced, icon: <CheckCircle2 size={24} />, tone: "success" },
+    { label: t("Handlers"), value: metrics.total, icon: <Truck className="d-block" size={24} />, tone: "secondary" },
+    { label: t("Synced"), value: metrics.synced, icon: <CheckCircle2 className="d-block" size={24} />, tone: "success" },
     {
       label: t("Sync Issues"),
       value: metrics.issues,
-      icon: <AlertTriangle size={24} />,
+      icon: <AlertTriangle className="d-block" size={24} />,
       tone: metrics.issues > 0 ? "danger" : "success",
     },
-    { label: t("Open Contracts"), value: metrics.openContracts, icon: <Package size={24} />, tone: "info" },
+    { label: t("Open Contracts"), value: metrics.openContracts, icon: <Package className="d-block" size={24} />, tone: "info" },
   ];
 
   return (
@@ -38,7 +38,7 @@ export function AdministrationKpiCards({ metrics }: AdministrationKpiCardsProps)
             <Card.Body className="p-3 d-flex align-items-center justify-content-between">
               <div>
                 <span className="text-muted small fw-semibold">{card.label}</span>
-                <h4 className={`mb-0 fw-bold text-${card.tone}`}>{card.value}</h4>
+                <h4 className={`fs-6 mb-0 fw-bold text-${card.tone}`}>{card.value}</h4>
               </div>
               <div className={`p-2 rounded-3 bg-${card.tone} bg-opacity-10 text-${card.tone}`}>
                 {card.icon}

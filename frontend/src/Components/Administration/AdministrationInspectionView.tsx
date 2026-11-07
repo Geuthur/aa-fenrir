@@ -80,7 +80,7 @@ export function AdministrationInspectionView({
             <Card className="bg-body border-secondary h-100 shadow-sm">
               <Card.Body className="p-3">
                 <span className="text-muted small fw-semibold">{item.label}</span>
-                <h5 className="mb-0 fw-bold">{item.value}</h5>
+                <h5 className="fs-6 mb-0 fw-bold">{item.value}</h5>
               </Card.Body>
             </Card>
           </Col>

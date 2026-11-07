@@ -51,11 +51,11 @@ function BaseHeader<TData extends RowData>({ table, enableFilters = true }: Tabl
                         {canSort && (
                           <span>
                             {isSorted === "asc" ? (
-                              <ChevronUp className="aa-table-sort-icon aa-table-sort-icon-active" />
+                              <ChevronUp className="d-block aa-table-sort-icon aa-table-sort-icon-active" />
                             ) : isSorted === "desc" ? (
-                              <ChevronDown className="aa-table-sort-icon aa-table-sort-icon-active" />
+                              <ChevronDown className="d-block aa-table-sort-icon aa-table-sort-icon-active" />
                             ) : (
-                              <ArrowUpDown className="aa-table-sort-icon" />
+                              <ArrowUpDown className="d-block aa-table-sort-icon" />
                             )}
                           </span>
                         )}
