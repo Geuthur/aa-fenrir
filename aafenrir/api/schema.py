@@ -200,6 +200,7 @@ class CynoCoverageCharacterSchema(Schema):
         ship_type_name (str): The type of the current ship.
         ship_name (str): The name of the current ship.
         last_update (datetime | None): When corptools last updated the location.
+        is_own (bool): The character belongs to the requesting user.
     """
 
     character_id: int
@@ -209,6 +210,7 @@ class CynoCoverageCharacterSchema(Schema):
     ship_type_name: str = ""
     ship_name: str = ""
     last_update: datetime | None = None
+    is_own: bool = False
 
 
 class CynoCoverageSystemSchema(Schema):

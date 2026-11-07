@@ -317,6 +317,14 @@
   @apply p-2;
 }
 
+.coverageSection + .coverageSection {
+  @apply mt-2 pt-2 border-t border-white/15;
+}
+
+.coverageSectionTitle {
+  @apply mb-1 text-[10px] font-semibold uppercase tracking-wide opacity-70;
+}
+
 .coverageList {
   @apply list-none m-0 p-0 flex flex-col gap-2;
 }

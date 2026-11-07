@@ -1,4 +1,4 @@
-import type { CynoCoverageSystemSchema } from '@/Api/schema';
+import type { CynoCoverageCharacterSchema, CynoCoverageSystemSchema } from '@/Api/schema';
 import { JUMP_FREIGHTERS } from '@/Components/Fenrir/eveData';
 import type { EveSolarSystem, FreightCorridor, JumpFreighterShip, QuoteCalculation } from '@/types';
 
@@ -293,4 +293,18 @@ export function findWaypointCoverage(
   waypoint: string
 ): CynoCoverageSystemSchema | undefined {
   return coverage.find((system) => system.system_name === waypoint && system.characters.length > 0);
+}
+
+/**
+ * Splits the characters of a covered waypoint into the viewer's own
+ * characters and those of other route admins, keeping their order.
+ */
+export function splitCoverageCharacters(characters: CynoCoverageCharacterSchema[]): {
+  own: CynoCoverageCharacterSchema[];
+  others: CynoCoverageCharacterSchema[];
+} {
+  return {
+    own: characters.filter((character) => character.is_own),
+    others: characters.filter((character) => !character.is_own),
+  };
 }

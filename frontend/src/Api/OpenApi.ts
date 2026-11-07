@@ -753,6 +753,7 @@ export interface components {
          *         ship_type_name (str): The type of the current ship.
          *         ship_name (str): The name of the current ship.
          *         last_update (datetime | None): When corptools last updated the location.
+         *         is_own (bool): The character belongs to the requesting user.
          */
         CynoCoverageCharacterSchema: {
             /** Character Id */
@@ -781,6 +782,11 @@ export interface components {
             ship_name: string;
             /** Last Update */
             last_update?: string | null;
+            /**
+             * Is Own
+             * @default false
+             */
+            is_own: boolean;
         };
         /**
          * CynoCoverageSystemSchema

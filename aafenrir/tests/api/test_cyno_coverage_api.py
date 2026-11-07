@@ -87,6 +87,7 @@ class TestRoutePresetCoverageApi(AuthTestCase):
                             "ship_type_name": "Arazu",
                             "ship_name": "Beacon",
                             "last_update": "2026-11-07T12:00:00Z",
+                            "is_own": True,
                         }
                     ],
                 }
@@ -106,15 +107,44 @@ class TestRoutePresetCoverageApi(AuthTestCase):
             [row["system_name"] for row in response.json()], ["Jita", "1DQ1-A"]
         )
 
-    def test_coverage_should_include_full_access_characters(self):
+    def test_coverage_should_show_manage_access_only_own_characters(self):
         # Test Data
         create_character_location(self.admin, self.waypoint)
+        create_character_location(self.admin, self.origin)
+        own = create_character_location(self.manager, self.origin)
 
         # Test Action
         response = self._get_coverage(self.manager)
 
         # Expected Result
         self.assertEqual(len(response.json()), 1)
+        self.assertEqual(response.json()[0]["system_name"], "Jita")
+        characters = response.json()[0]["characters"]
+        self.assertEqual(
+            [c["character_id"] for c in characters],
+            [own.character.character.character_id],
+        )
+        self.assertTrue(characters[0]["is_own"])
+
+    def test_coverage_should_show_full_access_all_characters_marked_by_owner(self):
+        # Test Data
+        own = create_character_location(self.admin, self.waypoint)
+        other = create_character_location(self.manager, self.waypoint)
+
+        # Test Action
+        response = self._get_coverage(self.admin)
+
+        # Expected Result
+        is_own = {
+            c["character_id"]: c["is_own"] for c in response.json()[0]["characters"]
+        }
+        self.assertEqual(
+            is_own,
+            {
+                own.character.character.character_id: True,
+                other.character.character.character_id: False,
+            },
+        )
 
     def test_coverage_should_include_permission_from_group(self):
         # Test Data
@@ -129,7 +159,7 @@ class TestRoutePresetCoverageApi(AuthTestCase):
         create_character_location(pilot, self.waypoint)
 
         # Test Action
-        response = self._get_coverage(self.manager)
+        response = self._get_coverage(self.admin)
 
         # Expected Result
         self.assertEqual(len(response.json()), 1)
@@ -139,7 +169,7 @@ class TestRoutePresetCoverageApi(AuthTestCase):
         create_character_location(self.user, self.waypoint)
 
         # Test Action
-        response = self._get_coverage(self.manager)
+        response = self._get_coverage(self.admin)
 
         # Expected Result
         self.assertEqual(response.json(), [])
@@ -168,15 +198,15 @@ class TestRoutePresetCoverageApi(AuthTestCase):
         # Test Data
         create_character_location(self.manager, self.waypoint)
         # Warm up: the first request also creates the session
-        self._get_coverage(self.manager)
+        self._get_coverage(self.admin)
 
         # Test Action
         with CaptureQueriesContext(connection) as one_character:
-            self._get_coverage(self.manager)
+            self._get_coverage(self.admin)
         create_character_location(self.admin, self.waypoint)
         create_character_location(self.admin, self.origin)
         with CaptureQueriesContext(connection) as three_characters:
-            self._get_coverage(self.manager)
+            self._get_coverage(self.admin)
 
         # Expected Result
         self.assertEqual(

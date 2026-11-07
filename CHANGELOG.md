@@ -33,6 +33,7 @@ Section Order:
 
 - **Cyno Coverage in the Transit Routing Chain** (optional, requires [allianceauth-corptools](https://github.com/Solar-Helix-Independent-Transport/allianceauth-corp-tools)):
   - For users with `aafenrir.manage_access` or `aafenrir.full_access`, every waypoint system of the selected route in which a character of a route admin (user with `manage_access` or `full_access`) is currently located, according to corptools, is highlighted in green.
+  - Users with `manage_access` only see their own characters. Users with `full_access` see the characters of all route admins, with their own characters listed separately.
   - Clicking a highlighted system opens a popover with the characters there: portrait, name, current station or system, ship and the time of the last location update from corptools.
   - New endpoint `GET /contract/preset/{preset_id}/coverage/` (`403` without manage access, `404` for an unknown route). Without corptools in `INSTALLED_APPS` it returns an empty list and the chain looks as before.
 - **Administration**:

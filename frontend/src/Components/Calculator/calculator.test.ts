@@ -8,6 +8,7 @@ import {
   doesCorridorMatch,
   estimateStargateJumps,
   findWaypointCoverage,
+  splitCoverageCharacters,
   formatDuration,
   formatIskExact,
   normalizeDangerLevel,
@@ -239,6 +240,7 @@ describe('findWaypointCoverage', () => {
     ship_type_name: 'Arazu',
     ship_name: 'Beacon',
     last_update: null,
+    is_own: true,
   };
   const coverage = [
     { system_id: 1, system_name: 'Hykkota', characters: [character] },
@@ -253,5 +255,26 @@ describe('findWaypointCoverage', () => {
     expect(findWaypointCoverage(coverage, 'Empty')).toBeUndefined();
     expect(findWaypointCoverage(coverage, 'Jita')).toBeUndefined();
     expect(findWaypointCoverage([], 'Hykkota')).toBeUndefined();
+  });
+});
+
+describe('splitCoverageCharacters', () => {
+  const base = {
+    portrait: '',
+    location_name: 'Hykkota',
+    ship_type_name: 'Arazu',
+    ship_name: '',
+    last_update: null,
+  };
+
+  it('separates own characters from those of other route admins', () => {
+    const own = { ...base, character_id: 1, character_name: 'Mine', is_own: true };
+    const other = { ...base, character_id: 2, character_name: 'Theirs', is_own: false };
+
+    expect(splitCoverageCharacters([other, own])).toEqual({ own: [own], others: [other] });
+  });
+
+  it('returns empty groups without characters', () => {
+    expect(splitCoverageCharacters([])).toEqual({ own: [], others: [] });
   });
 });

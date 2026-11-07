@@ -1952,7 +1952,7 @@
         "type": "object"
       },
       "CynoCoverageCharacterSchema": {
-        "description": "Schema for a route admin character located in a route waypoint system.\n\nParameters:\n    character_id (int): The ID of the character.\n    character_name (str): The name of the character.\n    portrait (str): The URL of the character portrait.\n    location_name (str): The current station, structure or system.\n    ship_type_name (str): The type of the current ship.\n    ship_name (str): The name of the current ship.\n    last_update (datetime | None): When corptools last updated the location.",
+        "description": "Schema for a route admin character located in a route waypoint system.\n\nParameters:\n    character_id (int): The ID of the character.\n    character_name (str): The name of the character.\n    portrait (str): The URL of the character portrait.\n    location_name (str): The current station, structure or system.\n    ship_type_name (str): The type of the current ship.\n    ship_name (str): The name of the current ship.\n    last_update (datetime | None): When corptools last updated the location.\n    is_own (bool): The character belongs to the requesting user.",
         "properties": {
           "character_id": {
             "title": "Character Id",
@@ -1993,6 +1993,11 @@
               }
             ],
             "title": "Last Update"
+          },
+          "is_own": {
+            "default": false,
+            "title": "Is Own",
+            "type": "boolean"
           }
         },
         "required": [

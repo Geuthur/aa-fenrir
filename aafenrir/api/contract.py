@@ -232,7 +232,7 @@ class ContractApiEndpoints:
                 ]
                 if system is not None
             }
-            coverage = get_cyno_coverage(list(systems))
+            coverage = get_cyno_coverage(list(systems), request.user)
 
             return HTTPStatus.OK, [
                 schema.CynoCoverageSystemSchema(
@@ -252,6 +252,7 @@ class ContractApiEndpoints:
                             ),
                             ship_name=loc.current_ship_name or "",
                             last_update=loc.last_update,
+                            is_own=loc.is_own,
                         )
                         for loc in coverage[system_id]
                     ],
