@@ -88,6 +88,7 @@ Section Order:
 ### Changed
 
 - **App Container Width**: The app container (`.aa-react.container`) now has a minimum width of 640px, like the other AA apps. Its maximum width of 1280px is unchanged.
+- **Page Width**: All pages now share the width of the Administration page, like aa-ledger and aa-example: at least 640px, at most 1280px and centered. The page wrapper now carries `aa-react container`. The Administration page uses the new class `aa-admin` instead of `container` for its button styles, its look is unchanged.
 - **Tests**: The test base classes in `aafenrir/tests/__init__.py` match the aa-example template (docstrings only, no behavior change).
 - **Modal Design**: Modals match the calculator view through Bootstrap overrides under `.modal-content.aa-react`, with cards, uppercase labels and a boxed title icon. They follow the Darkly and Flatly themes. The clipboard appraiser moved to `BaseModal`, `FenrirModal` is removed, and `CynoWaypointManager` moved from Tailwind to Bootstrap.
 - **Calculator Layout**: Thin theme-coloured scrollbars on aa-fenrir pages. Collateral buttons and quick load presets wrap instead of scrolling or squeezing their text.

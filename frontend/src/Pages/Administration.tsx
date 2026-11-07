@@ -68,7 +68,7 @@ export default function Administration() {
 
   if (isAccessLoading) {
     return (
-      <main className="aa-react container mt-4">
+      <main className="aa-react aa-admin mt-4">
         <FetchingLoader message={t("Checking authorizations...")} />
       </main>
     );
@@ -76,7 +76,7 @@ export default function Administration() {
 
   if (!hasAdminAccess) {
     return (
-      <main className="aa-react container mt-4">
+      <main className="aa-react aa-admin mt-4">
         <Alert variant="danger" className="d-flex align-items-center gap-2">
           <ShieldAlert size={20} />
           <span>
@@ -104,7 +104,7 @@ export default function Administration() {
 
   if (inspectId !== null && !Number.isNaN(inspectId)) {
     return (
-      <main className="aa-react container mt-4">
+      <main className="aa-react aa-admin mt-4">
         <Card className="bg-dark">
           <Card.Body>
             {header}
@@ -119,7 +119,7 @@ export default function Administration() {
   }
 
   return (
-    <main className="aa-react container mt-4">
+    <main className="aa-react aa-admin mt-4">
       <Card className="bg-dark">
         <Card.Body>
           {header}
