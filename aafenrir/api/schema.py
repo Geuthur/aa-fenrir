@@ -188,6 +188,39 @@ class RoutePresetSchema(Schema):
     days_to_complete: int = 3
 
 
+class CynoCoverageCharacterSchema(Schema):
+    """
+    Schema for a route admin character located in a route waypoint system.
+
+    Parameters:
+        character_id (int): The ID of the character.
+        character_name (str): The name of the character.
+        portrait (str): The URL of the character portrait.
+        location_name (str): The current station, structure or system.
+        ship_type_name (str): The type of the current ship.
+        ship_name (str): The name of the current ship.
+        last_update (datetime | None): When corptools last updated the location.
+    """
+
+    character_id: int
+    character_name: str
+    portrait: str = ""
+    location_name: str = ""
+    ship_type_name: str = ""
+    ship_name: str = ""
+    last_update: datetime | None = None
+
+
+class CynoCoverageSystemSchema(Schema):
+    """
+    Schema for a route waypoint system covered by route admin characters.
+    """
+
+    system_id: int
+    system_name: str
+    characters: list[CynoCoverageCharacterSchema] = []
+
+
 class CreateRoutePresetSchema(Schema):
     """
     Schema for creating a RoutePreset.

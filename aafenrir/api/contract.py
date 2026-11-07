@@ -15,6 +15,8 @@ from eve_sde.models import SolarSystem
 # AA Fenrir
 from aafenrir import __title__
 from aafenrir.api import schema
+from aafenrir.helpers.cyno_coverage import get_cyno_coverage
+from aafenrir.helpers.eveonline import get_character_portrait_url
 from aafenrir.models import Contract, ContractHandler, RoutePreset, RouteSystem
 from aafenrir.models.general import General
 
@@ -195,6 +197,69 @@ class ContractApiEndpoints:
                 expiration_days=p.expiration_days,
                 days_to_complete=p.days_to_complete,
             )
+
+        @api.get(
+            "contract/preset/{preset_id}/coverage/",
+            response={
+                HTTPStatus.OK: list[schema.CynoCoverageSystemSchema],
+                HTTPStatus.NOT_FOUND: dict,
+                HTTPStatus.FORBIDDEN: dict,
+            },
+            tags=self.tags,
+            summary="Route admin characters in the systems of a route",
+        )
+        def get_route_preset_coverage(request: WSGIRequest, preset_id: int):
+            if not General.has_management_access(request.user):
+                return HTTPStatus.FORBIDDEN, {"error": _("Permission Denied.")}
+
+            preset = (
+                RoutePreset.objects.select_related(
+                    "origin_system", "destination_system"
+                )
+                .prefetch_related("cyno_waypoints")
+                .filter(id=preset_id)
+                .first()
+            )
+            if preset is None:
+                return HTTPStatus.NOT_FOUND, {"error": _("Route preset not found.")}
+
+            systems = {
+                system.id: system
+                for system in [
+                    preset.origin_system,
+                    *preset.cyno_waypoints.all(),
+                    preset.destination_system,
+                ]
+                if system is not None
+            }
+            coverage = get_cyno_coverage(list(systems))
+
+            return HTTPStatus.OK, [
+                schema.CynoCoverageSystemSchema(
+                    system_id=system_id,
+                    system_name=systems[system_id].name,
+                    characters=[
+                        schema.CynoCoverageCharacterSchema(
+                            character_id=loc.character.character.character_id,
+                            character_name=loc.character.character.character_name,
+                            portrait=get_character_portrait_url(
+                                character_id=loc.character.character.character_id,
+                                size=64,
+                            ),
+                            location_name=loc.current_location.location_name or "",
+                            ship_type_name=(
+                                loc.current_ship.name if loc.current_ship else ""
+                            ),
+                            ship_name=loc.current_ship_name or "",
+                            last_update=loc.last_update,
+                        )
+                        for loc in coverage[system_id]
+                    ],
+                )
+                # Keep the order of the route
+                for system_id in systems
+                if system_id in coverage
+            ]
 
         @api.post(
             "contract/presets/",

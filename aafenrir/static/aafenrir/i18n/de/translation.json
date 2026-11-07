@@ -405,5 +405,10 @@
   "Done": "Done",
   "Range…": "Range…",
   "Filter…": "Filter…",
-  "No matching options": "No matching options"
+  "No matching options": "No matching options",
+  "Loading…": "Loading…",
+  "Characters in {{system}}": "Characters in {{system}}",
+  "Updated:": "Updated:",
+  "Unknown": "Unknown",
+  "Show characters in this system": "Show characters in this system"
 }

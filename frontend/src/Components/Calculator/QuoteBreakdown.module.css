@@ -296,6 +296,55 @@
   @apply px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-200;
 }
 
+.waypointBadgeCovered {
+  @apply border-emerald-400 text-white font-semibold cursor-pointer;
+}
+
+.waypointBadgeCovered:hover,
+.waypointBadgeCovered:focus-visible {
+  @apply ring-2 ring-emerald-300/60 outline-none;
+}
+
+.coveragePopover {
+  @apply max-w-xs;
+}
+
+.coveragePopoverHeader {
+  @apply text-xs font-semibold;
+}
+
+.coveragePopoverBody {
+  @apply p-2;
+}
+
+.coverageList {
+  @apply list-none m-0 p-0 flex flex-col gap-2;
+}
+
+.coverageCharacter {
+  @apply flex items-start gap-2;
+}
+
+.coveragePortrait {
+  @apply rounded-full shrink-0;
+}
+
+.coverageDetails {
+  @apply flex flex-col text-xs leading-tight;
+}
+
+.coverageName {
+  @apply font-semibold;
+}
+
+.coverageMeta {
+  @apply opacity-80;
+}
+
+.coverageUpdated {
+  @apply opacity-60 text-[10px];
+}
+
 .waypointArrow {
   @apply text-cyan-500 font-bold;
 }

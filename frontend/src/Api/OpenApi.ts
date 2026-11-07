@@ -178,6 +178,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/aafenrir/api/contract/preset/{preset_id}/coverage/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Route admin characters in the systems of a route */
+        get: operations["aafenrir_api_contract_get_route_preset_coverage"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/aafenrir/api/contract/systems/": {
         parameters: {
             query?: never;
@@ -723,6 +740,62 @@ export interface components {
              * @default 3
              */
             days_to_complete: number;
+        };
+        /**
+         * CynoCoverageCharacterSchema
+         * @description Schema for a route admin character located in a route waypoint system.
+         *
+         *     Parameters:
+         *         character_id (int): The ID of the character.
+         *         character_name (str): The name of the character.
+         *         portrait (str): The URL of the character portrait.
+         *         location_name (str): The current station, structure or system.
+         *         ship_type_name (str): The type of the current ship.
+         *         ship_name (str): The name of the current ship.
+         *         last_update (datetime | None): When corptools last updated the location.
+         */
+        CynoCoverageCharacterSchema: {
+            /** Character Id */
+            character_id: number;
+            /** Character Name */
+            character_name: string;
+            /**
+             * Portrait
+             * @default
+             */
+            portrait: string;
+            /**
+             * Location Name
+             * @default
+             */
+            location_name: string;
+            /**
+             * Ship Type Name
+             * @default
+             */
+            ship_type_name: string;
+            /**
+             * Ship Name
+             * @default
+             */
+            ship_name: string;
+            /** Last Update */
+            last_update?: string | null;
+        };
+        /**
+         * CynoCoverageSystemSchema
+         * @description Schema for a route waypoint system covered by route admin characters.
+         */
+        CynoCoverageSystemSchema: {
+            /** System Id */
+            system_id: number;
+            /** System Name */
+            system_name: string;
+            /**
+             * Characters
+             * @default []
+             */
+            characters: components["schemas"]["CynoCoverageCharacterSchema"][];
         };
         /**
          * RouteSystemSchema
@@ -1445,6 +1518,50 @@ export interface operations {
                     "application/json": {
                         [key: string]: unknown;
                     };
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
+    aafenrir_api_contract_get_route_preset_coverage: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                preset_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CynoCoverageSystemSchema"][];
                 };
             };
             /** @description Forbidden */

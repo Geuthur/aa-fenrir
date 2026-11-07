@@ -1,3 +1,4 @@
+import type { CynoCoverageSystemSchema } from '@/Api/schema';
 import { JUMP_FREIGHTERS } from '@/Components/Fenrir/eveData';
 import type { EveSolarSystem, FreightCorridor, JumpFreighterShip, QuoteCalculation } from '@/types';
 
@@ -281,4 +282,15 @@ export function doesCorridorMatch(
   const reverseOrigin = (cOId && dId && cOId === dId) || (cOName && dName && cOName === dName);
   const reverseDest = (cDId && oId && cDId === oId) || (cDName && oName && cDName === oName);
   return Boolean(reverseOrigin && reverseDest);
+}
+
+/**
+ * Returns the coverage of a waypoint in the transit routing chain,
+ * or undefined if no route admin character is located in that system.
+ */
+export function findWaypointCoverage(
+  coverage: CynoCoverageSystemSchema[],
+  waypoint: string
+): CynoCoverageSystemSchema | undefined {
+  return coverage.find((system) => system.system_name === waypoint && system.characters.length > 0);
 }

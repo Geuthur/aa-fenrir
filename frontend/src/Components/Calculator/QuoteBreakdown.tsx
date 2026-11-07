@@ -21,9 +21,11 @@ import { useTranslation } from 'react-i18next';
 // Styles
 import styles from '@/Components/Calculator/QuoteBreakdown.module.css';
 
-import { formatIsk, formatIskCompact, formatM3 } from '@/Components/Calculator/calculator';
+import type { CynoCoverageSystemSchema } from '@/Api/schema';
+import { findWaypointCoverage, formatIsk, formatIskCompact, formatM3 } from '@/Components/Calculator/calculator';
 import { MatchedCorridorIndicator } from '@/Components/Calculator/MatchedCorridorIndicator';
 import type { MatchedCorridorIndicatorProps } from '@/Components/Calculator/MatchedCorridorIndicator';
+import { WaypointCoverageBadge } from '@/Components/Calculator/WaypointCoverageBadge';
 import type { FreightCorridor, QuoteCalculation } from '@/types';
 
 interface QuoteBreakdownProps extends MatchedCorridorIndicatorProps {
@@ -31,6 +33,8 @@ interface QuoteBreakdownProps extends MatchedCorridorIndicatorProps {
   onApplyCorridor: (corridor: FreightCorridor) => void;
   quote: QuoteCalculation;
   onOpenContractModal: () => void;
+  /** Route admin characters per waypoint system (only for route admins) */
+  coverage?: CynoCoverageSystemSchema[];
 }
 
 export function QuoteBreakdown({
@@ -42,6 +46,7 @@ export function QuoteBreakdown({
   onApplyCorridor,
   onUseBaseRates,
   onOpenContractModal,
+  coverage = [],
 }: QuoteBreakdownProps) {
   const { t } = useTranslation();
   const [rewardCopied, setRewardCopied] = useState(false);
@@ -414,9 +419,10 @@ export function QuoteBreakdown({
           <div className={styles.waypointChain}>
             {quote.waypoints.map((wp, idx) => (
               <div key={idx} className={styles.waypointItem}>
-                <span className={styles.waypointBadge}>
-                  {wp}
-                </span>
+                <WaypointCoverageBadge
+                  name={wp}
+                  coverage={findWaypointCoverage(coverage, wp)}
+                />
                 {idx < quote.waypoints.length - 1 && (
                   <span className={styles.waypointArrow}>➔</span>
                 )}

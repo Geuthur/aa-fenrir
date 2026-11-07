@@ -4,6 +4,7 @@ export const queryKeys = {
     Menu: ["Menu"] as const,
     User: ["User"] as const,
     RoutePresets: ["RoutePresets"] as const,
+    RoutePresetCoverage: (presetId: number) => ["RoutePresetCoverage", presetId] as const,
     Contracts: ["Contracts"] as const,
     RouteSystems: ["RouteSystems"] as const,
     ContractHandlers: ["ContractHandlers"] as const,

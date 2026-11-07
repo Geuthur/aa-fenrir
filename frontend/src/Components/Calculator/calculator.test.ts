@@ -7,6 +7,7 @@ import {
   collateralFractionToPercent,
   doesCorridorMatch,
   estimateStargateJumps,
+  findWaypointCoverage,
   formatDuration,
   formatIskExact,
   normalizeDangerLevel,
@@ -226,5 +227,31 @@ describe('collateralFractionToPercent', () => {
     [1.5, 150],
   ])('converts %d to %d percent', (fraction, percent) => {
     expect(collateralFractionToPercent(fraction)).toBe(percent);
+  });
+});
+
+describe('findWaypointCoverage', () => {
+  const character = {
+    character_id: 1001,
+    character_name: 'Cyno Alt',
+    portrait: '',
+    location_name: 'Hykkota',
+    ship_type_name: 'Arazu',
+    ship_name: 'Beacon',
+    last_update: null,
+  };
+  const coverage = [
+    { system_id: 1, system_name: 'Hykkota', characters: [character] },
+    { system_id: 2, system_name: 'Empty', characters: [] },
+  ];
+
+  it('returns the coverage of a waypoint with route admin characters', () => {
+    expect(findWaypointCoverage(coverage, 'Hykkota')).toEqual(coverage[0]);
+  });
+
+  it('returns undefined for waypoints without characters', () => {
+    expect(findWaypointCoverage(coverage, 'Empty')).toBeUndefined();
+    expect(findWaypointCoverage(coverage, 'Jita')).toBeUndefined();
+    expect(findWaypointCoverage([], 'Hykkota')).toBeUndefined();
   });
 });
