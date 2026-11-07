@@ -91,7 +91,7 @@ export default function Administration() {
   const header = (
     <header className="d-flex align-items-center gap-3 mb-4">
       <div className="p-2 rounded bg-danger-subtle text-danger border border-danger-subtle">
-        <ShieldAlert size={28} />
+        <ShieldAlert className="d-block" size={28} />
       </div>
       <div>
         <h1 className="h3 mb-1 fw-bold">{t("Administration")}</h1>

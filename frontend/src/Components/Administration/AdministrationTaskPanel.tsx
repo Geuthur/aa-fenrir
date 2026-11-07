@@ -23,7 +23,7 @@ export function AdministrationTaskPanel({
     <Card className="bg-body border-secondary mb-3 shadow-sm">
       <Card.Body className="d-flex flex-wrap align-items-center justify-content-between gap-2 p-3">
         <div>
-          <h6 className="mb-1">{t("Global Task Administration")}</h6>
+          <h6 className="mb-1 fw-normal">{t("Global Task Administration")}</h6>
           <p className="mb-0 small text-muted">
             {t("Queue background tasks to synchronize all handlers.")}
           </p>

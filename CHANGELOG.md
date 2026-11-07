@@ -83,6 +83,7 @@ Section Order:
   - Fixed TypeScript compiler errors with TanStack Table column definitions by updating `BaseTableProps` to `ColumnDef<TData, TValue = any>[]` and explicitly typing `systemColumns`.
 - Fixed `make coverage` exiting with 0 when tests failed. The reports are still created, and the target now exits with the status of the test run, or with the status of `coverage report` if the tests passed.
 - [FIX] The pulsing menu and tab badges scaled up and down with their number. Only the glow around the badge pulses now.
+- **Alliance Auth Template**: AA Fenrir no longer changes the Alliance Auth layout around the app. Tailwind's Preflight reset is no longer loaded, because it changed headings, lists, images, form fields and the sidebar logo of the AA template. The thin scrollbar now applies only inside the app (`.aa-react`), not to the whole page. The app wrapper carries `aa-react` like the other AA apps, the button overrides stay limited to the Administration page and the modals. The look of AA Fenrir itself is unchanged.
 
 ### Changed
 

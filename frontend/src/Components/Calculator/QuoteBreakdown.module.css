@@ -31,7 +31,7 @@
 }
 
 .deliveryIcon {
-  @apply w-3.5 h-3.5 text-cyan-400;
+  @apply block w-3.5 h-3.5 text-cyan-400;
 }
 
 .deliveryHours {
@@ -173,7 +173,7 @@
 }
 
 .tariffTitle {
-  @apply text-xs font-mono uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-1.5;
+  @apply text-xs font-normal font-mono uppercase tracking-wider text-slate-400 mb-3 flex items-center gap-1.5;
 }
 
 .tariffIcon {
