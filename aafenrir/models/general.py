@@ -5,7 +5,9 @@ import uuid
 from typing import Any
 
 # Django
+from django.contrib.auth.models import Permission as AuthPermission
 from django.db import models
+from django.db.models import Q, QuerySet
 from django.utils.translation import gettext_lazy as _
 
 # Alliance Auth
@@ -39,10 +41,14 @@ class General(models.Model):
     Meta.permissions = tuple(Permission.choices)
 
     @classmethod
+    def get_codename(cls, perm: "str | General.Permission") -> str:
+        """Return the codename of the permission, e.g. 'manage_access'."""
+        return perm.value if isinstance(perm, cls.Permission) else perm
+
+    @classmethod
     def get_perm(cls, perm: "str | General.Permission") -> str:
         """Return the full permission string 'aafenrir.<codename>'."""
-        codename = perm.value if isinstance(perm, cls.Permission) else perm
-        return f"aafenrir.{codename}"
+        return f"aafenrir.{cls.get_codename(perm)}"
 
     @classmethod
     def has_perm(cls, user: Any, perm: "str | General.Permission") -> bool:
@@ -68,6 +74,36 @@ class General(models.Model):
         """Return True if the user may manage routes (manage or full access)."""
         return cls.has_any_perm(
             user, cls.Permission.MANAGE_ACCESS, cls.Permission.FULL_ACCESS
+        )
+
+    @classmethod
+    def users_with_any_perm(cls, *perms: "str | General.Permission") -> QuerySet:
+        """Return all active users with any of the given permissions.
+
+        The counterpart of ``has_any_perm`` as one database query.
+        Permissions can come from the user, one of their groups or their
+        state. Superusers are included, as ``has_perm`` is always True for them.
+        """
+        permissions = AuthPermission.objects.filter(
+            content_type__app_label="aafenrir",
+            codename__in=[cls.get_codename(perm) for perm in perms],
+        )
+        return (
+            User.objects.filter(is_active=True)
+            .filter(
+                Q(is_superuser=True)
+                | Q(user_permissions__in=permissions)
+                | Q(groups__permissions__in=permissions)
+                | Q(profile__state__permissions__in=permissions)
+            )
+            .distinct()
+        )
+
+    @classmethod
+    def users_with_management_access(cls) -> QuerySet:
+        """Return all users who may manage routes (manage or full access)."""
+        return cls.users_with_any_perm(
+            cls.Permission.MANAGE_ACCESS, cls.Permission.FULL_ACCESS
         )
 
     @classmethod
