@@ -11,6 +11,7 @@ from evesde_factory.allianceauth import (
     EveCharacterFactory,
     EveCorporationInfoFactory,
 )
+from evesde_factory.eve_sde import SolarSystemFactory
 
 # Django
 from django.utils import timezone
@@ -23,6 +24,7 @@ from aafenrir.models import (
     ContractHandler,
     EveEntity,
     Location,
+    RoutePreset,
 )
 
 
@@ -104,3 +106,22 @@ class ContractCustomerNotificationFactory(
     contract = factory.SubFactory(ContractFactory)
     status = Status.OUTSTANDING
     date_notified = factory.LazyFunction(timezone.now)
+
+
+class RoutePresetFactory(
+    factory.django.DjangoModelFactory, metaclass=BaseMetaFactory[RoutePreset]
+):
+    """Generate a RoutePreset. Cyno waypoints are passed as a list of systems."""
+
+    class Meta:
+        model = RoutePreset
+
+    name = factory.Sequence(lambda n: f"Route {n}")
+    origin_system = factory.SubFactory(SolarSystemFactory)
+    destination_system = factory.SubFactory(SolarSystemFactory)
+    is_cyno_route = True
+
+    @factory.post_generation
+    def cyno_waypoints(obj, create, extracted, **kwargs):
+        if create and extracted:
+            obj.cyno_waypoints.set(extracted)

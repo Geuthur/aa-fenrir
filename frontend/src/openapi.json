@@ -763,6 +763,71 @@
         ]
       }
     },
+    "/aafenrir/api/contract/preset/{preset_id}/coverage/": {
+      "get": {
+        "operationId": "aafenrir_api_contract_get_route_preset_coverage",
+        "summary": "Route admin characters in the systems of a route",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "preset_id",
+            "schema": {
+              "title": "Preset Id",
+              "type": "integer"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/CynoCoverageSystemSchema"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "title": "Response",
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Contracts"
+        ],
+        "security": [
+          {
+            "SessionAuth": []
+          }
+        ]
+      }
+    },
     "/aafenrir/api/contract/systems/": {
       "get": {
         "operationId": "aafenrir_api_contract_get_route_systems",
@@ -1884,6 +1949,89 @@
           "destination_system_id"
         ],
         "title": "CreateRoutePresetSchema",
+        "type": "object"
+      },
+      "CynoCoverageCharacterSchema": {
+        "description": "Schema for a route admin character located in a route waypoint system.\n\nParameters:\n    character_id (int): The ID of the character.\n    character_name (str): The name of the character.\n    portrait (str): The URL of the character portrait.\n    location_name (str): The current station, structure or system.\n    ship_type_name (str): The type of the current ship.\n    ship_name (str): The name of the current ship.\n    last_update (datetime | None): When corptools last updated the location.\n    is_own (bool): The character belongs to the requesting user.",
+        "properties": {
+          "character_id": {
+            "title": "Character Id",
+            "type": "integer"
+          },
+          "character_name": {
+            "title": "Character Name",
+            "type": "string"
+          },
+          "portrait": {
+            "default": "",
+            "title": "Portrait",
+            "type": "string"
+          },
+          "location_name": {
+            "default": "",
+            "title": "Location Name",
+            "type": "string"
+          },
+          "ship_type_name": {
+            "default": "",
+            "title": "Ship Type Name",
+            "type": "string"
+          },
+          "ship_name": {
+            "default": "",
+            "title": "Ship Name",
+            "type": "string"
+          },
+          "last_update": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Update"
+          },
+          "is_own": {
+            "default": false,
+            "title": "Is Own",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "character_id",
+          "character_name"
+        ],
+        "title": "CynoCoverageCharacterSchema",
+        "type": "object"
+      },
+      "CynoCoverageSystemSchema": {
+        "description": "Schema for a route waypoint system covered by route admin characters.",
+        "properties": {
+          "system_id": {
+            "title": "System Id",
+            "type": "integer"
+          },
+          "system_name": {
+            "title": "System Name",
+            "type": "string"
+          },
+          "characters": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/CynoCoverageCharacterSchema"
+            },
+            "title": "Characters",
+            "type": "array"
+          }
+        },
+        "required": [
+          "system_id",
+          "system_name"
+        ],
+        "title": "CynoCoverageSystemSchema",
         "type": "object"
       },
       "RouteSystemSchema": {

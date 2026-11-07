@@ -6,6 +6,7 @@ import {
     createRoutePreset,
     deleteRoutePreset,
     loadMenu,
+    loadRoutePresetCoverage,
     loadRoutePresets,
     loadUserData,
     updateUserSettings,
@@ -39,6 +40,34 @@ describe('General API client functions', () => {
             } as never);
 
             await expect(loadRoutePresets()).rejects.toThrow('Failed to load route presets');
+        });
+    });
+
+    describe('loadRoutePresetCoverage', () => {
+        it('calls the coverage endpoint of the preset and returns the systems', async () => {
+            const mockCoverage = [{ system_id: 30000142, system_name: 'Jita', characters: [] }];
+            vi.spyOn(apiClient, 'GET').mockResolvedValueOnce({
+                data: mockCoverage,
+                error: undefined,
+                response: new Response(),
+            } as never);
+
+            const result = await loadRoutePresetCoverage(3);
+            expect(result).toEqual(mockCoverage);
+            expect(apiClient.GET).toHaveBeenCalledWith(
+                `/${ProjectName}/api/contract/preset/{preset_id}/coverage/`,
+                { params: { path: { preset_id: 3 } } }
+            );
+        });
+
+        it('throws error when GET fails', async () => {
+            vi.spyOn(apiClient, 'GET').mockResolvedValueOnce({
+                data: undefined,
+                error: { error: 'Permission Denied.' },
+                response: new Response(),
+            } as never);
+
+            await expect(loadRoutePresetCoverage(3)).rejects.toThrow('Failed to load route coverage');
         });
     });
 

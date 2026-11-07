@@ -5,7 +5,13 @@ import { useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
-import { loadRoutePresets, loadRouteSystems, loadUserData, updateUserSettings } from '@/Api/ApiCalls';
+import {
+    loadRoutePresetCoverage,
+    loadRoutePresets,
+    loadRouteSystems,
+    loadUserData,
+    updateUserSettings,
+} from '@/Api/ApiCalls';
 import { queryKeys } from '@/Api/query';
 import {
   CargoInput,
@@ -234,6 +240,15 @@ export default function Calculator() {
     const [selectedShipId,] = useState('rhea');
 
     // Calculate quote dynamically
+    // Route admin characters in the waypoint systems (route admins only)
+    const coveragePresetId = typeof effectiveCorridor?.id === 'number' ? effectiveCorridor.id : null;
+    const { data: coverage = [] } = useQuery({
+        queryKey: queryKeys.RoutePresetCoverage(coveragePresetId ?? 0),
+        queryFn: () => loadRoutePresetCoverage(coveragePresetId as number),
+        enabled: Boolean(userData?.user.has_manage_access) && coveragePresetId !== null,
+        refetchOnWindowFocus: false,
+    });
+
     const quote = useMemo(() => {
         return calculateTransportQuote({
         corridor: effectiveCorridor,
@@ -310,6 +325,7 @@ export default function Calculator() {
                         setSelectedCorridor(null);
                     }}
                     onOpenContractModal={() => setShowContractModal(true)}
+                    coverage={coverage}
                 />
                 </div>
             </div>

@@ -9,4 +9,8 @@ describe('queryKeys', () => {
         expect(queryKeys.User).toEqual(['User']);
         expect(queryKeys.RoutePresets).toEqual(['RoutePresets']);
     });
+
+    it('provides the route coverage key per preset', () => {
+        expect(queryKeys.RoutePresetCoverage(7)).toEqual(['RoutePresetCoverage', 7]);
+    });
 });

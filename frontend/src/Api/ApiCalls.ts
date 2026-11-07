@@ -51,6 +51,18 @@ export async function loadRoutePresets(): Promise<FreightCorridor[]> {
   return data as unknown as FreightCorridor[];
 }
 
+export async function loadRoutePresetCoverage(
+  presetId: number
+): Promise<components["schemas"]["CynoCoverageSystemSchema"][]> {
+  const { data, error } = await apiClient.GET(`/${ProjectName}/api/contract/preset/{preset_id}/coverage/`, {
+    params: { path: { preset_id: presetId } },
+  });
+  if (error || !data) {
+    throw new Error("Failed to load route coverage");
+  }
+  return data;
+}
+
 export async function createRoutePreset(
   presetData: components["schemas"]["CreateRoutePresetSchema"]
 ): Promise<FreightCorridor> {

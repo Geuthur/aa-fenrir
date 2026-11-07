@@ -401,5 +401,14 @@
   "Done": "Done",
   "Range…": "Range…",
   "Filter…": "Filter…",
-  "No matching options": "No matching options"
+  "No matching options": "No matching options",
+  "Loading…": "Loading…",
+  "A route preset exists for this route. Apply it to use its corridor tariffs.": "A route preset exists for this route. Apply it to use its corridor tariffs.",
+  "Apply Route Preset": "Apply Route Preset",
+  "Characters in {{system}}": "Characters in {{system}}",
+  "Updated:": "Updated:",
+  "Unknown": "Unknown",
+  "Show characters in this system": "Show characters in this system",
+  "Your characters": "Your characters",
+  "Other route admins": "Other route admins"
 }
