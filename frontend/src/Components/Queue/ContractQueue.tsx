@@ -2,13 +2,11 @@
 import { useMemo, useState } from 'react';
 
 // Third Party
+import { type BaseColumnDef, BaseTable, createBaseColumnHelper } from "aa-geuthur-react";
 import { CheckCircle, Clock, Search, Truck, XCircle } from 'lucide-react';
 import { Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { BaseTable } from '@/Components/Base/BaseTable';
-import { createBaseColumnHelper } from '@/Components/Base/BaseTable/tableFeatures';
-import type { BaseColumnDef } from '@/Components/Base/BaseTable/tableFeatures';
 // AA Fenrir
 import { formatIskCompact, formatM3 } from '@/Components/Calculator/calculator';
 import QueueFilter from '@/Components/Queue/Partial/QueueFilter';

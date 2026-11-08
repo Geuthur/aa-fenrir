@@ -5,13 +5,12 @@ import { apiClient } from '@/Api/Api';
 import {
     createRoutePreset,
     deleteRoutePreset,
-    loadMenu,
     loadRoutePresetCoverage,
     loadRoutePresets,
-    loadUserData,
+    loadUserSettings,
     updateUserSettings,
 } from '@/Api/ApiCalls';
-import { ProjectName } from '@/App';
+import { ProjectName } from '@/constants';
 
 describe('General API client functions', () => {
     beforeEach(() => {
@@ -128,79 +127,60 @@ describe('General API client functions', () => {
         });
     });
 
-    describe('loadUserData', () => {
-        it('returns user data on successful GET', async () => {
-            const mockUser = { user_id: 1, character_id: 42, character_name: 'Test Pilot' };
-            vi.spyOn(apiClient, 'GET').mockResolvedValueOnce({
-                data: mockUser,
-                error: undefined,
-                response: new Response(),
-            } as never);
-
-            const result = await loadUserData();
-            expect(result).toEqual({ user: mockUser });
-            expect(apiClient.GET).toHaveBeenCalledWith(`/${ProjectName}/api/user/`);
-        });
-
-        it('throws error when GET fails or returns no data', async () => {
-            vi.spyOn(apiClient, 'GET').mockResolvedValueOnce({
-                data: undefined,
-                error: { status: 500 },
-                response: new Response(),
-            } as never);
-
-            await expect(loadUserData()).rejects.toThrow('Failed to load user data');
-        });
-    });
-
-    describe('loadMenu', () => {
-        it('calls /menu/ and returns data', async () => {
-            const mockMenu = { left_links: [], right_links: [] };
-            vi.spyOn(apiClient, 'GET').mockResolvedValueOnce({
-                data: mockMenu,
-                error: undefined,
-                response: new Response(),
-            } as never);
-
-            const result = await loadMenu();
-            expect(result).toEqual(mockMenu);
-            expect(apiClient.GET).toHaveBeenCalledWith(`/${ProjectName}/api/menu/`);
-        });
-    });
-
     describe('updateUserSettings', () => {
-        it('submits FormData with disable_notifications and returns success', async () => {
-            vi.spyOn(apiClient, 'POST').mockResolvedValueOnce({
-                data: { success: true },
+        it('PUTs disable_notifications to settings/ and returns the settings', async () => {
+            const settings = { disable_notifications: true, quick_select_presets: [] };
+            vi.spyOn(apiClient, 'PUT').mockResolvedValueOnce({
+                data: settings,
                 error: undefined,
                 response: new Response(),
             } as never);
 
             const result = await updateUserSettings({ disable_notifications: true });
-            expect(result).toEqual({ success: true });
-            expect(apiClient.POST).toHaveBeenCalledWith(`/${ProjectName}/api/modify/user/settings/`, expect.any(Object));
+            expect(result).toEqual(settings);
+            expect(apiClient.PUT).toHaveBeenCalledWith(`/${ProjectName}/api/settings/`, {
+                body: { disable_notifications: true },
+            });
         });
 
-        it('submits FormData with quick_select_presets', async () => {
-            vi.spyOn(apiClient, 'POST').mockResolvedValueOnce({
-                data: { success: true },
+        it('PUTs quick_select_presets to settings/', async () => {
+            const settings = { disable_notifications: false, quick_select_presets: [1, 2, 3] };
+            vi.spyOn(apiClient, 'PUT').mockResolvedValueOnce({
+                data: settings,
                 error: undefined,
                 response: new Response(),
             } as never);
 
             const result = await updateUserSettings({ quick_select_presets: [1, 2, 3] });
-            expect(result).toEqual({ success: true });
-            expect(apiClient.POST).toHaveBeenCalledWith(`/${ProjectName}/api/modify/user/settings/`, expect.any(Object));
+            expect(result).toEqual(settings);
+            expect(apiClient.PUT).toHaveBeenCalledWith(`/${ProjectName}/api/settings/`, {
+                body: { quick_select_presets: [1, 2, 3] },
+            });
         });
 
-        it('throws error when update fails', async () => {
-            vi.spyOn(apiClient, 'POST').mockResolvedValueOnce({
-                data: { success: false, message: 'Permission denied' },
+        it('throws the error message when the update fails', async () => {
+            vi.spyOn(apiClient, 'PUT').mockResolvedValueOnce({
+                data: undefined,
+                error: { error: 'Permission Denied.' },
+                response: new Response(),
+            } as never);
+
+            await expect(updateUserSettings({ disable_notifications: false })).rejects.toThrow('Permission Denied.');
+        });
+    });
+
+    describe('loadUserSettings', () => {
+        it('calls GET settings/ and returns the settings', async () => {
+            const settings = { disable_notifications: false, quick_select_presets: [] };
+            vi.spyOn(apiClient, 'GET').mockResolvedValueOnce({
+                data: settings,
                 error: undefined,
                 response: new Response(),
             } as never);
 
-            await expect(updateUserSettings({ disable_notifications: false })).rejects.toThrow('Permission denied');
+            const result = await loadUserSettings();
+            expect(result).toEqual(settings);
+            expect(apiClient.GET).toHaveBeenCalledWith(`/${ProjectName}/api/settings/`);
         });
     });
 });

@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react';
 
 // Third Party
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { type BaseColumnDef, BaseTable, createBaseColumnHelper, useUserData } from "aa-geuthur-react";
 import {
   AlertTriangle,
   CheckCircle2,
@@ -24,14 +25,11 @@ import {
   deleteRouteSystem,
   loadRoutePresets,
   loadRouteSystems,
-  loadUserData,
   updateRoutePreset,
 } from '@/Api/ApiCalls';
 import type { components } from '@/Api/OpenApi';
 import { queryKeys } from '@/Api/query';
-import { BaseTable } from '@/Components/Base/BaseTable';
-import { createBaseColumnHelper } from '@/Components/Base/BaseTable/tableFeatures';
-import type { BaseColumnDef } from '@/Components/Base/BaseTable/tableFeatures';
+import type { UserData } from "@/Api/schema";
 import { RouteAdminHeader, RouteCard } from '@/Components/RouteAdmin';
 import {
   AddRouteSystemModal,
@@ -59,11 +57,7 @@ export default function RouteAdmin() {
   const [activeTab, setActiveTab] = useState<'routes' | 'systems'>('routes');
 
   // Check user permission
-  const { data: userData, isLoading: isUserLoading } = useQuery({
-    queryKey: queryKeys.User,
-    queryFn: loadUserData,
-    refetchOnWindowFocus: false,
-  });
+  const { data: userData, isLoading: isUserLoading } = useUserData<UserData>();
 
   // Load existing routes
   const { data: presets = [], isLoading: isPresetsLoading } = useQuery({

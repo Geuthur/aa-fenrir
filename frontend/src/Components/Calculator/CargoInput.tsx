@@ -2,6 +2,7 @@
 import { useState } from 'react';
 
 // Third Party
+import { BaseModal } from "aa-geuthur-react";
 import { Box, Check, Clipboard, Coins, Info, Package, Users, Zap } from 'lucide-react';
 import { Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -9,7 +10,6 @@ import { useTranslation } from 'react-i18next';
 // Styles
 import styles from '@/Components/Calculator/CargoInput.module.css';
 
-import { BaseModal } from '@/Components/Base/BaseModal';
 import { ModalTitle } from '@/Components/Base/ModalTitle';
 import { formatIskCompact, formatM3 } from '@/Components/Calculator/calculator';
 import { parseEveClipboard } from '@/Components/Fenrir/cargoParser';

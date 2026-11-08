@@ -1,5 +1,4 @@
 # Standard Library
-import json
 from http import HTTPStatus
 
 # Third Party
@@ -10,7 +9,7 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 
 # AA Fenrir
-from aafenrir import __title__, forms
+from aafenrir import __title__
 from aafenrir.api import schema
 from aafenrir.app_settings import AA_FENRIR_MAX_COLLATERAL, AA_FENRIR_MAX_VOLUME
 from aafenrir.helpers.eveonline import get_character_portrait_url
@@ -62,7 +61,7 @@ class GeneralApiEndpoints:
             "user/",
             response={
                 HTTPStatus.OK: schema.UserData,
-                HTTPStatus.FORBIDDEN: dict,
+                HTTPStatus.FORBIDDEN: schema.ErrorSchema,
             },
             tags=self.tags,
         )
@@ -73,9 +72,17 @@ class GeneralApiEndpoints:
             try:
                 character_id = request.user.profile.main_character.character_id
                 character_name = request.user.profile.main_character.character_name
+                corporation_id = request.user.profile.main_character.corporation_id
+                corporation_name = request.user.profile.main_character.corporation_name
+                alliance_id = request.user.profile.main_character.alliance_id
+                alliance_name = request.user.profile.main_character.alliance_name
             except AttributeError:
                 character_id = 0
                 character_name = ""
+                corporation_id = 0
+                corporation_name = ""
+                alliance_id = None
+                alliance_name = None
 
             settings = UserSettings.objects.get_or_create(user=request.user)[0]
 
@@ -93,51 +100,64 @@ class GeneralApiEndpoints:
                 user_id=request.user.id,
                 character_id=character_id,
                 character_name=character_name,
+                corporation_id=corporation_id,
+                corporation_name=corporation_name,
+                alliance_id=alliance_id,
+                alliance_name=alliance_name,
                 portrait=portrait_url,
+                is_admin=request.user.is_superuser,
                 notification=settings.disable_notifications,
                 quick_select_presets=settings.quick_select_presets or [],
                 has_manage_access=General.has_management_access(request.user),
                 has_admin_access=General.has_admin_access(request.user),
-                is_superuser=request.user.is_superuser,
                 calculator_max_volume=AA_FENRIR_MAX_VOLUME,
                 calculator_max_collateral=AA_FENRIR_MAX_COLLATERAL,
             )
 
-        @api.post(
-            "modify/user/settings/",
+        @api.get(
+            "settings/",
             response={
-                HTTPStatus.OK: dict,
-                HTTPStatus.BAD_REQUEST: dict,
-                HTTPStatus.FORBIDDEN: dict,
+                HTTPStatus.OK: schema.UserSettingsSchema,
+                HTTPStatus.FORBIDDEN: schema.ErrorSchema,
             },
             tags=self.tags,
+            summary="Get current user's settings",
         )
-        def modify_user_settings(request):
+        def get_user_settings(request):
             if not General.has_basic_access(request.user):
                 return HTTPStatus.FORBIDDEN, {"error": _("Permission Denied.")}
 
             settings = UserSettings.objects.get_or_create(user=request.user)[0]
+            return HTTPStatus.OK, schema.UserSettingsSchema(
+                disable_notifications=settings.disable_notifications,
+                quick_select_presets=settings.quick_select_presets or [],
+            )
 
-            if "quick_select_presets" in request.POST:
-                try:
-                    raw = json.loads(request.POST.get("quick_select_presets"))
-                    if isinstance(raw, list):
-                        settings.quick_select_presets = [int(x) for x in raw[:5]]
-                        settings.save()
-                except (ValueError, TypeError, json.JSONDecodeError):
-                    pass
+        @api.put(
+            "settings/",
+            response={
+                HTTPStatus.OK: schema.UserSettingsSchema,
+                HTTPStatus.FORBIDDEN: schema.ErrorSchema,
+            },
+            tags=self.tags,
+            summary="Update current user's settings",
+        )
+        def update_user_settings(request, payload: schema.UserSettingsUpdateRequest):
+            if not General.has_basic_access(request.user):
+                return HTTPStatus.FORBIDDEN, {"error": _("Permission Denied.")}
 
-            if "disable_notifications" in request.POST:
-                form = forms.UserSettingsForm(data=request.POST, instance=settings)
-                if form.is_valid():
-                    form.save()
-                else:
-                    msg = _(
-                        "Invalid input data. Please check the format and try again."
-                    )
-                    return HTTPStatus.BAD_REQUEST, {"success": False, "message": msg}
+            settings = UserSettings.objects.get_or_create(user=request.user)[0]
+            update_fields = []
+            if payload.disable_notifications is not None:
+                settings.disable_notifications = payload.disable_notifications
+                update_fields.append("disable_notifications")
+            if payload.quick_select_presets is not None:
+                settings.quick_select_presets = payload.quick_select_presets[:5]
+                update_fields.append("quick_select_presets")
+            if update_fields:
+                settings.save(update_fields=update_fields)
 
-            return HTTPStatus.OK, {
-                "success": True,
-                "message": str(_("User settings updated successfully.")),
-            }
+            return HTTPStatus.OK, schema.UserSettingsSchema(
+                disable_notifications=settings.disable_notifications,
+                quick_select_presets=settings.quick_select_presets or [],
+            )

@@ -2,15 +2,15 @@
 import { useState } from 'react';
 
 // Third Party
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { ErrorLoader, FetchingLoader, useUserData } from "aa-geuthur-react";
 import Alert from 'react-bootstrap/Alert';
 import { useTranslation } from 'react-i18next';
 
-import { loadUserData, updateUserSettings } from '@/Api/ApiCalls';
+import { updateUserSettings } from '@/Api/ApiCalls';
 import { queryKeys } from '@/Api/query';
+import type { UserData } from "@/Api/schema";
 import UserSettingsForm from '@/Components/Forms/UserSettingsForm';
-import ErrorLoader from '@/Components/Loader/ErrorLoader';
-import FetchingLoader from '@/Components/Loader/FetchingLoader';
 
 function Settings() {
     const { t } = useTranslation();
@@ -18,19 +18,15 @@ function Settings() {
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-    const { data, isLoading, isError, error } = useQuery({
-        queryKey: queryKeys.User,
-        queryFn: loadUserData,
-        refetchOnWindowFocus: false,
-    });
+    const { data, isLoading, isError, error } = useUserData<UserData>();
 
     const mutation = useMutation({
         mutationFn: (disableNotifications: boolean) =>
             updateUserSettings({ disable_notifications: disableNotifications }),
-        onSuccess: (result) => {
+        onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: queryKeys.User });
             setErrorMessage(null);
-            setSuccessMessage(result.message ?? t("Settings saved successfully."));
+            setSuccessMessage(t("Settings saved successfully."));
         },
         onError: (err: unknown) => {
             setSuccessMessage(null);

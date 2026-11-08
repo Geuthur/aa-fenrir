@@ -1,46 +1,29 @@
 import { apiClient } from "@/Api/Api";
 import type { components } from "@/Api/OpenApi";
-import { ProjectName } from "@/App";
+import { ProjectName } from "@/constants";
 import type { FreightCorridor } from "@/types";
 
-export async function loadUserData(): Promise<{ user: components["schemas"]["UserData"] }> {
-  const { data, error } = await apiClient.GET(`/${ProjectName}/api/user/`);
-  if (error || !data) {
-    throw new Error("Failed to load user data");
-  }
-  return { user: data };
-}
+export async function updateUserSettings(
+  settings: components["schemas"]["UserSettingsUpdateRequest"],
+): Promise<components["schemas"]["UserSettingsSchema"]> {
+  const { data, error } = await apiClient.PUT(`/${ProjectName}/api/settings/`, {
+    body: settings,
+  });
 
-export async function loadMenu(): Promise<components["schemas"]["MenuSchema"]> {
-  const { data, error } = await apiClient.GET(`/${ProjectName}/api/menu/`);
   if (error || !data) {
-    throw new Error("Failed to load menu");
+    throw new Error(
+      (error as { error?: string } | undefined)?.error ?? "Failed to update user settings",
+    );
   }
   return data;
 }
 
-export async function updateUserSettings(settings: {
-  disable_notifications?: boolean;
-  quick_select_presets?: number[];
-}): Promise<{ success: boolean; message?: string }> {
-  const body = new FormData();
-  if (settings.disable_notifications !== undefined) {
-    if (settings.disable_notifications) {
-      body.append("disable_notifications", "on");
-    }
+export async function loadUserSettings(): Promise<components["schemas"]["UserSettingsSchema"]> {
+  const { data, error } = await apiClient.GET(`/${ProjectName}/api/settings/`);
+  if (error || !data) {
+    throw new Error("Failed to load user settings");
   }
-  if (settings.quick_select_presets !== undefined) {
-    body.append("quick_select_presets", JSON.stringify(settings.quick_select_presets));
-  }
-
-  const { data, error } = await apiClient.POST(`/${ProjectName}/api/modify/user/settings/`, {
-    body: body as never,
-  });
-
-  if (error || !data || (data as { success?: boolean }).success !== true) {
-    throw new Error((data as { message?: string } | undefined)?.message ?? "Failed to update user settings");
-  }
-  return data as { success: boolean; message?: string };
+  return data;
 }
 
 export async function loadRoutePresets(): Promise<FreightCorridor[]> {

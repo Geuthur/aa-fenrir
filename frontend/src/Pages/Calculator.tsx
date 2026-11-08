@@ -3,16 +3,17 @@ import { useEffect, useMemo, useState } from 'react';
 
 // Third Party
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useUserData } from "aa-geuthur-react";
 import { useTranslation } from 'react-i18next';
 
 import {
     loadRoutePresetCoverage,
     loadRoutePresets,
     loadRouteSystems,
-    loadUserData,
     updateUserSettings,
 } from '@/Api/ApiCalls';
 import { queryKeys } from '@/Api/query';
+import type { UserData } from "@/Api/schema";
 import {
   CargoInput,
   QuoteBreakdown,
@@ -41,11 +42,7 @@ export default function Calculator() {
     const [showConfigurePresetsModal, setShowConfigurePresetsModal] = useState(false);
 
     // Load User Data (for quick-select preset configuration)
-    const { data: userData } = useQuery({
-        queryKey: queryKeys.User,
-        queryFn: loadUserData,
-        refetchOnWindowFocus: false,
-    });
+    const { data: userData } = useUserData<UserData>();
 
     // Load Presets from API
     const { data: presets = [] } = useQuery({

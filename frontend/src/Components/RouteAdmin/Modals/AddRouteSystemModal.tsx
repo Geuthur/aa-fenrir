@@ -2,13 +2,13 @@
 import { useEffect, useState } from 'react';
 
 // Third Party
+import { BaseModal } from "aa-geuthur-react";
 import { Check, Compass, Plus, Search } from 'lucide-react';
 import { Badge, Button, Form, InputGroup, ListGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import { searchSolarSystems } from '@/Api/ApiCalls';
 import type { components } from '@/Api/OpenApi';
-import { BaseModal } from '@/Components/Base/BaseModal';
 import { ModalTitle } from '@/Components/Base/ModalTitle';
 import { getSecurityVariant } from '@/Components/Calculator/calculator';
 

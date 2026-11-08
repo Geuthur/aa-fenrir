@@ -1,4 +1,5 @@
 // Third Party
+import { formatDate, formatRelativeTime } from "aa-geuthur-react";
 import { OverlayTrigger, Popover } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
@@ -7,7 +8,6 @@ import styles from '@/Components/Calculator/QuoteBreakdown.module.css';
 
 import type { CynoCoverageCharacterSchema, CynoCoverageSystemSchema } from '@/Api/schema';
 import { splitCoverageCharacters } from '@/Components/Calculator/calculator';
-import { formatDate, formatRelativeTime } from '@/Utils/format';
 
 interface WaypointCoverageBadgeProps {
   /** Name of the waypoint system */
