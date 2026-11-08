@@ -205,13 +205,13 @@ export function formatM3(vol: number): string {
   return `${vol.toLocaleString('en-US', { maximumFractionDigits: 1 })} m³`;
 }
 
-export function getSecurityColor(sec: number): { bg: string; text: string; border: string; label: string } {
-  if (sec >= 0.95) return { bg: '!bg-emerald-950/40', text: '!text-emerald-400', border: '!border-emerald-500/30', label: '1.0 High' };
-  if (sec >= 0.8) return { bg: '!bg-emerald-900/30', text: '!text-emerald-300', border: '!border-emerald-500/20', label: '0.8 High' };
-  if (sec >= 0.5) return { bg: '!bg-teal-950/40', text: '!text-teal-400', border: '!border-teal-500/30', label: `${sec.toFixed(1)} High` };
-  if (sec >= 0.3) return { bg: '!bg-amber-950/40', text: '!text-amber-400', border: '!border-amber-500/30', label: `${sec.toFixed(1)} Low` };
-  if (sec > 0.0) return { bg: '!bg-orange-950/40', text: '!text-orange-400', border: '!border-orange-500/30', label: `${sec.toFixed(1)} Low` };
-  return { bg: '!bg-red-950/40', text: '!text-red-400', border: '!border-red-500/30', label: `${sec.toFixed(1)} Null` };
+export function getSecurityColor(sec: number): { variant: string; label: string } {
+  if (sec >= 0.95) return { variant: 'secHigh1', label: '1.0 High' };
+  if (sec >= 0.8) return { variant: 'secHigh08', label: '0.8 High' };
+  if (sec >= 0.5) return { variant: 'secHigh05', label: `${sec.toFixed(1)} High` };
+  if (sec >= 0.3) return { variant: 'secLow03', label: `${sec.toFixed(1)} Low` };
+  if (sec > 0.0) return { variant: 'secLow00', label: `${sec.toFixed(1)} Low` };
+  return { variant: 'secNull', label: `${sec.toFixed(1)} Null` };
 }
 
 /** Bootstrap variant for the security status of a solar system (high/low/null). */

@@ -1,0 +1,86 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.card {
+  background-color: color-mix(in oklab, oklch(27.9% 0.041 260.031) 80%, transparent) !important;
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.label {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: oklch(70.4% 0.04 256.788) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.value {
+  font-size: 1.5rem;
+  line-height: 1.33333;
+  font-family: 'Chakra Petch', -apple-system, sans-serif;
+  font-weight: 700;
+}
+
+.valueWhite {
+  color: #fff !important;
+}
+
+.valueCyan {
+  color: oklch(86.5% 0.127 207.078) !important;
+}
+
+.valueAmber {
+  color: oklch(87.9% 0.169 91.605) !important;
+}
+
+.hint {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  margin-top: 0.125rem;
+}
+
+.hintCyan {
+  color: oklch(78.9% 0.154 211.53) !important;
+}
+
+.hintSlate {
+  color: oklch(70.4% 0.04 256.788) !important;
+}
+
+.iconBox {
+  border-radius: 0.75rem;
+}
+
+.iconCyan {
+  background-color: color-mix(in oklab, oklch(30.2% 0.056 229.695) 40%, transparent) !important;
+  border-color: color-mix(in oklab, oklch(71.5% 0.143 215.221) 30%, transparent) !important;
+  color: oklch(78.9% 0.154 211.53) !important;
+}
+
+.iconBlue {
+  background-color: color-mix(in oklab, oklch(28.2% 0.091 267.935) 40%, transparent) !important;
+  border-color: color-mix(in oklab, oklch(62.3% 0.214 259.815) 30%, transparent) !important;
+  color: oklch(70.7% 0.165 254.624) !important;
+}
+
+.iconAmber {
+  background-color: color-mix(in oklab, oklch(27.9% 0.077 45.635) 40%, transparent) !important;
+  border-color: color-mix(in oklab, oklch(76.9% 0.188 70.08) 30%, transparent) !important;
+  color: oklch(82.8% 0.189 84.429) !important;
+}
+
+.icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+@media (min-width: 40rem) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

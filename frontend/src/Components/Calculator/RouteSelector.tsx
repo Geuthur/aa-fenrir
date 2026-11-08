@@ -214,9 +214,9 @@ export function RouteSelector({
             <Button
               onClick={onOpenConfigurePresets}
               title={t('Customize Quick-Select Presets')}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg !bg-slate-900 border !border-slate-700 hover:!bg-slate-800 hover:!border-cyan-500/50 !text-cyan-300 text-xs font-semibold transition-all cursor-pointer shadow"
+              className={`border px-3 shadow ${styles.pillBtn}`}
             >
-              <SlidersHorizontal className="w-4 h-4" />
+              <SlidersHorizontal className={styles.pillBtnIcon} />
               <span>{t('Configure')}</span>
             </Button>
           )}
@@ -232,7 +232,7 @@ export function RouteSelector({
               <span className={styles.originDot}></span>
               {t('Origin Solar System')}
             </span>
-            <span className={`${styles.secBadge} ${originSec.bg} ${originSec.text} ${originSec.border}`}>
+            <span className={`${styles.secBadge} ${styles[originSec.variant]}`}>
               {t('Sec:')} {originSec.label}
             </span>
           </div>
@@ -261,7 +261,7 @@ export function RouteSelector({
                 />
                 <div className={styles.dropdownList}>
                   {filteredOrigins.length === 0 ? (
-                    <div className="p-3 text-center text-xs !text-slate-400">
+                    <div className={`p-3 ${styles.noResults}`}>
                       {systems.length === 0 ? t('No systems configured in Route Admin') : t('No matching systems found')}
                     </div>
                   ) : (
@@ -281,7 +281,7 @@ export function RouteSelector({
                           <span className={styles.systemItemName}>{sys.name}</span>
                           <div className={styles.systemItemMeta}>
                             <span className={styles.systemItemRegion}>{sys.region}</span>
-                            <span className={`${styles.systemItemSecBadge} ${sec.bg} ${sec.text} ${sec.border}`}>
+                            <span className={`${styles.systemItemSecBadge} ${styles[sec.variant]}`}>
                               {sys.security.toFixed(1)}
                             </span>
                           </div>
@@ -332,7 +332,7 @@ export function RouteSelector({
               <span className={styles.destDot}></span>
               {t('Destination Solar System')}
             </span>
-            <span className={`${styles.secBadge} ${destSec.bg} ${destSec.text} ${destSec.border}`}>
+            <span className={`${styles.secBadge} ${styles[destSec.variant]}`}>
               {t('Sec:')} {destSec.label}
             </span>
           </div>
@@ -361,7 +361,7 @@ export function RouteSelector({
                 />
                 <div className={styles.dropdownList}>
                   {filteredDests.length === 0 ? (
-                    <div className="p-3 text-center text-xs !text-slate-400">
+                    <div className={`p-3 ${styles.noResults}`}>
                       {systems.length === 0 ? t('No systems configured in Route Admin') : t('No matching systems found')}
                     </div>
                   ) : (
@@ -382,7 +382,7 @@ export function RouteSelector({
                           <span className={styles.systemItemName}>{sys.name}</span>
                           <div className={styles.systemItemMeta}>
                             <span className={styles.systemItemRegion}>{sys.region}</span>
-                            <span className={`${styles.systemItemSecBadge} ${sec.bg} ${sec.text} ${sec.border}`}>
+                            <span className={`${styles.systemItemSecBadge} ${styles[sec.variant]}`}>
                               {sys.security.toFixed(1)}
                             </span>
                           </div>

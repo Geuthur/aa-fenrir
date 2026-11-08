@@ -2,6 +2,10 @@
 import { Clock, FileText, Truck } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
+// Styles
+import styles from '@/Components/Queue/Partial/QueueMetrics.module.css';
+
+// AA Fenrir
 import { formatIskCompact, formatM3 } from '@/Components/Calculator/calculator';
 
 export function QueueMetrics({
@@ -16,55 +20,55 @@ export function QueueMetrics({
   const { t } = useTranslation();
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-      <div className="!bg-slate-800/80 fenrir-gradient fenrir-border-500 rounded-xl p-4 shadow-lg flex items-center justify-between">
+    <div className={`gap-4 ${styles.grid}`}>
+      <div className={`fenrir-gradient fenrir-border-500 p-4 shadow-lg ${styles.card}`}>
         <div>
-          <span className="text-[11px] font-mono !text-slate-400 uppercase tracking-wider">
+          <span className={styles.label}>
             {t('Pending Courier Queue')}
           </span>
-          <div className="text-2xl font-eve font-bold !text-white mt-1">
+          <div className={`mt-1 ${styles.value} ${styles.valueWhite}`}>
             {pendingCount} {t('Contracts')}
           </div>
-          <div className="text-[11px] font-mono !text-cyan-400 mt-0.5">
+          <div className={`${styles.hint} ${styles.hintCyan}`}>
             {t('Ready for hauler acceptance')}
           </div>
         </div>
-        <div className="p-3 rounded-xl !bg-cyan-950/40 border !border-cyan-500/30 !text-cyan-400">
-          <Clock className="d-block w-6 h-6" />
+        <div className={`p-3 border ${styles.iconBox} ${styles.iconCyan}`}>
+          <Clock className={`d-block ${styles.icon}`} />
         </div>
       </div>
 
-      <div className="!bg-slate-800/80 fenrir-gradient fenrir-border-500 rounded-xl p-4 shadow-lg flex items-center justify-between">
+      <div className={`fenrir-gradient fenrir-border-500 p-4 shadow-lg ${styles.card}`}>
         <div>
-          <span className="text-[11px] font-mono !text-slate-400 uppercase tracking-wider">
+          <span className={styles.label}>
             {t('Active In-Transit Cargo')}
           </span>
-          <div className="text-2xl font-eve font-bold !text-cyan-300 mt-1">
+          <div className={`mt-1 ${styles.value} ${styles.valueCyan}`}>
             {formatM3(totalVolume)}
           </div>
-          <div className="text-[11px] font-mono !text-slate-400 mt-0.5">
+          <div className={`${styles.hint} ${styles.hintSlate}`}>
             {t('Across Jump Freighter lines')}
           </div>
         </div>
-        <div className="p-3 rounded-xl !bg-blue-950/40 border !border-blue-500/30 !text-blue-400">
-          <Truck className="d-block w-6 h-6" />
+        <div className={`p-3 border ${styles.iconBox} ${styles.iconBlue}`}>
+          <Truck className={`d-block ${styles.icon}`} />
         </div>
       </div>
 
-      <div className="!bg-slate-800/80 fenrir-gradient fenrir-border-500 rounded-xl p-4 shadow-lg flex items-center justify-between">
+      <div className={`fenrir-gradient fenrir-border-500 p-4 shadow-lg ${styles.card}`}>
         <div>
-          <span className="text-[11px] font-mono !text-slate-400 uppercase tracking-wider">
+          <span className={styles.label}>
             {t('Outstanding Rewards Pool')}
           </span>
-          <div className="text-2xl font-eve font-bold !text-amber-300 mt-1">
+          <div className={`mt-1 ${styles.value} ${styles.valueAmber}`}>
             {formatIskCompact(totalRewards)}
           </div>
-          <div className="text-[11px] font-mono !text-slate-400 mt-0.5">
+          <div className={`${styles.hint} ${styles.hintSlate}`}>
             {t('Pending hauler payouts')}
           </div>
         </div>
-        <div className="p-3 rounded-xl !bg-amber-950/40 border !border-amber-500/30 !text-amber-400">
-          <FileText className="d-block w-6 h-6" />
+        <div className={`p-3 border ${styles.iconBox} ${styles.iconAmber}`}>
+          <FileText className={`d-block ${styles.icon}`} />
         </div>
       </div>
     </div>

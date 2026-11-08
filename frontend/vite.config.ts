@@ -1,5 +1,4 @@
 // Third Party
-import tailwindcss from "@tailwindcss/vite"
 import react from "@vitejs/plugin-react-swc"
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -20,7 +19,6 @@ export default defineConfig({
   },
   plugins: [
     react(),
-    tailwindcss(),
   ],
   server: {
     port: 3002,
@@ -47,15 +45,6 @@ export default defineConfig({
     sourcemap: true,
     manifest: true,
     rollupOptions: {
-      onwarn(warning, warn) {
-        if (
-          warning.code === 'SOURCEMAP_BROKEN' &&
-          warning.plugin?.includes('@tailwindcss/vite')
-        ) {
-          return;
-        }
-        warn(warning);
-      },
       output: {
         entryFileNames: "react/js/[name]-[hash].js",
         chunkFileNames: "react/js/[name]-[hash].js",

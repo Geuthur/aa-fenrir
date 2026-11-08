@@ -6,8 +6,8 @@
       "_rolldown-runtime-WkwZ5CU-.js"
     ]
   },
-  "_@lang-libs-DIP-VPqD.js": {
-    "file": "react/js/@lang-libs-DIP-VPqD.js",
+  "_@lang-libs-COynSyqI.js": {
+    "file": "react/js/@lang-libs-COynSyqI.js",
     "name": "@lang-libs",
     "imports": [
       "_rolldown-runtime-WkwZ5CU-.js",
@@ -22,14 +22,14 @@
       "_@bootstrap-libs-C-sFDyAB.js"
     ]
   },
-  "_@vendor-BezwWqNH.js": {
-    "file": "react/js/@vendor-BezwWqNH.js",
+  "_@vendor-x_J519qC.js": {
+    "file": "react/js/@vendor-x_J519qC.js",
     "name": "@vendor",
     "imports": [
       "_rolldown-runtime-WkwZ5CU-.js",
       "_@bootstrap-libs-C-sFDyAB.js",
       "_@react-libs-DCKEqw-u.js",
-      "_@lang-libs-DIP-VPqD.js"
+      "_@lang-libs-COynSyqI.js"
     ]
   },
   "_rolldown-runtime-WkwZ5CU-.js": {
@@ -37,19 +37,19 @@
     "name": "rolldown-runtime"
   },
   "index.html": {
-    "file": "react/js/index-CIhJJvra.js",
+    "file": "react/js/index-DepnF9-K.js",
     "name": "index",
     "src": "index.html",
     "isEntry": true,
     "imports": [
       "_rolldown-runtime-WkwZ5CU-.js",
       "_@bootstrap-libs-C-sFDyAB.js",
-      "_@vendor-BezwWqNH.js",
-      "_@react-libs-DCKEqw-u.js",
-      "_@lang-libs-DIP-VPqD.js"
+      "_@vendor-x_J519qC.js",
+      "_@lang-libs-COynSyqI.js",
+      "_@react-libs-DCKEqw-u.js"
     ],
     "css": [
-      "react/css/index-C3mTcLMu.css"
+      "react/css/index-Dt6vIcIi.css"
     ]
   }
 }
