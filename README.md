@@ -154,7 +154,7 @@ The frontend is a React 19 SPA (TypeScript, Vite) in `frontend/`. Its shared bas
 
 Help us translate this app into your language or improve existing translations. Join our team!"
 
-The texts of the app live in the namespace `translation` (`frontend/i18n/<lng>/translation.json`). The shared frontend components (tables, modals, menu, loaders) come from the npm package [aa-geuthur-react](https://github.com/Geuthur/aa-geuthur-react); their texts live in the namespace `aa-geuthur-react`, the package bundles them and registers them with i18next itself, so the app neither copies nor loads them. Both are translated on Weblate, the package in its own component. Only `en` holds the English text as value; in the other languages untranslated strings are empty and fall back to English at runtime (`returnEmptyString: false`).
+The texts of the app live in the namespace `translation` (`frontend/i18n/<lng>/translation.json`). The shared frontend components (tables, modals, menu, loaders) come from the npm package [aa-geuthur-react](https://github.com/Geuthur/aa-geuthur-react); their texts live in the namespace `aa-geuthur-react`, the package bundles them and registers them with i18next itself, so the app neither copies nor loads them. Both are translated on Weblate, the package in its own component. Only `en` holds the English texts and is maintained by the scanner. The other languages hold only real translations, as Weblate writes them; untranslated strings are not in the file and fall back to English at runtime (`fallbackLng: "en"`).
 
 ## Contributing<a name="contributing"></a>
 
