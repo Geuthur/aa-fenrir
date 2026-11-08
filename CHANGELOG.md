@@ -92,6 +92,7 @@ Section Order:
 - **Tests**: The test base classes in `aafenrir/tests/__init__.py` match the aa-example template (docstrings only, no behavior change).
 - **Modal Design**: Modals match the calculator view through Bootstrap overrides under `.modal-content.aa-react`, with cards, uppercase labels and a boxed title icon. They follow the Darkly and Flatly themes. The clipboard appraiser moved to `BaseModal`, `FenrirModal` is removed, and `CynoWaypointManager` moved from Tailwind to Bootstrap.
 - **Calculator Layout**: Thin theme-coloured scrollbars on aa-fenrir pages. Collateral buttons and quick load presets wrap instead of scrolling or squeezing their text.
+- **GitHub Workflows**: `autotester.yml` matches the aa-example template again (`actions-setup-redis` v1.60.0 instead of v1.58.0, no Python 3.10 in the matrix), and `tox.ini` no longer has its own `[testenv:react]` (the frontend tests run with `make react-test` and in the React CI job). `pypi.yml`, `release.yml` and `dependabot.yml` already matched.
 - **Shared React Base**: The frontend now uses the npm package [`aa-geuthur-react`](https://github.com/Geuthur/aa-geuthur-react) 1.2.0 like the other AA apps (BaseTable stack, `BaseModal`, loaders, `BaseSectionHeader`, menu, `useMenu`, `useUserData`, `AuthBase`, `ErrorPage`, utils, `createApiClient`, `queryKeys`, styles, ESLint rule `import-headings`). The copies in `Components/Base/BaseTable`, `Components/Base/BaseModal`, `Components/Loader`, `Components/Sections`, `Menu`, `Utils` and `Styles/table.css` were removed. `Routing.tsx` wraps the app in `AaReactProvider` and `AuthBase` (with `fluidOnSmallScreens`, so the pages fit on phones narrower than 640px), `Main.tsx` loads the namespace `aa-geuthur-react` next to `translation`, and `Styles/index.css` imports `aa-geuthur-react/styles.css` first. `make react-copy-translations` also copies `aa-geuthur-react.json` of the package.
 - **Frontend Structure**: `App.tsx` and `main.tsx` became `Routing.tsx` and `Main.tsx`, the app names live in `constants.ts`, the unit tests moved to `src/__tests__/` and run in jsdom (`setupTests.ts`).
 - **Visible Differences**: The tables use the footer layout of the package (page size, status and paging side by side), the menu links keep their query parameters, the Administration menu entry is highlighted like in the other apps, and the page headers of the package are flat grey.
@@ -113,6 +114,7 @@ Section Order:
 
 ### Removed
 
+- **Python 3.10**: End of life. Removed from the CI matrix, the tox environments and the classifiers; `requires-python` is now `>=3.11`.
 - **Tailwind**: Tailwind CSS (`tailwindcss`, `@tailwindcss/vite`) was removed from the frontend. The styles use Bootstrap utilities and CSS modules and look as before; the shared classes `fenrir-gradient`, `fenrir-border-500`, `fenrir-border-700` and `font-eve` moved to `Styles/index.css`.
 - Endpoint `POST modify/user/settings/` (replaced by `PUT settings/`) and the field `is_superuser` of `user/` (replaced by `is_admin`).
 - Own test helper module `testdata/utils.py` (`add_character_to_user` and others, identical to the ones in `aa-evesde-factory`); `aa-evesde-factory` provides it.
