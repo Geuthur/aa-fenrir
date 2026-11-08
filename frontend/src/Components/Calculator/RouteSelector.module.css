@@ -1,72 +1,152 @@
-@reference "@/App.css";
-
 /* Main Container */
 /* No overflow-hidden here: it would clip the absolutely positioned system dropdowns */
 .container {
-  @apply rounded-xl p-5 shadow-lg relative bg-slate-800/80;
+  position: relative;
+  border-radius: 0.75rem;
+  background-color: color-mix(in oklab, oklch(27.9% 0.041 260.031) 80%, transparent);
+  padding: 1.25rem;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
 
 .cornerGradient {
-  @apply absolute top-0 right-0 w-48 h-48 rounded-tr-xl bg-gradient-to-bl from-cyan-500/10 via-transparent to-transparent pointer-events-none;
+  pointer-events: none;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  height: 12rem;
+  width: 12rem;
+  border-top-right-radius: 0.75rem;
+  background-image: linear-gradient(to bottom left in oklab, color-mix(in oklab, oklch(71.5% 0.143 215.221) 10%, transparent), transparent, transparent);
 }
 
 /* Header */
 .header {
-  @apply flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-300/60 mb-5;
+  margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-color: color-mix(in oklab, oklch(86.9% 0.022 252.894) 60%, transparent);
+  padding-bottom: 1rem;
+}
+@media (min-width: 40rem) {
+  .header {
+    flex-direction: row;
+    align-items: center;
+  }
 }
 
 .titleGroup {
-  @apply flex items-center gap-2;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .titleIcon {
-  @apply w-5 h-5 text-blue-400;
+  height: 1.25rem;
+  width: 1.25rem;
+  color: oklch(70.7% 0.165 254.624);
 }
 
 .titleHeading {
-  @apply font-eve font-bold text-lg text-white tracking-wide;
+  font-family: 'Chakra Petch', -apple-system, sans-serif;
+  font-size: 1.125rem;
+  line-height: 1.55556;
+  font-weight: 700;
+  letter-spacing: 0.025em;
+  color: #fff;
 }
 
 .subtitle {
-  @apply text-xs text-slate-300 mt-0.5;
+  margin-top: 0.125rem;
+  font-size: 0.75rem;
+  line-height: 1.33333;
+  color: oklch(86.9% 0.022 252.894);
 }
 
 .eveClock {
-  @apply hidden sm:flex items-center gap-2 px-3 py-1 rounded bg-black/40 border border-slate-800 text-xs font-mono;
+  display: none;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 0.25rem;
+  border-style: solid;
+  border-width: 1px;
+  border-color: oklch(27.9% 0.041 260.031);
+  background-color: color-mix(in oklab, #000 40%, transparent);
+  padding-inline: 0.75rem;
+  padding-block: 0.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.33333;
+}
+@media (min-width: 40rem) {
+  .eveClock {
+    display: flex;
+  }
 }
 
 .clockIcon {
-  @apply w-3.5 h-3.5 text-cyan-400 animate-pulse;
+  height: 0.875rem;
+  width: 0.875rem;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  color: oklch(78.9% 0.154 211.53);
 }
 
 .clockLabel {
-  @apply text-slate-400;
+  color: oklch(70.4% 0.04 256.788);
 }
 
 .clockTime {
-  @apply text-cyan-300 font-semibold;
+  font-weight: 600;
+  color: oklch(86.5% 0.127 207.078);
 }
 
 /* Preset Corridor Selector */
 .presetSelectorWrapper {
-  @apply w-full sm:w-72;
+  width: 100%;
+}
+@media (min-width: 40rem) {
+  .presetSelectorWrapper {
+    width: 18rem;
+  }
 }
 
 .presetSelectorLabel {
-  @apply block text-[11px] font-mono text-slate-300 uppercase tracking-wider mb-1 flex items-center gap-1;
+  margin-bottom: 0.25rem;
+  display: block;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  color: oklch(86.9% 0.022 252.894);
+  text-transform: uppercase;
 }
 
 .presetSelectorIcon {
-  @apply w-3 h-3 text-cyan-400;
+  height: 0.75rem;
+  width: 0.75rem;
+  color: oklch(78.9% 0.154 211.53);
 }
 
 .presetSelectControl {
-  @apply w-full px-3 py-2 text-xs rounded-lg font-medium;
+  width: 100%;
+  border-radius: 0.5rem;
+  padding-inline: 0.75rem;
+  padding-block: 0.5rem;
+  font-size: 0.75rem;
+  line-height: 1.33333;
+  font-weight: 500;
 }
+
 /* Darkly keeps Bootstrap's dark chevron, which would vanish on the dark field */
 :global(html[data-theme="darkly"]) .presetSelectControl {
   --bs-form-select-bg-img: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23dee2e6' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
 }
+
 .presetSelectControl:focus {
   outline: none;
   border-color: #06b6d4 !important;
@@ -75,19 +155,44 @@
 
 /* Preset Route Quick Select Pills */
 .presetsPillsRow {
-  @apply flex flex-wrap items-center gap-2 mb-5 -mt-2;
+  margin-top: -0.5rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .presetsPillsLabel {
-  @apply text-[11px] font-mono text-slate-400 uppercase flex items-center gap-1;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: oklch(70.4% 0.04 256.788);
+  text-transform: uppercase;
 }
 
 .presetsPillsIcon {
-  @apply w-3 h-3 text-cyan-400;
+  height: 0.75rem;
+  width: 0.75rem;
+  color: oklch(78.9% 0.154 211.53);
 }
 
 .presetPill {
-  @apply text-xs font-mono flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all cursor-pointer;
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  gap: 0.375rem;
+  border-radius: 0.5rem;
+  padding-inline: 0.75rem;
+  padding-block: 0.375rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.33333;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
   background-color: rgba(15, 23, 42, 0.6) !important;
   border: 1px solid rgba(51, 65, 85, 0.8) !important;
   --bs-btn-border-color: rgba(51, 65, 85, 0.8) !important;
@@ -100,7 +205,20 @@
 }
 
 .presetPillSelected {
-  @apply text-xs font-mono flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-semibold transition-all cursor-pointer;
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  gap: 0.375rem;
+  border-radius: 0.5rem;
+  padding-inline: 0.75rem;
+  padding-block: 0.375rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.33333;
+  font-weight: 600;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
   background-color: rgba(6, 182, 212, 0.2) !important;
   border: 1px solid #22d3ee !important;
   --bs-btn-border-color: #22d3ee !important;
@@ -109,11 +227,23 @@
 }
 
 .presetPillSub {
-  @apply text-[10px] text-slate-400;
+  font-size: 10px;
+  color: oklch(70.4% 0.04 256.788);
 }
 
 .configureBtn {
-  @apply text-xs p-1 px-2 flex items-center gap-1 font-mono transition-all cursor-pointer;
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  padding-inline: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.33333;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
   background: transparent !important;
   border: 1px solid #334155 !important;
   --bs-btn-border-color: #334155 !important;
@@ -126,49 +256,106 @@
 }
 
 .configureBtnText {
-  @apply text-[10px] uppercase;
+  font-size: 10px;
+  text-transform: uppercase;
 }
 
 .configureIcon {
-  @apply w-3.5 h-3.5;
+  height: 0.875rem;
+  width: 0.875rem;
 }
 
 /* Systems Grid */
 .systemsGrid {
-  @apply grid grid-cols-1 lg:grid-cols-11 gap-4 items-center;
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  align-items: center;
+  gap: 1rem;
+}
+@media (min-width: 64rem) {
+  .systemsGrid {
+    grid-template-columns: repeat(11, minmax(0, 1fr));
+  }
 }
 
 .systemCard {
-  @apply lg:col-span-5 rounded-lg p-4 transition-all bg-slate-900/60;
+  border-radius: 0.5rem;
+  background-color: color-mix(in oklab, oklch(20.8% 0.042 265.755) 60%, transparent);
+  padding: 1rem;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
   border: 1px solid rgba(6, 182, 212, 0.5);
+}
+@media (min-width: 64rem) {
+  .systemCard {
+    grid-column: span 5 / span 5;
+  }
 }
 
 .systemCardHeader {
-  @apply flex items-center justify-between mb-2;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .systemCardTitle {
-  @apply text-[11px] font-mono uppercase tracking-wider text-slate-300 flex items-center gap-1.5;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  color: oklch(86.9% 0.022 252.894);
+  text-transform: uppercase;
 }
 
 .originDot {
-  @apply w-2 h-2 rounded-full bg-cyan-400;
+  height: 0.5rem;
+  width: 0.5rem;
+  border-radius: 9999px;
+  background-color: oklch(78.9% 0.154 211.53);
 }
 
 .destDot {
-  @apply w-2 h-2 rounded-full bg-indigo-400;
+  height: 0.5rem;
+  width: 0.5rem;
+  border-radius: 9999px;
+  background-color: oklch(67.3% 0.182 276.935);
 }
 
 .secBadge {
-  @apply text-[10px] font-mono px-2 py-0.5 rounded border;
+  border-radius: 0.25rem;
+  border-style: solid;
+  border-width: 1px;
+  padding-inline: 0.5rem;
+  padding-block: 0.125rem;
+  font-family: var(--font-mono);
+  font-size: 10px;
 }
 
 .dropdownWrapper {
-  @apply relative;
+  position: relative;
 }
 
 .systemDropdownBtn {
-  @apply w-full text-left flex items-center justify-between px-3 py-2 rounded-lg text-white font-bold text-base cursor-pointer transition-all;
+  display: flex;
+  width: 100%;
+  cursor: pointer;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 0.5rem;
+  padding-inline: 0.75rem;
+  padding-block: 0.5rem;
+  text-align: left;
+  font-size: 1rem;
+  line-height: 1.5;
+  font-weight: 700;
+  color: #fff;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
   font-family: 'Chakra Petch', -apple-system, sans-serif;
   background-color: #0c1018 !important;
   border: 1px solid #334155 !important;
@@ -180,28 +367,63 @@
 }
 
 .systemDropdownRegion {
-  @apply text-xs font-sans font-normal text-slate-300;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  font-size: 0.75rem;
+  line-height: 1.33333;
+  font-weight: 400;
+  color: oklch(86.9% 0.022 252.894);
 }
 
 .dropdownMenu {
-  @apply absolute top-full left-0 right-0 mt-1.5 border border-slate-800 rounded-lg shadow-2xl z-50 max-h-60 overflow-y-auto p-2;
+  position: absolute;
+  top: 100%;
+  right: 0px;
+  left: 0px;
+  z-index: 50;
+  margin-top: 0.375rem;
+  max-height: 15rem;
+  overflow-y: auto;
+  border-radius: 0.5rem;
+  border-style: solid;
+  border-width: 1px;
+  border-color: oklch(27.9% 0.041 260.031);
+  padding: 0.5rem;
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
   background-color: #0c1018;
 }
 
 .searchInput {
-  @apply w-full px-2.5 py-1.5 text-xs rounded mb-2 font-mono;
+  margin-bottom: 0.5rem;
+  width: 100%;
+  border-radius: 0.25rem;
+  padding-inline: 0.625rem;
+  padding-block: 0.375rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.33333;
 }
 .searchInput:focus {
   outline: none;
   border-color: #06b6d4 !important;
 }
 
-.dropdownList {
-  @apply space-y-1;
+:where(.dropdownList > :not(:last-child)) {
+  margin-block-start: 0;
+  margin-block-end: 0.25rem;
 }
 
 .systemItemBtn {
-  @apply w-full flex items-center justify-between px-2.5 py-1.5 rounded text-left text-xs cursor-pointer;
+  display: flex;
+  width: 100%;
+  cursor: pointer;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 0.25rem;
+  padding-inline: 0.625rem;
+  padding-block: 0.375rem;
+  text-align: left;
+  font-size: 0.75rem;
+  line-height: 1.33333;
   background: transparent !important;
   border: none !important;
   --bs-btn-border-color: transparent !important;
@@ -212,31 +434,51 @@
 }
 
 .systemItemName {
-  @apply text-white font-medium;
+  font-weight: 500;
+  color: #fff;
 }
 
 .systemItemMeta {
-  @apply flex items-center gap-2;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .systemItemRegion {
-  @apply text-[11px] text-slate-300;
+  font-size: 11px;
+  color: oklch(86.9% 0.022 252.894);
 }
 
 .systemItemSecBadge {
-  @apply text-[10px] font-mono px-1.5 py-0.5 rounded border;
+  border-radius: 0.25rem;
+  border-style: solid;
+  border-width: 1px;
+  padding-inline: 0.375rem;
+  padding-block: 0.125rem;
+  font-family: var(--font-mono);
+  font-size: 10px;
 }
 
 .stationWrapper {
-  @apply mt-3;
+  margin-top: 0.75rem;
 }
 
 .stationLabel {
-  @apply block text-[10px] font-mono text-slate-300 uppercase mb-1;
+  margin-bottom: 0.25rem;
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: oklch(86.9% 0.022 252.894);
+  text-transform: uppercase;
 }
 
 .stationInput {
-  @apply w-full px-2.5 py-1.5 text-xs rounded;
+  width: 100%;
+  border-radius: 0.25rem;
+  padding-inline: 0.625rem;
+  padding-block: 0.375rem;
+  font-size: 0.75rem;
+  line-height: 1.33333;
 }
 .stationInput:focus {
   outline: none;
@@ -245,11 +487,26 @@
 
 /* Swap / Connector */
 .swapWrapper {
-  @apply lg:col-span-1 flex flex-col items-center justify-center py-2 lg:py-0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-block: 0.5rem;
+}
+@media (min-width: 64rem) {
+  .swapWrapper {
+    grid-column: span 1 / span 1;
+    padding-block: 0px;
+  }
 }
 
 .swapBtn {
-  @apply p-2 rounded-full transition-all cursor-pointer;
+  cursor: pointer;
+  border-radius: 9999px;
+  padding: 0.5rem;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
   background-color: rgba(15, 23, 42, 0.6) !important;
   border: 1px solid #334155 !important;
   --bs-btn-border-color: #334155 !important;
@@ -262,59 +519,194 @@
 }
 
 .swapIcon {
-  @apply block w-4 h-4;
+  display: block;
+  height: 1rem;
+  width: 1rem;
 }
 
 .swapLabel {
-  @apply hidden lg:block text-[10px] font-mono text-slate-500 mt-1 uppercase;
+  margin-top: 0.25rem;
+  display: none;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: oklch(55.4% 0.046 257.417);
+  text-transform: uppercase;
+}
+@media (min-width: 64rem) {
+  .swapLabel {
+    display: block;
+  }
 }
 
 /* Navigation Telemetry Bar */
 .telemetryGrid {
-  @apply mt-4 pt-4 border-t border-slate-300/60 grid grid-cols-2 sm:grid-cols-4 gap-3;
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-color: color-mix(in oklab, oklch(86.9% 0.022 252.894) 60%, transparent);
+  padding-top: 1rem;
+}
+@media (min-width: 40rem) {
+  .telemetryGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
 
 .telemetryCard {
-  @apply p-2.5 rounded-lg bg-slate-900/60;
+  border-radius: 0.5rem;
+  background-color: color-mix(in oklab, oklch(20.8% 0.042 265.755) 60%, transparent);
+  padding: 0.625rem;
   border: 1px solid rgba(6, 182, 212, 0.5);
 }
 
 .telemetryLabel {
-  @apply block text-[10px] font-mono text-slate-300 uppercase;
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: oklch(86.9% 0.022 252.894);
+  text-transform: uppercase;
 }
 
 .serviceBadge {
-  @apply inline-block mt-1 text-xs px-2 py-0.5 rounded border font-medium;
+  margin-top: 0.25rem;
+  display: inline-block;
+  border-radius: 0.25rem;
+  border-style: solid;
+  border-width: 1px;
+  padding-inline: 0.5rem;
+  padding-block: 0.125rem;
+  font-size: 0.75rem;
+  line-height: 1.33333;
+  font-weight: 500;
 }
 
 .telemetryValueRow {
-  @apply flex items-baseline gap-1 mt-1;
+  margin-top: 0.25rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
 }
 
 .telemetryValueCyan {
-  @apply text-base font-mono font-bold text-cyan-300;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  line-height: 1.5;
+  font-weight: 700;
+  color: oklch(86.5% 0.127 207.078);
 }
 
 .telemetryValueWhite {
-  @apply text-base font-mono font-bold text-slate-200;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  line-height: 1.5;
+  font-weight: 700;
+  color: oklch(92.9% 0.013 255.508);
 }
 
 .telemetryUnit {
-  @apply text-xs text-slate-300;
+  font-size: 0.75rem;
+  line-height: 1.33333;
+  color: oklch(86.9% 0.022 252.894);
 }
 
 .riskRatingRow {
-  @apply flex items-center gap-1.5 mt-1 text-xs font-semibold;
+  margin-top: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.75rem;
+  line-height: 1.33333;
+  font-weight: 600;
 }
 
 .riskRatingSafe {
-  @apply text-emerald-400 flex items-center gap-1;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: oklch(76.5% 0.177 163.223);
 }
 
 .riskRatingWarning {
-  @apply text-amber-400 flex items-center gap-1;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: oklch(82.8% 0.189 84.429);
 }
 
 .riskRatingIcon {
-  @apply w-3.5 h-3.5;
+  height: 0.875rem;
+  width: 0.875rem;
+}
+
+.pillBtn {
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  gap: 0.375rem;
+  border-radius: 0.5rem;
+  border-color: oklch(37.2% 0.044 257.287) !important;
+  background-color: oklch(20.8% 0.042 265.755) !important;
+  padding-block: 0.375rem;
+  font-size: 0.75rem;
+  line-height: 1.33333;
+  font-weight: 600;
+  color: oklch(86.5% 0.127 207.078) !important;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+.pillBtn:hover {
+  border-color: color-mix(in oklab, oklch(71.5% 0.143 215.221) 50%, transparent) !important;
+  background-color: oklch(27.9% 0.041 260.031) !important;
+}
+
+.pillBtnIcon {
+  height: 1rem;
+  width: 1rem;
+}
+
+.noResults {
+  text-align: center;
+  font-size: 0.75rem;
+  line-height: 1.33333;
+  color: oklch(70.4% 0.04 256.788) !important;
+}
+
+.secHigh1 {
+  border-color: color-mix(in oklab, oklch(69.6% 0.17 162.48) 30%, transparent) !important;
+  background-color: color-mix(in oklab, oklch(26.2% 0.051 172.552) 40%, transparent) !important;
+  color: oklch(76.5% 0.177 163.223) !important;
+}
+
+.secHigh08 {
+  border-color: color-mix(in oklab, oklch(69.6% 0.17 162.48) 20%, transparent) !important;
+  background-color: color-mix(in oklab, oklch(37.8% 0.077 168.94) 30%, transparent) !important;
+  color: oklch(84.5% 0.143 164.978) !important;
+}
+
+.secHigh05 {
+  border-color: color-mix(in oklab, oklch(70.4% 0.14 182.503) 30%, transparent) !important;
+  background-color: color-mix(in oklab, oklch(27.7% 0.046 192.524) 40%, transparent) !important;
+  color: oklch(77.7% 0.152 181.912) !important;
+}
+
+.secLow03 {
+  border-color: color-mix(in oklab, oklch(76.9% 0.188 70.08) 30%, transparent) !important;
+  background-color: color-mix(in oklab, oklch(27.9% 0.077 45.635) 40%, transparent) !important;
+  color: oklch(82.8% 0.189 84.429) !important;
+}
+
+.secLow00 {
+  border-color: color-mix(in oklab, oklch(70.5% 0.213 47.604) 30%, transparent) !important;
+  background-color: color-mix(in oklab, oklch(26.6% 0.079 36.259) 40%, transparent) !important;
+  color: oklch(75% 0.183 55.934) !important;
+}
+
+.secNull {
+  border-color: color-mix(in oklab, oklch(63.7% 0.237 25.331) 30%, transparent) !important;
+  background-color: color-mix(in oklab, oklch(25.8% 0.092 26.042) 40%, transparent) !important;
+  color: oklch(70.4% 0.191 22.216) !important;
 }

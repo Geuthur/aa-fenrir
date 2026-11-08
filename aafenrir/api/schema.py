@@ -14,22 +14,59 @@ class UserData(Schema):
         user_id (int): The ID of the user.
         character_id (int): The ID of the character associated with the user.
         character_name (str): The name of the character.
+        corporation_id (int): The ID of the corporation of the character.
+        corporation_name (str): The name of the corporation of the character.
+        alliance_id (int | None): The ID of the alliance of the character, if any.
+        alliance_name (str | None): The name of the alliance of the character, if any.
         portrait (str | None): The URL or path to the character's portrait image.
+        is_admin (bool): Whether the user is a superuser (Administration: force refresh).
         notification (boolean): The notification status for the user.
     """
 
     user_id: int
     character_id: int
     character_name: str
+    corporation_id: int
+    corporation_name: str
+    alliance_id: int | None = None
+    alliance_name: str | None = None
     portrait: str | None = None
+
+    is_admin: bool = False
 
     notification: bool
     quick_select_presets: list[int] = []
     has_manage_access: bool = False
     has_admin_access: bool = False
-    is_superuser: bool = False
     calculator_max_volume: int
     calculator_max_collateral: int
+
+
+class UserSettingsSchema(Schema):
+    """Settings of the current user."""
+
+    disable_notifications: bool
+    quick_select_presets: list[int] = []
+
+
+class UserSettingsUpdateRequest(Schema):
+    """Request body of ``PUT settings/``. Fields that are not sent stay unchanged."""
+
+    disable_notifications: bool | None = None
+    quick_select_presets: list[int] | None = None
+
+
+class ErrorSchema(Schema):
+    """Error response of an endpoint, e.g. for 403 and 404."""
+
+    error: str
+
+
+class ActionResponse(Schema):
+    """Response of an action endpoint."""
+
+    success: bool
+    message: str
 
 
 class DataTableSchema(Schema):
@@ -74,11 +111,15 @@ class MenuLink(Schema):
         name (str): The name of the menu link.
         link (str | None): The URL or path the menu link points to.
         is_external (bool): Whether the link is outside of React and should be opened directly.
+        badge (int | None): Number of issues shown as badge next to the link.
+        has_errors (bool): Whether the badge pulses because of active errors.
     """
 
     name: str
     link: str = None
     is_external: bool = False
+    badge: int | None = None
+    has_errors: bool = False
 
 
 class MenuCategory(MenuLink):

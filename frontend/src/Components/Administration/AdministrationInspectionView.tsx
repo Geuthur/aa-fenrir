@@ -1,4 +1,5 @@
 // Third Party
+import { ErrorLoader, FetchingLoader } from "aa-geuthur-react";
 import { ArrowLeft } from "lucide-react";
 import { Button, Card, Col, Row, Table } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
@@ -7,8 +8,6 @@ import { HandlerStatusBadge } from "@/Components/Administration/HandlerStatusBad
 import { useAdministrationHandler } from "@/Components/Administration/Hooks";
 import { getContractStatusLabel } from "@/Components/Administration/status";
 import { formatIskCompact, formatM3 } from "@/Components/Calculator/calculator";
-import ErrorLoader from "@/Components/Loader/ErrorLoader";
-import FetchingLoader from "@/Components/Loader/FetchingLoader";
 
 export interface AdministrationInspectionViewProps {
   corporationId: number;

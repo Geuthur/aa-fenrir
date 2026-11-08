@@ -1,0 +1,340 @@
+.loading,
+.loadingSm {
+  padding: 2rem;
+  font-family: var(--font-mono);
+  color: oklch(70.4% 0.04 256.788) !important;
+}
+
+.loading {
+  font-size: 0.875rem;
+  line-height: calc(1.25 / 0.875);
+}
+
+.loadingSm {
+  font-size: 0.75rem;
+  line-height: calc(1 / 0.75);
+}
+
+.denied {
+  max-width: 48rem;
+  margin-block: 3rem;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  background-color: color-mix(in oklab, oklch(25.8% 0.092 26.042) 40%, transparent) !important;
+  border-color: color-mix(in oklab, oklch(63.7% 0.237 25.331) 40%, transparent) !important;
+  color: oklch(92.9% 0.013 255.508) !important;
+}
+
+.deniedTitle {
+  color: oklch(70.4% 0.191 22.216) !important;
+  font-size: 1.25rem;
+  line-height: calc(1.75 / 1.25);
+}
+
+.deniedText {
+  font-size: 0.875rem;
+  line-height: calc(1.25 / 0.875);
+  color: oklch(86.9% 0.022 252.894) !important;
+}
+
+.code {
+  padding-block: 0.125rem;
+  background-color: color-mix(in oklab, #000 50%, transparent) !important;
+  color: oklch(80.8% 0.114 19.571) !important;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: calc(1 / 0.75);
+}
+
+.page {
+  min-height: 100vh;
+  padding-block: 2rem;
+  color: oklch(92.9% 0.013 255.508) !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', Arial,
+    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+.container {
+  max-width: 72rem;
+}
+
+.alertSuccess,
+.alertError {
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  line-height: calc(1.25 / 0.875);
+}
+
+.alertSuccess {
+  background-color: color-mix(in oklab, oklch(26.2% 0.051 172.552) 50%, transparent) !important;
+  border-color: color-mix(in oklab, oklch(69.6% 0.17 162.48) 40%, transparent) !important;
+  color: oklch(84.5% 0.143 164.978) !important;
+}
+
+.alertError {
+  background-color: color-mix(in oklab, oklch(25.8% 0.092 26.042) 50%, transparent) !important;
+  border-color: color-mix(in oklab, oklch(63.7% 0.237 25.331) 50%, transparent) !important;
+  color: oklch(80.8% 0.114 19.571) !important;
+}
+
+.iconLg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.iconMd {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.iconSm {
+  width: 1rem;
+  height: 1rem;
+}
+
+.iconXs {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.tabBar {
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-color: oklch(27.9% 0.041 260.031) !important;
+}
+
+.tab,
+.pill {
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  line-height: calc(1 / 0.75);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tab {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.pill {
+  padding-block: 0.375rem;
+  white-space: nowrap;
+  transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.tabActive,
+.pillActive {
+  background-color: oklch(60.9% 0.126 221.723) !important;
+  color: #fff !important;
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
+}
+
+.tabActive {
+  border-color: oklch(71.5% 0.143 215.221) !important;
+}
+
+.tabInactive,
+.pillInactive {
+  background-color: oklch(20.8% 0.042 265.755) !important;
+  color: oklch(70.4% 0.04 256.788) !important;
+  border-color: oklch(27.9% 0.041 260.031) !important;
+}
+
+@media (hover: hover) {
+  .tabInactive:hover {
+    color: #fff !important;
+  }
+
+  .pillInactive:hover {
+    color: oklch(92.9% 0.013 255.508) !important;
+  }
+}
+
+.count {
+  padding-inline: 0.375rem;
+  padding-block: 0.125rem;
+  border-radius: 9999px;
+  background-color: color-mix(in oklab, #000 40%, transparent);
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+
+.toolbar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-radius: 0.75rem;
+  background-color: color-mix(in oklab, oklch(27.9% 0.041 260.031) 80%, transparent) !important;
+}
+
+@media (min-width: 48rem) {
+  .toolbar {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.pills {
+  gap: 0.375rem;
+}
+
+.search {
+  position: relative;
+  width: 100%;
+}
+
+@media (min-width: 48rem) {
+  .search {
+    width: 18rem;
+  }
+
+  .searchWide {
+    width: 20rem;
+  }
+}
+
+.searchIcon {
+  position: absolute;
+  top: 0.625rem;
+  left: 0.75rem;
+  width: 1rem;
+  height: 1rem;
+  color: oklch(55.4% 0.046 257.417) !important;
+}
+
+.searchInput {
+  padding-right: 0.75rem;
+  padding-left: 2.25rem;
+  border-radius: 0.5rem;
+  background-color: oklch(20.8% 0.042 265.755) !important;
+  border-color: oklch(37.2% 0.044 257.287) !important;
+  color: oklch(92.9% 0.013 255.508) !important;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: calc(1 / 0.75);
+}
+
+.searchInput:focus {
+  outline-style: none;
+  border-color: oklch(71.5% 0.143 215.221) !important;
+}
+
+.empty {
+  padding: 2.5rem;
+  border-radius: 0.75rem;
+  background-color: #111724 !important;
+  border-color: oklch(27.9% 0.041 260.031) !important;
+  color: oklch(70.4% 0.04 256.788) !important;
+  font-size: 0.875rem;
+  line-height: calc(1.25 / 0.875);
+}
+
+.routesGrid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+@media (min-width: 48rem) {
+  .routesGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.pager {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: calc(1 / 0.75);
+  color: oklch(70.4% 0.04 256.788) !important;
+}
+
+.pagerBtn {
+  padding-inline: 0.625rem;
+  background-color: oklch(20.8% 0.042 265.755) !important;
+  border-color: oklch(27.9% 0.041 260.031) !important;
+  color: oklch(86.9% 0.022 252.894) !important;
+  font-size: 0.75rem;
+  line-height: calc(1 / 0.75);
+}
+
+.pagerBtn:disabled {
+  opacity: 0.4;
+}
+
+@media (hover: hover) {
+  .pagerBtn:hover {
+    background-color: oklch(27.9% 0.041 260.031) !important;
+  }
+}
+
+.sysName {
+  color: oklch(86.5% 0.127 207.078) !important;
+}
+
+.sysRegion {
+  color: oklch(70.4% 0.04 256.788) !important;
+}
+
+.secBadge {
+  padding-block: 0.125rem;
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+
+.secHigh {
+  background-color: color-mix(in oklab, oklch(26.2% 0.051 172.552) 60%, transparent) !important;
+  color: oklch(76.5% 0.177 163.223) !important;
+}
+
+.secLow {
+  background-color: color-mix(in oklab, oklch(27.9% 0.077 45.635) 60%, transparent) !important;
+  color: oklch(82.8% 0.189 84.429) !important;
+}
+
+.secNull {
+  background-color: color-mix(in oklab, oklch(27.1% 0.105 12.094) 60%, transparent) !important;
+  color: oklch(71.2% 0.194 13.428) !important;
+}
+
+.removeBtn {
+  background-color: color-mix(in oklab, oklch(25.8% 0.092 26.042) 40%, transparent) !important;
+  border-color: color-mix(in oklab, oklch(63.7% 0.237 25.331) 40%, transparent) !important;
+  color: oklch(80.8% 0.114 19.571) !important;
+  font-size: 0.75rem;
+  line-height: calc(1 / 0.75);
+  cursor: pointer;
+  transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+@media (hover: hover) {
+  .removeBtn:hover {
+    background-color: oklch(39.6% 0.141 25.723) !important;
+  }
+}
+
+.addBtn {
+  gap: 0.375rem;
+  padding-inline: 0.875rem;
+  padding-block: 0.375rem;
+  border-radius: 0.5rem;
+  background-color: oklch(60.9% 0.126 221.723) !important;
+  color: #fff !important;
+  font-size: 0.75rem;
+  line-height: calc(1 / 0.75);
+  font-weight: 600;
+  cursor: pointer;
+  transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+@media (hover: hover) {
+  .addBtn:hover {
+    background-color: oklch(71.5% 0.143 215.221) !important;
+  }
+}

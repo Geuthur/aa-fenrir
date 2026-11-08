@@ -2,11 +2,11 @@
 import { useEffect, useState } from 'react';
 
 // Third Party
+import { BaseModal } from "aa-geuthur-react";
 import { SlidersHorizontal, Sparkles } from 'lucide-react';
 import { Badge, Button, Form, ListGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { BaseModal } from '@/Components/Base/BaseModal';
 import { ModalTitle } from '@/Components/Base/ModalTitle';
 import { ServiceBadge } from '@/Components/Calculator/ServiceBadge';
 import type { FreightCorridor } from '@/types';

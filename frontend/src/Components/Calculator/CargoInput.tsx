@@ -2,6 +2,7 @@
 import { useState } from 'react';
 
 // Third Party
+import { BaseModal } from "aa-geuthur-react";
 import { Box, Check, Clipboard, Coins, Info, Package, Users, Zap } from 'lucide-react';
 import { Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -9,7 +10,6 @@ import { useTranslation } from 'react-i18next';
 // Styles
 import styles from '@/Components/Calculator/CargoInput.module.css';
 
-import { BaseModal } from '@/Components/Base/BaseModal';
 import { ModalTitle } from '@/Components/Base/ModalTitle';
 import { formatIskCompact, formatM3 } from '@/Components/Calculator/calculator';
 import { parseEveClipboard } from '@/Components/Fenrir/cargoParser';
@@ -105,9 +105,9 @@ export function CargoInput({
         <Button
           id="open-clipboard-appraiser"
           onClick={() => setShowClipboardModal(true)}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg !bg-slate-900 border !border-slate-700 hover:!bg-slate-800 hover:!border-cyan-500/50 !text-cyan-300 text-xs font-semibold transition-all cursor-pointer shadow"
+          className={`border px-3 shadow ${styles.pillBtn}`}
         >
-          <Clipboard className="w-4 h-4" />
+          <Clipboard className={styles.pillBtnIcon} />
           <span>{t('Paste EVE Inventory')}</span>
         </Button>
       </div>
@@ -263,7 +263,7 @@ export function CargoInput({
         <div
           className={`${styles.perkCard} ${
             isSubsidyDisabled
-              ? '!bg-rose-950/40 !border-rose-500/60 text-rose-200'
+              ? styles.perkCardDisabled
               : ''
           }`}
         >
@@ -271,7 +271,7 @@ export function CargoInput({
             <div
               className={`${styles.perkIconBox} ${
                 isSubsidyDisabled
-                  ? '!bg-rose-900/40 !text-rose-400 !border !border-rose-500/50'
+                  ? styles.perkIconDisabled
                   : isCorpSubsidized
                   ? styles.perkIconEmeraldActive
                   : styles.perkIconInactive
@@ -280,13 +280,13 @@ export function CargoInput({
               <Users className={styles.perkIcon} />
             </div>
             <div>
-              <div className={isSubsidyDisabled ? 'text-xs font-semibold text-rose-200' : styles.perkTitle}>
+              <div className={isSubsidyDisabled ? styles.perkTitleDisabled : styles.perkTitle}>
                 {t('Alliance Subsidy')}
               </div>
               <div
                 className={
                   isSubsidyDisabled
-                    ? 'text-[11px] text-rose-300/80 font-mono mt-0.5'
+                    ? styles.perkSubtitleDisabled
                     : styles.perkSubtitle
                 }
               >
@@ -301,7 +301,7 @@ export function CargoInput({
             checked={isSubsidyDisabled ? false : isCorpSubsidized}
             disabled={isSubsidyDisabled}
             onChange={(e) => !isSubsidyDisabled && setIsCorpSubsidized(e.target.checked)}
-            className={isSubsidyDisabled ? 'opacity-40 cursor-not-allowed' : styles.checkEmerald}
+            className={isSubsidyDisabled ? styles.checkDisabled : styles.checkEmerald}
           />
         </div>
       </div>

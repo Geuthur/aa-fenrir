@@ -23,33 +23,33 @@ export function RouteAdminHeader({ onCreateClick, onAddSystemClick }: RouteAdmin
   return (
     <div className={styles.routeAdminHeader + " my-4 fenrir-gradient fenrir-border-500"}>
       <div>
-        <div className="flex items-center gap-2">
-          <RouteIcon className="w-6 h-6 !text-cyan-400" />
-          <h1 className="font-eve font-bold text-2xl !text-white tracking-wide">
+        <div className="d-flex align-items-center gap-2">
+          <RouteIcon className={styles.titleIcon} />
+          <h1 className={`font-eve fw-bold text-white ${styles.title}`}>
             {t('ROUTE & SYSTEM MANAGEMENT')}
           </h1>
         </div>
-        <p className="text-xs !text-slate-400 mt-1">
+        <p className={`mt-1 ${styles.subtitle}`}>
           {t('Configure available solar systems, corridors, and tariffs for courier services.')}
         </p>
       </div>
 
-      <div className="flex items-center gap-2.5">
+      <div className={styles.actions}>
         {onAddSystemClick && (
           <Button
             onClick={onAddSystemClick}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg !bg-slate-900 border !border-slate-700 hover:!bg-slate-800 hover:!border-cyan-500/50 !text-cyan-300 text-xs font-semibold transition-all cursor-pointer shadow"
+            className={`px-3 border shadow ${styles.headerActionBtn}`}
           >
-            <Compass className="w-4 h-4" />
+            <Compass className={styles.btnIcon} />
             <span>{t('Add System')}</span>
           </Button>
         )}
 
         <Button
           onClick={onCreateClick}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg !bg-slate-900 border !border-slate-700 hover:!bg-slate-800 hover:!border-cyan-500/50 !text-cyan-300 text-xs font-semibold transition-all cursor-pointer shadow"
+          className={`px-3 border shadow ${styles.headerActionBtn}`}
         >
-          <PlusCircle className="w-4 h-4" />
+          <PlusCircle className={styles.btnIcon} />
           <span>{t('Create New Route')}</span>
         </Button>
       </div>

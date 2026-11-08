@@ -3,14 +3,13 @@ import { useNavigate } from 'react-router-dom';
 
 // Third Party
 import { useQuery } from '@tanstack/react-query';
+import { ErrorLoader, FetchingLoader } from "aa-geuthur-react";
 import { useTranslation } from 'react-i18next';
 
 import { loadContractQueue } from '@/Api/ApiCalls';
 import { queryKeys } from '@/Api/query';
-import { ProjectName } from '@/App';
-import ErrorLoader from '@/Components/Loader/ErrorLoader';
-import FetchingLoader from '@/Components/Loader/FetchingLoader';
 import { ContractQueue } from '@/Components/Queue';
+import { ProjectName } from '@/constants';
 
 export default function Queue() {
   const { t } = useTranslation();

@@ -3,6 +3,9 @@ import { Filter } from 'lucide-react';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
+// Styles
+import styles from '@/Components/Queue/Partial/QueueFilter.module.css';
+
 export default function QueueFilter({
   filterStatus,
   setFilterStatus,
@@ -21,19 +24,15 @@ export default function QueueFilter({
   ];
 
   return (
-    <div className="!bg-slate-900/80 fenrir-border-500 rounded-xl p-4 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div className={`fenrir-border-500 p-4 shadow-lg gap-4 ${styles.container}`}>
       {/* Status Filter Pills */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
-        <Filter className="w-4 h-4 !text-slate-400 mr-1 shrink-0" />
+      <div className={`scrollbar-none pb-1 ${styles.pills}`}>
+        <Filter className={styles.filterIcon} />
         {tabs.map((tab) => (
           <Button
             key={tab.id}
             onClick={() => setFilterStatus(tab.id)}
-            className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors cursor-pointer whitespace-nowrap ${
-              filterStatus === tab.id
-                ? '!bg-cyan-600 !text-white shadow-[0_0_10px_rgba(6,182,212,0.3)]'
-                : '!bg-slate-900 !text-slate-400 hover:!text-slate-200 border !border-slate-800'
-            }`}
+            className={`px-3 ${styles.pill} ${filterStatus === tab.id ? styles.pillActive : `border ${styles.pillInactive}`}`}
           >
             {tab.label}
           </Button>

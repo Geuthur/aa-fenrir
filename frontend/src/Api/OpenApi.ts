@@ -38,17 +38,18 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/aafenrir/api/modify/user/settings/": {
+    "/aafenrir/api/settings/": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get?: never;
-        put?: never;
-        /** Modify User Settings */
-        post: operations["aafenrir_api_general_modify_user_settings"];
+        /** Get current user's settings */
+        get: operations["aafenrir_api_general_get_user_settings"];
+        /** Update current user's settings */
+        put: operations["aafenrir_api_general_update_user_settings"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -293,6 +294,8 @@ export interface components {
          *         name (str): The name of the menu link.
          *         link (str | None): The URL or path the menu link points to.
          *         is_external (bool): Whether the link is outside of React and should be opened directly.
+         *         badge (int | None): Number of issues shown as badge next to the link.
+         *         has_errors (bool): Whether the badge pulses because of active errors.
          */
         MenuLink: {
             /** Name */
@@ -304,6 +307,13 @@ export interface components {
              * @default false
              */
             is_external: boolean;
+            /** Badge */
+            badge?: number | null;
+            /**
+             * Has Errors
+             * @default false
+             */
+            has_errors: boolean;
         };
         /**
          * MenuModalSchema
@@ -361,7 +371,12 @@ export interface components {
          *         user_id (int): The ID of the user.
          *         character_id (int): The ID of the character associated with the user.
          *         character_name (str): The name of the character.
+         *         corporation_id (int): The ID of the corporation of the character.
+         *         corporation_name (str): The name of the corporation of the character.
+         *         alliance_id (int | None): The ID of the alliance of the character, if any.
+         *         alliance_name (str | None): The name of the alliance of the character, if any.
          *         portrait (str | None): The URL or path to the character's portrait image.
+         *         is_admin (bool): Whether the user is a superuser (Administration: force refresh).
          *         notification (boolean): The notification status for the user.
          */
         UserData: {
@@ -371,8 +386,21 @@ export interface components {
             character_id: number;
             /** Character Name */
             character_name: string;
+            /** Corporation Id */
+            corporation_id: number;
+            /** Corporation Name */
+            corporation_name: string;
+            /** Alliance Id */
+            alliance_id?: number | null;
+            /** Alliance Name */
+            alliance_name?: string | null;
             /** Portrait */
             portrait?: string | null;
+            /**
+             * Is Admin
+             * @default false
+             */
+            is_admin: boolean;
             /** Notification */
             notification: boolean;
             /**
@@ -390,15 +418,41 @@ export interface components {
              * @default false
              */
             has_admin_access: boolean;
-            /**
-             * Is Superuser
-             * @default false
-             */
-            is_superuser: boolean;
             /** Calculator Max Volume */
             calculator_max_volume: number;
             /** Calculator Max Collateral */
             calculator_max_collateral: number;
+        };
+        /**
+         * ErrorSchema
+         * @description Error response of an endpoint, e.g. for 403 and 404.
+         */
+        ErrorSchema: {
+            /** Error */
+            error: string;
+        };
+        /**
+         * UserSettingsSchema
+         * @description Settings of the current user.
+         */
+        UserSettingsSchema: {
+            /** Disable Notifications */
+            disable_notifications: boolean;
+            /**
+             * Quick Select Presets
+             * @default []
+             */
+            quick_select_presets: number[];
+        };
+        /**
+         * UserSettingsUpdateRequest
+         * @description Request body of ``PUT settings/``. Fields that are not sent stay unchanged.
+         */
+        UserSettingsUpdateRequest: {
+            /** Disable Notifications */
+            disable_notifications?: boolean | null;
+            /** Quick Select Presets */
+            quick_select_presets?: number[] | null;
         };
         /**
          * AdministrationHandlerSchema
@@ -1038,14 +1092,12 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
+                    "application/json": components["schemas"]["ErrorSchema"];
                 };
             };
         };
     };
-    aafenrir_api_general_modify_user_settings: {
+    aafenrir_api_general_get_user_settings: {
         parameters: {
             query?: never;
             header?: never;
@@ -1060,20 +1112,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
-                };
-            };
-            /** @description Bad Request */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
+                    "application/json": components["schemas"]["UserSettingsSchema"];
                 };
             };
             /** @description Forbidden */
@@ -1082,9 +1121,40 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": {
-                        [key: string]: unknown;
-                    };
+                    "application/json": components["schemas"]["ErrorSchema"];
+                };
+            };
+        };
+    };
+    aafenrir_api_general_update_user_settings: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UserSettingsUpdateRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserSettingsSchema"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorSchema"];
                 };
             };
         };

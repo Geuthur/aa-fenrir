@@ -21,6 +21,7 @@ ______________________________________________________________________
     - [Step 4.1 - Migrate App and collect static](#step-41---migrate-app-and-collect-static)
     - [Step 5 - Setting up Permissions](#step-5---setting-up-permissions)
     - [Step 6 - (Optional) Setting up Compatibilies](#step-6---optional-setting-up-compatibilies)
+  - [Frontend](#frontend)
   - [Translations](#translations)
   - [Contributing](#contributing)
 
@@ -134,11 +135,26 @@ The Following Settings can be setting up in the `local.py`
 - AA_FENRIR_MAX_COLLATERAL: `1000000000000` - Upper limit of the collateral in ISK in the calculator when no route is active
 - AA_FENRIR_TASKS_TIME_LIMIT: `7200` - Defines the time (in seconds) a task will timeout
 
+## Frontend<a name="frontend"></a>
+
+The frontend is a React 19 SPA (TypeScript, Vite) in `frontend/`. Its shared base (tables, modals, loaders, menu, hooks, the `AuthBase` page layout, the API client and styles) comes from the npm package [aa-geuthur-react](https://github.com/Geuthur/aa-geuthur-react); the app extends it through props and wrappers and does not copy its files.
+
+| Command                        | Description                                                                        |
+| :----------------------------- | :--------------------------------------------------------------------------------- |
+| `make react-build`             | Type-checks and builds the frontend                                                |
+| `make react-test`              | Runs the frontend unit tests (Vitest)                                              |
+| `make react-lint`              | Runs ESLint                                                                        |
+| `make react-openapi`           | Exports the OpenAPI schema and generates the TypeScript types                      |
+| `make react-translations`      | Scans the app texts into `frontend/i18n/<lng>/translation.json`                    |
+| `make react-copy-translations` | Copies the app translations and those of `aa-geuthur-react` to Django static files |
+
 ## Translations<a name="translations"></a>
 
 [![Translations](https://weblate.geuthur.de/widget/allianceauth/aa-fenrir/multi-auto.svg)](https://weblate.geuthur.de/engage/allianceauth/)
 
 Help us translate this app into your language or improve existing translations. Join our team!"
+
+The shared frontend components (tables, modals, menu, loaders) come from the npm package [aa-geuthur-react](https://github.com/Geuthur/aa-geuthur-react) and are translated once in its own Weblate component.
 
 ## Contributing<a name="contributing"></a>
 

@@ -253,12 +253,12 @@ export function QuoteBreakdown({
           )}
 
           {quote.corridor?.has_alliance_subsidy === false ? (
-            <div className="flex items-center justify-between text-xs py-1.5 px-3 rounded bg-slate-900/60 border border-slate-800/80 text-slate-400">
-              <span className="flex items-center gap-1.5 text-slate-400">
-                <span className="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+            <div className={`px-3 rounded border ${styles.noSubsidyRow}`}>
+              <span className={styles.noSubsidyLabel}>
+                <span className={styles.noSubsidyDot}></span>
                 {t('Alliance Member Subsidy:')}
               </span>
-              <span className="text-[11px] font-mono text-rose-400/90 italic">
+              <span className={styles.noSubsidyNote}>
                 {t('Not available on this corridor')}
               </span>
             </div>
@@ -278,34 +278,34 @@ export function QuoteBreakdown({
             <Building2 className={styles.carrierIcon} />
             <span>{t('Delivering Carrier & Contract Dispatch')}</span>
           </div>
-          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950/60 text-cyan-300 border border-cyan-500/30">
+          <span className={`px-2 rounded border ${styles.contractHandlerBadge}`}>
             {t('Contract Handler')}
           </span>
         </div>
 
         {/* Carrier Info Row */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-lg bg-slate-950/40 border border-slate-800/80">
-          <div className="flex items-center gap-3 min-w-0">
+        <div className={`gap-3 p-3 border ${styles.carrierRow}`}>
+          <div className={`gap-3 ${styles.carrierInfo}`}>
             {corpId && !logoError ? (
               <img
                 src={`https://images.evetech.net/corporations/${corpId}/logo?size=64`}
                 alt={assigneeCorp}
                 onError={() => setLogoError(true)}
-                className="w-12 h-12 rounded-lg border border-cyan-500/40 bg-slate-950 p-0.5 shadow shrink-0 object-contain"
+                className={`border shadow ${styles.carrierLogo}`}
               />
             ) : (
-              <div className="w-12 h-12 rounded-lg border border-cyan-500/40 bg-slate-800/80 flex items-center justify-center text-cyan-400 shrink-0">
-                <Building2 className="w-6 h-6" />
+              <div className={`border ${styles.carrierLogoFallback}`}>
+                <Building2 className={styles.carrierFallbackIcon} />
               </div>
             )}
-            <div className="min-w-0">
-              <div className="text-[10px] font-mono uppercase tracking-wider text-slate-400">
+            <div className={styles.carrierText}>
+              <div className={styles.carrierAssignLabel}>
                 {t('Assign To (Private)')}
               </div>
-              <div className="text-sm sm:text-base font-bold text-white tracking-wide truncate">
+              <div className={styles.carrierName}>
                 {assigneeCorp}
               </div>
-              <div className="text-[11px] font-mono text-slate-400 mt-0.5">
+              <div className={styles.carrierCorridor}>
                 {quote.corridor
                   ? t('Corridor: {{name}}', { name: quote.corridor.name })
                   : t('Standard Rate Transit')}
@@ -335,12 +335,12 @@ export function QuoteBreakdown({
         </div>
 
         {/* Contract Parameters Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-3 pt-3 border-t border-slate-800/80 text-xs font-mono">
+        <div className={`gap-3 mt-3 pt-3 ${styles.contractGrid}`}>
           <div>
-            <span className="text-[10px] text-slate-500 uppercase block mb-0.5">
+            <span className={styles.contractLabel}>
               {t('Service Type')}
             </span>
-            <span className="text-slate-200 font-medium truncate block">
+            <span className={styles.contractValue}>
               {quote.corridor?.service_type === 'standard_freighter'
                 ? t('Standard Freighter Transit')
                 : quote.corridor?.service_type === 'deep_space_transport'
@@ -352,12 +352,12 @@ export function QuoteBreakdown({
           </div>
 
           <div>
-            <span className="text-[10px] text-slate-500 uppercase block mb-0.5">
+            <span className={styles.contractLabel}>
               {t('Delivery Window')}
             </span>
-            <span className="text-cyan-300 font-bold block">
+            <span className={styles.contractValueCyan}>
               {quote.isRush ? (
-                <span className="text-amber-300">{t('1 Day (Rush)')}</span>
+                <span className={styles.contractRushText}>{t('1 Day (Rush)')}</span>
               ) : (
                 t('{{days}} Days', { days: daysToComplete })
               )}
@@ -365,19 +365,19 @@ export function QuoteBreakdown({
           </div>
 
           <div>
-            <span className="text-[10px] text-slate-500 uppercase block mb-0.5">
+            <span className={styles.contractLabel}>
               {t('Expiration')}
             </span>
-            <span className="text-slate-200 font-medium block">
+            <span className={styles.contractValuePlain}>
               {t('{{days}} Days', { days: expirationDays })}
             </span>
           </div>
 
           <div>
-            <span className="text-[10px] text-slate-500 uppercase block mb-0.5">
+            <span className={styles.contractLabel}>
               {t('Max Capacity')}
             </span>
-            <span className="text-slate-200 font-medium block truncate">
+            <span className={styles.contractValue}>
               {formatM3(quote.corridor?.max_volume || 360000)}
             </span>
           </div>

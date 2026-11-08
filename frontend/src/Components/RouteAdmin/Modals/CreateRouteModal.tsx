@@ -2,12 +2,12 @@
 import { useEffect, useState } from 'react';
 
 // Third Party
+import { BaseModal } from "aa-geuthur-react";
 import { Sparkles } from 'lucide-react';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import type { components } from '@/Api/OpenApi';
-import { BaseModal } from '@/Components/Base/BaseModal';
 import { ModalTitle } from '@/Components/Base/ModalTitle';
 import type { CynoWaypointItem } from '@/Components/RouteAdmin/CynoWaypointManager';
 import { useRouteFormOptions } from '@/Components/RouteAdmin/Hooks';

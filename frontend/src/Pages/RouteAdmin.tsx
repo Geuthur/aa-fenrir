@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react';
 
 // Third Party
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { type BaseColumnDef, BaseTable, createBaseColumnHelper, useUserData } from "aa-geuthur-react";
 import {
   AlertTriangle,
   CheckCircle2,
@@ -17,6 +18,9 @@ import {
 import { Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
+// Styles
+import styles from '@/Pages/RouteAdmin.module.css';
+
 import {
   addRouteSystem,
   createRoutePreset,
@@ -24,14 +28,11 @@ import {
   deleteRouteSystem,
   loadRoutePresets,
   loadRouteSystems,
-  loadUserData,
   updateRoutePreset,
 } from '@/Api/ApiCalls';
 import type { components } from '@/Api/OpenApi';
 import { queryKeys } from '@/Api/query';
-import { BaseTable } from '@/Components/Base/BaseTable';
-import { createBaseColumnHelper } from '@/Components/Base/BaseTable/tableFeatures';
-import type { BaseColumnDef } from '@/Components/Base/BaseTable/tableFeatures';
+import type { UserData } from "@/Api/schema";
 import { RouteAdminHeader, RouteCard } from '@/Components/RouteAdmin';
 import {
   AddRouteSystemModal,
@@ -59,11 +60,7 @@ export default function RouteAdmin() {
   const [activeTab, setActiveTab] = useState<'routes' | 'systems'>('routes');
 
   // Check user permission
-  const { data: userData, isLoading: isUserLoading } = useQuery({
-    queryKey: queryKeys.User,
-    queryFn: loadUserData,
-    refetchOnWindowFocus: false,
-  });
+  const { data: userData, isLoading: isUserLoading } = useUserData<UserData>();
 
   // Load existing routes
   const { data: presets = [], isLoading: isPresetsLoading } = useQuery({
@@ -214,9 +211,9 @@ export default function RouteAdmin() {
   }, [routeSystems, systemSearch]);
 
   const getSecColor = (sec: number) => {
-    if (sec >= 0.5) return '!text-emerald-400 !bg-emerald-950/60 border-emerald-500/40';
-    if (sec > 0.0) return '!text-amber-400 !bg-amber-950/60 border-amber-500/40';
-    return '!text-rose-400 !bg-rose-950/60 border-rose-500/40';
+    if (sec >= 0.5) return styles.secHigh;
+    if (sec > 0.0) return styles.secLow;
+    return styles.secNull;
   };
 
   // Systems DataTable Column Definitions
@@ -225,7 +222,7 @@ export default function RouteAdmin() {
       systemColumnHelper.accessor('name', {
         header: t('System'),
         cell: ({ getValue }) => (
-          <span className="font-bold !text-cyan-300">{getValue()}</span>
+          <span className={`fw-bold ${styles.sysName}`}>{getValue()}</span>
         ),
       }),
       systemColumnHelper.accessor('security_status', {
@@ -234,7 +231,7 @@ export default function RouteAdmin() {
           const sys = row.original;
           return (
             <span
-              className={`text-[10px] px-2 py-0.5 rounded border font-mono ${getSecColor(
+              className={`px-2 rounded border ${styles.secBadge} ${getSecColor(
                 sys.security_status
               )}`}
             >
@@ -246,25 +243,25 @@ export default function RouteAdmin() {
       systemColumnHelper.accessor('region_name', {
         header: t('Region'),
         cell: ({ getValue }) => (
-          <span className="!text-slate-400">{getValue() || '—'}</span>
+          <span className={styles.sysRegion}>{getValue() || '—'}</span>
         ),
       }),
       systemColumnHelper.display({
         id: 'actions',
         enableSorting: false,
-        header: () => <div className="text-right">{t('Actions')}</div>,
+        header: () => <div className="text-end">{t('Actions')}</div>,
         cell: ({ row }) => {
           const sys = row.original;
           return (
-            <div className="text-right">
+            <div className="text-end">
               <Button
                 variant="outline-danger"
                 size="sm"
                 onClick={() => setSystemToDelete(sys)}
-                className="px-2 py-1 text-xs rounded !bg-red-950/40 hover:!bg-red-900 border !border-red-500/40 !text-red-300 transition-colors cursor-pointer"
+                className={`px-2 py-1 rounded border ${styles.removeBtn}`}
                 title={t('Remove System')}
               >
-                <Trash2 className="w-3.5 h-3.5" />
+                <Trash2 className={styles.iconXs} />
               </Button>
             </div>
           );
@@ -277,7 +274,7 @@ export default function RouteAdmin() {
   if (isUserLoading) {
     return (
       <main className="mt-4">
-        <div className="p-8 text-center !text-slate-400 font-mono text-sm">
+        <div className={`text-center ${styles.loading}`}>
           {t('Checking authorizations...')}
         </div>
       </main>
@@ -288,14 +285,14 @@ export default function RouteAdmin() {
   if (!userData?.user.has_manage_access) {
     return (
       <main className="mt-4">
-        <div className="max-w-3xl mx-auto my-12 p-6 rounded-xl !bg-red-950/40 border !border-red-500/40 !text-slate-200">
-          <div className="flex items-center gap-3 mb-3 !text-red-400 font-eve font-bold text-xl">
-            <ShieldAlert className="w-6 h-6" />
+        <div className={`mx-auto border ${styles.denied}`}>
+          <div className={`d-flex align-items-center gap-3 mb-3 font-eve fw-bold ${styles.deniedTitle}`}>
+            <ShieldAlert className={styles.iconLg} />
             <span>{t('Access Denied')}</span>
           </div>
-          <p className="text-sm !text-slate-300">
+          <p className={styles.deniedText}>
             {t('You do not have permission to manage routes. Requires permission:')}{' '}
-            <code className="!bg-black/50 px-2 py-0.5 rounded !text-red-300 font-mono text-xs">
+            <code className={`px-2 rounded ${styles.code}`}>
               aafenrir.manage_access
             </code>
           </p>
@@ -305,8 +302,8 @@ export default function RouteAdmin() {
   }
 
   return (
-    <main className="mt-4 min-h-screen !text-slate-200 px-4 sm:px-6 lg:px-8 py-8 font-sans">
-      <div className="max-w-6xl mx-auto">
+    <main className={`mt-4 px-4 ${styles.page}`}>
+      <div className={`mx-auto ${styles.container}`}>
         {/* Top Header */}
         <RouteAdminHeader
           onCreateClick={() => setIsCreateModalOpen(true)}
@@ -315,47 +312,43 @@ export default function RouteAdmin() {
 
         {/* Feedback Notifications */}
         {successMessage && (
-          <div className="my-2 p-4 rounded-lg !bg-emerald-950/50 border !border-emerald-500/40 !text-emerald-300 text-sm flex items-center gap-2">
-            <CheckCircle2 className="w-5 h-5 shrink-0" />
+          <div className={`my-2 p-4 border d-flex align-items-center gap-2 ${styles.alertSuccess}`}>
+            <CheckCircle2 className={`flex-shrink-0 ${styles.iconMd}`} />
             <span>{successMessage}</span>
           </div>
         )}
 
         {errorMessage && (
-          <div className="my-2 p-4 rounded-lg !bg-red-950/50 border !border-red-500/40 !text-red-300 text-sm flex items-center gap-2">
-            <AlertTriangle className="w-5 h-5 shrink-0" />
+          <div className={`my-2 p-4 border d-flex align-items-center gap-2 ${styles.alertError}`}>
+            <AlertTriangle className={`flex-shrink-0 ${styles.iconMd}`} />
             <span>{errorMessage}</span>
           </div>
         )}
 
         {/* View Navigation Tabs */}
-        <div className="flex items-center gap-2 border-b !border-slate-800 pb-2">
+        <div className={`d-flex align-items-center gap-2 pb-2 ${styles.tabBar}`}>
           <Button
             onClick={() => setActiveTab('routes')}
-            className={`px-4 py-2 text-xs font-semibold rounded-lg flex items-center gap-2 transition-all cursor-pointer ${
-              activeTab === 'routes'
-                ? '!bg-cyan-600 !text-white !border-cyan-500 shadow-[0_0_10px_rgba(6,182,212,0.3)]'
-                : '!bg-slate-900 !text-slate-400 hover:!text-white border !border-slate-800'
+            className={`px-4 py-2 d-flex align-items-center gap-2 ${styles.tab} ${
+              activeTab === 'routes' ? styles.tabActive : `border ${styles.tabInactive}`
             }`}
           >
-            <RouteIcon className="w-4 h-4" />
+            <RouteIcon className={styles.iconSm} />
             <span>{t('Route Presets')}</span>
-            <span className="px-1.5 py-0.5 rounded-full text-[10px] bg-black/40 font-mono">
+            <span className={styles.count}>
               {presets.length}
             </span>
           </Button>
 
           <Button
             onClick={() => setActiveTab('systems')}
-            className={`px-4 py-2 text-xs font-semibold rounded-lg flex items-center gap-2 transition-all cursor-pointer ${
-              activeTab === 'systems'
-                ? '!bg-cyan-600 !text-white !border-cyan-500 shadow-[0_0_10px_rgba(6,182,212,0.3)]'
-                : '!bg-slate-900 !text-slate-400 hover:!text-white border !border-slate-800'
+            className={`px-4 py-2 d-flex align-items-center gap-2 ${styles.tab} ${
+              activeTab === 'systems' ? styles.tabActive : `border ${styles.tabInactive}`
             }`}
           >
-            <Compass className="w-4 h-4" />
+            <Compass className={styles.iconSm} />
             <span>{t('Available Systems')}</span>
-            <span className="px-1.5 py-0.5 rounded-full text-[10px] bg-black/40 font-mono">
+            <span className={styles.count}>
               {routeSystems.length}
             </span>
           </Button>
@@ -365,9 +358,9 @@ export default function RouteAdmin() {
         {activeTab === 'routes' && (
           <div>
             {/* Filter and Search Bar */}
-            <div className="!bg-slate-800/80 fenrir-gradient fenrir-border-500 rounded-xl p-4 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className={`fenrir-gradient fenrir-border-500 p-4 shadow-lg gap-4 ${styles.toolbar}`}>
               {/* Service Type Filter Pills */}
-              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
+              <div className={`d-flex align-items-center overflow-x-auto pb-1 ${styles.pills}`}>
                 {[
                   { id: 'all', label: t('All Corridors') },
                   { id: 'jumpfreighter', label: t('Jump Freighter') },
@@ -380,10 +373,10 @@ export default function RouteAdmin() {
                       setRouteServiceFilter(pill.id);
                       setRoutePage(1);
                     }}
-                    className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors cursor-pointer whitespace-nowrap ${
+                    className={`px-3 ${styles.pill} ${
                       routeServiceFilter === pill.id
-                        ? '!bg-cyan-600 !text-white shadow-[0_0_10px_rgba(6,182,212,0.3)]'
-                        : '!bg-slate-900 !text-slate-400 hover:!text-slate-200 border !border-slate-800'
+                        ? styles.pillActive
+                        : `border ${styles.pillInactive}`
                     }`}
                   >
                     {pill.label}
@@ -392,8 +385,8 @@ export default function RouteAdmin() {
               </div>
 
               {/* Search input */}
-              <div className="relative w-full md:w-72">
-                <Search className="w-4 h-4 !text-slate-500 absolute left-3 top-2.5" />
+              <div className={styles.search}>
+                <Search className={styles.searchIcon} />
                 <Form.Control
                   type="text"
                   placeholder={t('Search routes, systems, stations...')}
@@ -402,25 +395,25 @@ export default function RouteAdmin() {
                     setRouteSearch(e.target.value);
                     setRoutePage(1);
                   }}
-                  className="w-full pl-9 pr-3 py-2 text-xs font-mono !bg-slate-900 border !border-slate-700 rounded-lg !text-slate-200 focus:outline-none focus:!border-cyan-500"
+                  className={`w-100 py-2 border ${styles.searchInput}`}
                 />
               </div>
             </div>
 
             {/* Routes Grid */}
             {isPresetsLoading ? (
-              <div className="p-8 text-center !text-slate-400 font-mono text-xs">
+              <div className={`text-center ${styles.loadingSm}`}>
                 {t('Loading routes...')}
               </div>
             ) : filteredRoutes.length === 0 ? (
-              <div className="p-10 rounded-xl !bg-[#111724] border !border-slate-800 text-center !text-slate-400 text-sm">
+              <div className={`border text-center ${styles.empty}`}>
                 {routeSearch || routeServiceFilter !== 'all'
                   ? t('No route presets match your search criteria.')
                   : t('No route presets created yet. Click "Create New Route" above to add one.')}
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className={`gap-4 ${styles.routesGrid}`}>
                   {currentRoutes.map((preset: FreightCorridor) => (
                     <RouteCard
                       key={preset.id}
@@ -434,7 +427,7 @@ export default function RouteAdmin() {
 
                 {/* Pagination Controls */}
                 {totalRoutePages > 1 && (
-                  <div className="flex items-center justify-between pt-2 px-1 text-xs font-mono !text-slate-400">
+                  <div className={`d-flex align-items-center justify-content-between pt-2 px-1 ${styles.pager}`}>
                     <div>
                       {t('Showing {{start}}-{{end}} of {{total}} routes', {
                         start: (routePage - 1) * routesPerPage + 1,
@@ -443,15 +436,15 @@ export default function RouteAdmin() {
                       })}
                     </div>
 
-                    <div className="flex items-center gap-2">
+                    <div className="d-flex align-items-center gap-2">
                       <Button
                         disabled={routePage <= 1}
                         onClick={() => setRoutePage((p) => Math.max(1, p - 1))}
-                        className="px-2.5 py-1 text-xs rounded !bg-slate-900 border !border-slate-800 hover:!bg-slate-800 !text-slate-300 disabled:opacity-40"
+                        className={`py-1 rounded border ${styles.pagerBtn}`}
                       >
-                        <ChevronLeft className="w-3.5 h-3.5" />
+                        <ChevronLeft className={styles.iconXs} />
                       </Button>
-                      <span className="px-2 font-semibold">
+                      <span className="px-2 fw-semibold">
                         {t('Page {{page}} of {{total}}', {
                           page: routePage,
                           total: totalRoutePages,
@@ -460,9 +453,9 @@ export default function RouteAdmin() {
                       <Button
                         disabled={routePage >= totalRoutePages}
                         onClick={() => setRoutePage((p) => Math.min(totalRoutePages, p + 1))}
-                        className="px-2.5 py-1 text-xs rounded !bg-slate-900 border !border-slate-800 hover:!bg-slate-800 !text-slate-300 disabled:opacity-40"
+                        className={`py-1 rounded border ${styles.pagerBtn}`}
                       >
-                        <ChevronRight className="w-3.5 h-3.5" />
+                        <ChevronRight className={styles.iconXs} />
                       </Button>
                     </div>
                   </div>
@@ -476,9 +469,9 @@ export default function RouteAdmin() {
         {activeTab === 'systems' && (
           <div>
             {/* Search & Add Action Bar */}
-            <div className="!bg-slate-800/80 fenrir-gradient fenrir-border-500 rounded-xl p-4 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div className="relative w-full md:w-80">
-                <Search className="w-4 h-4 !text-slate-500 absolute left-3 top-2.5" />
+            <div className={`fenrir-gradient fenrir-border-500 p-4 shadow-lg gap-4 ${styles.toolbar}`}>
+              <div className={`${styles.search} ${styles.searchWide}`}>
+                <Search className={styles.searchIcon} />
                 <Form.Control
                   type="text"
                   placeholder={t('Search systems by name, region...')}
@@ -486,26 +479,26 @@ export default function RouteAdmin() {
                   onChange={(e) => {
                     setSystemSearch(e.target.value);
                   }}
-                  className="w-full pl-9 pr-3 py-2 text-xs font-mono !bg-slate-900 border !border-slate-700 rounded-lg !text-slate-200 focus:outline-none focus:!border-cyan-500"
+                  className={`w-100 py-2 border ${styles.searchInput}`}
                 />
               </div>
 
               <Button
                 onClick={() => setIsAddSystemModalOpen(true)}
-                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg !bg-cyan-600 hover:!bg-cyan-500 !text-white text-xs font-semibold shrink-0 cursor-pointer transition-colors shadow"
+                className={`d-flex align-items-center flex-shrink-0 shadow ${styles.addBtn}`}
               >
-                <Compass className="w-4 h-4" />
+                <Compass className={styles.iconSm} />
                 <span>+ {t('Add System')}</span>
               </Button>
             </div>
 
             {/* Systems DataTable */}
             {isSystemsLoading ? (
-              <div className="p-8 text-center !text-slate-400 font-mono text-xs">
+              <div className={`text-center ${styles.loadingSm}`}>
                 {t('Loading available systems...')}
               </div>
             ) : filteredSystems.length === 0 ? (
-              <div className="p-10 rounded-xl !bg-[#111724] border !border-slate-800 text-center !text-slate-400 text-sm">
+              <div className={`border text-center ${styles.empty}`}>
                 {systemSearch
                   ? t('No solar systems match your search.')
                   : t('No route systems configured yet. Click "+ Add System" to add one.')}

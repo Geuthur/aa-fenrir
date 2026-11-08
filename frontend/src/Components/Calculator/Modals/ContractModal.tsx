@@ -2,11 +2,11 @@
 import { useState } from 'react';
 
 // Third Party
+import { BaseModal } from "aa-geuthur-react";
 import { Info, Shield } from 'lucide-react';
 import { Alert } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { BaseModal } from '@/Components/Base/BaseModal';
 import { ModalTitle } from '@/Components/Base/ModalTitle';
 import { formatIsk } from '@/Components/Calculator/calculator';
 import { ContractParamCard } from '@/Components/Calculator/Modals/ContractParamCard';

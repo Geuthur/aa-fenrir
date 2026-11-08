@@ -1,0 +1,58 @@
+.container {
+  background-color: color-mix(in oklab, oklch(20.8% 0.042 265.755) 80%, transparent) !important;
+  border-radius: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.pills {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  overflow-x: auto;
+}
+
+.filterIcon {
+  width: 1rem;
+  height: 1rem;
+  color: oklch(70.4% 0.04 256.788) !important;
+  margin-right: 0.25rem;
+  flex-shrink: 0;
+}
+
+.pill {
+  padding-block: 0.375rem;
+  font-size: 0.75rem;
+  line-height: 1.33333;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.pillActive {
+  background-color: oklch(60.9% 0.126 221.723) !important;
+  color: #fff !important;
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
+}
+
+.pillInactive {
+  background-color: oklch(20.8% 0.042 265.755) !important;
+  color: oklch(70.4% 0.04 256.788) !important;
+  border-color: oklch(27.9% 0.041 260.031) !important;
+}
+
+.pillInactive:hover {
+  color: oklch(92.9% 0.013 255.508) !important;
+}
+
+@media (min-width: 48rem) {
+  .container {
+    flex-direction: row;
+    align-items: center;
+  }
+}

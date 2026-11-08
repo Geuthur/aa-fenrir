@@ -3,16 +3,17 @@ import { useState } from "react";
 
 // Third Party
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useUserData } from "aa-geuthur-react";
 
 import {
   deleteAdministrationHandler,
   loadAdministrationHandler,
   loadAdministrationHandlers,
-  loadUserData,
   updateAdministrationAll,
   updateAdministrationHandler,
 } from "@/Api/ApiCalls";
 import { queryKeys } from "@/Api/query";
+import type { UserData } from "@/Api/schema";
 
 export interface TaskFeedback {
   variant: "success" | "danger";
@@ -21,15 +22,11 @@ export interface TaskFeedback {
 
 /** Loads the permissions of the current user (admin access, superuser). */
 export function useAdministrationAccess() {
-  const { data, isLoading } = useQuery({
-    queryKey: queryKeys.User,
-    queryFn: loadUserData,
-    refetchOnWindowFocus: false,
-  });
+  const { data, isLoading } = useUserData<UserData>();
   return {
     isLoading,
     hasAdminAccess: data?.user.has_admin_access ?? false,
-    isSuperuser: data?.user.is_superuser ?? false,
+    isSuperuser: data?.user.is_admin ?? false,
   };
 }
 

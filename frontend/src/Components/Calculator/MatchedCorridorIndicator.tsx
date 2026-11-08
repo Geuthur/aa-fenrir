@@ -49,25 +49,25 @@ export function MatchedCorridorIndicator({
           <div className={styles.titleGroup}>
             <CheckCircle2 className={styles.iconActive} />
             <div>
-              <div className="flex flex-wrap items-center gap-2">
+              <div className={`gap-2 ${styles.badgeRow}`}>
                 <span className={styles.titleText}>{selectedCorridor.name}</span>
                 <span className={styles.badgeActive}>
                   {t('Corridor Tariffs Applied')}
                 </span>
                 <ServiceBadge serviceType={selectedCorridor.service_type} />
               </div>
-              <p className="text-[11px] !text-slate-400 font-mono m-0 mt-0.5">
+              <p className={styles.hintText}>
                 {t('Rates automatically adopted from alliance route preset.')}
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className={`gap-2 ${styles.actionGroup}`}>
             <Button
               variant="outline-secondary"
               size="sm"
               onClick={onUseBaseRates}
-              className={`${styles.toggleBtn} !bg-slate-900/80 hover:!bg-slate-800 !text-slate-300 border-slate-700`}
+              className={`${styles.toggleBtn} ${styles.toggleBtnTheme}`}
             >
               {t('Use Base Rates')}
             </Button>
@@ -81,11 +81,11 @@ export function MatchedCorridorIndicator({
           </div>
           <div className={styles.rateItem}>
             <span className={styles.rateLabel}>{t('Volume Rate')}</span>
-            <span className="!text-cyan-300 font-semibold">{selectedCorridor.fee_per_m3} ISK/m³</span>
+            <span className={styles.feeValue}>{selectedCorridor.fee_per_m3} ISK/m³</span>
           </div>
           <div className={styles.rateItem}>
             <span className={styles.rateLabel}>{t('Insurance')}</span>
-            <span className="!text-amber-300 font-semibold">
+            <span className={styles.amberValue}>
               {(selectedCorridor.collateral_percent * 100).toFixed(2)}%
             </span>
           </div>
@@ -110,13 +110,13 @@ export function MatchedCorridorIndicator({
           <div className={styles.titleGroup}>
             <Sparkles className={styles.iconAvailable} />
             <div>
-              <div className="flex flex-wrap items-center gap-2">
+              <div className={`gap-2 ${styles.badgeRow}`}>
                 <span className={styles.titleText}>{matchingCorridor.name}</span>
                 <span className={styles.badgeAvailable}>
                   {t('Preset Available')}
                 </span>
               </div>
-              <p className="text-[11px] !text-slate-400 font-mono m-0 mt-0.5">
+              <p className={styles.hintText}>
                 {t('Currently using standard base rates. You can apply the configured route preset tariffs.')}
               </p>
             </div>
@@ -133,13 +133,13 @@ export function MatchedCorridorIndicator({
         <div className={styles.titleGroup}>
           <Compass className={styles.iconStandard} />
           <div>
-            <div className="flex flex-wrap items-center gap-2">
+            <div className={`gap-2 ${styles.badgeRow}`}>
               <span className={styles.titleText}>{t('Standard Base Tariffs')}</span>
               <span className={styles.badgeStandard}>
                 {t('Custom Route')}
               </span>
             </div>
-            <p className="text-[11px] !text-slate-400 font-mono m-0 mt-0.5">
+            <p className={styles.hintText}>
               {t('No predefined corridor found for {{origin}} ➔ {{destination}}. Standard base rates are applied.', {
                 origin: origin.name || t('Origin'),
                 destination: destination.name || t('Destination'),

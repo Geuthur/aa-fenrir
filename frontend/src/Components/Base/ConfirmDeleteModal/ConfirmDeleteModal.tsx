@@ -2,11 +2,11 @@
 import type { ReactNode } from 'react';
 
 // Third Party
+import { BaseModal } from "aa-geuthur-react";
 import { AlertTriangle } from 'lucide-react';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { BaseModal } from '@/Components/Base/BaseModal';
 import { ModalTitle } from '@/Components/Base/ModalTitle';
 
 export interface ConfirmDeleteModalProps {

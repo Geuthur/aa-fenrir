@@ -1,17 +1,24 @@
 // Third Party
-import tailwindcss from "@tailwindcss/vite"
 import react from "@vitejs/plugin-react-swc"
 import path from 'path'
 import { fileURLToPath } from 'url'
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vitest/config'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  test: {
+    environment: 'jsdom',
+    setupFiles: ['./src/setupTests.ts'],
+    server: {
+      deps: {
+        inline: ['aa-geuthur-react'],
+      },
+    },
+  },
   plugins: [
     react(),
-    tailwindcss(),
   ],
   server: {
     port: 3002,
@@ -38,15 +45,6 @@ export default defineConfig({
     sourcemap: true,
     manifest: true,
     rollupOptions: {
-      onwarn(warning, warn) {
-        if (
-          warning.code === 'SOURCEMAP_BROKEN' &&
-          warning.plugin?.includes('@tailwindcss/vite')
-        ) {
-          return;
-        }
-        warn(warning);
-      },
       output: {
         entryFileNames: "react/js/[name]-[hash].js",
         chunkFileNames: "react/js/[name]-[hash].js",

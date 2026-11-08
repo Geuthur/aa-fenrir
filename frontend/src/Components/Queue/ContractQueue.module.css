@@ -1,0 +1,192 @@
+.contractId {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-weight: 700;
+  color: oklch(86.5% 0.127 207.078) !important;
+}
+
+.contractTitle {
+  font-size: 11px;
+  color: oklch(86.9% 0.022 252.894) !important;
+  font-weight: 400;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 20rem;
+}
+
+.contractDate {
+  font-size: 10px;
+  color: oklch(55.4% 0.046 257.417) !important;
+  font-weight: 400;
+}
+
+.issuerName {
+  color: #fff !important;
+  font-weight: 600;
+}
+
+.issuerCorp {
+  font-size: 10px;
+  color: oklch(70.4% 0.04 256.788) !important;
+}
+
+.routeMain {
+  color: oklch(92.9% 0.013 255.508) !important;
+  font-weight: 500;
+}
+
+.routeSub {
+  font-size: 10px;
+  color: oklch(55.4% 0.046 257.417) !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 20rem;
+}
+
+.volume {
+  color: oklch(86.9% 0.022 252.894) !important;
+}
+
+.collateral {
+  color: oklch(87.9% 0.169 91.605) !important;
+}
+
+.reward {
+  font-weight: 700;
+  color: oklch(86.5% 0.127 207.078) !important;
+}
+
+.statusBadge {
+  padding-block: 0.125rem;
+  border-radius: 9999px;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  width: max-content;
+}
+
+.statusIcon {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.statusIconPulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.statusPending {
+  background-color: color-mix(in oklab, oklch(76.9% 0.188 70.08) 15%, transparent) !important;
+  color: oklch(87.9% 0.169 91.605) !important;
+  border-color: color-mix(in oklab, oklch(76.9% 0.188 70.08) 30%, transparent) !important;
+}
+
+.statusProgress {
+  background-color: color-mix(in oklab, oklch(62.7% 0.265 303.9) 15%, transparent) !important;
+  color: oklch(82.7% 0.119 306.383) !important;
+  border-color: color-mix(in oklab, oklch(62.7% 0.265 303.9) 30%, transparent) !important;
+}
+
+.statusFinished {
+  background-color: color-mix(in oklab, oklch(69.6% 0.17 162.48) 15%, transparent) !important;
+  color: oklch(84.5% 0.143 164.978) !important;
+  border-color: color-mix(in oklab, oklch(69.6% 0.17 162.48) 30%, transparent) !important;
+}
+
+.statusFailed {
+  background-color: color-mix(in oklab, oklch(64.5% 0.246 16.439) 15%, transparent) !important;
+  color: oklch(81% 0.117 11.638) !important;
+  border-color: color-mix(in oklab, oklch(64.5% 0.246 16.439) 30%, transparent) !important;
+}
+
+.statusOther {
+  background-color: color-mix(in oklab, oklch(55.4% 0.046 257.417) 15%, transparent) !important;
+  color: oklch(86.9% 0.022 252.894) !important;
+  border-color: color-mix(in oklab, oklch(55.4% 0.046 257.417) 30%, transparent) !important;
+}
+
+.toolbar {
+  background-color: color-mix(in oklab, oklch(27.9% 0.041 260.031) 80%, transparent) !important;
+  border-radius: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.toolbarActions {
+  display: flex;
+  align-items: center;
+}
+
+.searchWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.searchIcon {
+  width: 1rem;
+  height: 1rem;
+  color: oklch(55.4% 0.046 257.417) !important;
+  position: absolute;
+  left: 0.75rem;
+  top: 0.625rem;
+}
+
+.searchInput {
+  width: 100%;
+  padding-left: 2.25rem;
+  padding-right: 0.75rem;
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
+  font-size: 0.75rem;
+  line-height: 1.33333;
+  font-family: var(--font-mono);
+  background-color: oklch(20.8% 0.042 265.755) !important;
+  border-color: oklch(37.2% 0.044 257.287) !important;
+  border-radius: 0.5rem;
+  color: oklch(92.9% 0.013 255.508) !important;
+}
+
+.searchInput:focus {
+  outline-style: none;
+  border-color: oklch(71.5% 0.143 215.221) !important;
+}
+
+.newQuoteButton {
+  padding-inline: 0.875rem;
+  padding-block: 0.375rem;
+  border-radius: 0.5rem;
+  background-color: oklch(60.9% 0.126 221.723) !important;
+  color: #fff !important;
+  font-size: 0.75rem;
+  line-height: 1.33333;
+  font-weight: 600;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.newQuoteButton:hover {
+  background-color: oklch(71.5% 0.143 215.221) !important;
+}
+
+@media (min-width: 48rem) {
+  .toolbar {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .searchWrapper {
+    width: 16rem;
+  }
+}

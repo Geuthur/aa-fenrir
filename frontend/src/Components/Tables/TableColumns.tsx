@@ -1,9 +1,7 @@
 // Third Party
+import { type BaseColumnDef, createBaseColumnHelper, formatNumber } from "aa-geuthur-react";
 import type { TFunction } from "i18next";
 
-import { createBaseColumnHelper } from "@/Components/Base/BaseTable/tableFeatures";
-import type { BaseColumnDef } from "@/Components/Base/BaseTable/tableFeatures";
-import { formatNumber } from "@/Utils/format";
 
 type ExampleRow = {
     name: string;
