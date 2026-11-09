@@ -3,6 +3,7 @@
 # Standard Library
 from datetime import datetime, timezone
 from http import HTTPStatus
+from unittest import skipUnless
 from unittest.mock import patch
 
 # Third Party
@@ -15,14 +16,20 @@ from django.test.utils import CaptureQueriesContext
 from django.urls import reverse
 
 # AA Fenrir
+from aafenrir.helpers.cyno_coverage import corptools_installed
 from aafenrir.tests import AuthTestCase
-from aafenrir.tests.testdata.corptools import create_character_location
 from aafenrir.tests.testdata.factory import UserMainFactory
 from aafenrir.tests.testdata.fenrir import RoutePresetFactory
+
+# corptools is optional and not available for every Alliance Auth version
+if corptools_installed():
+    # AA Fenrir
+    from aafenrir.tests.testdata.corptools import create_character_location
 
 COVERAGE_PATH = "aafenrir.helpers.cyno_coverage"
 
 
+@skipUnless(corptools_installed(), "corptools is not installed")
 class TestRoutePresetCoverageApi(AuthTestCase):
     @classmethod
     def setUpClass(cls):

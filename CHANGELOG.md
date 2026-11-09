@@ -57,6 +57,7 @@ Section Order:
 - **Add Company**: The menu entry now adds or updates the contract handler in AA Fenrir itself, using the corporation of the selected ESI token character, and queues its contract update. NPC corporations are rejected. It requires `manage_access` or `full_access` and no longer depends on `aa-voicesofwar`.
 - **Internationalization (i18n)**:
   - Added full German (`de/translation.json`) and English (`en/translation.json`) translations for new table pagination items, warnings, and cyno waypoint controls.
+- Optional extra `tests-allianceauth-development` (test packages plus the Alliance Auth 6 pre-release) for the tox environment `allianceauth-development` and `make tox-tests-development`; a non-blocking CI job "AA Development" runs it on Python 3.13 and 3.14. It runs without `allianceauth-corptools` (no release for Alliance Auth 6 yet), so the cyno coverage tests are skipped there
 
 ### Fixed
 
