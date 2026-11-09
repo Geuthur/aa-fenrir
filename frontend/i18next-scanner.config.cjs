@@ -22,6 +22,9 @@ module.exports = {
     defaultNs: "translation",
     // Only the English template is maintained here. Other languages are translated on
     // Weblate and hold only real translations, missing keys fall back to English.
+    defaultValue: function (lng, ns, key) {
+      return key;
+    },
     resource: {
       loadPath: "i18n/{{lng}}/{{ns}}.json",
       savePath: "i18n/{{lng}}/{{ns}}.json",
