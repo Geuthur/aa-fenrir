@@ -57,7 +57,7 @@ if os.environ.get("USE_MYSQL", True) is True:
 # Add any additional apps to this list.
 INSTALLED_APPS += [
     "eve_sde",
-    "corptools",
+    # corptools has no release for Alliance Auth 6 yet
     PACKAGE,
 ]
 # By default, apps are prevented from having public views for security reasons.
