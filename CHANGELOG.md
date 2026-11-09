@@ -60,6 +60,7 @@ Section Order:
 
 ### Fixed
 
+- **Translation Scanner**: `make react-translations` writes new keys in `en` with the key as value again (`defaultValue` was lost in a config cleanup), instead of an empty string.
 - **Contract Sync**: A contract accepted by a corporation no longer aborts the sync of its contract handler. `EveEntity` now uses `eve_id` in `__repr__` and `icon_url` too.
 - **Customer Notifications**: The title is now plain text instead of a Python tuple.
 - **Contract Notifications**: Notifications for new pending contracts no longer fail because of a missing URL, which also stopped the customer notifications. The link now opens the *Contracts Queue*.
