@@ -19,6 +19,7 @@ from django.utils import timezone
 from esi.exceptions import (
     ESIBucketLimitException,
     ESIErrorLimitException,
+    HTTPClientError,
     HTTPServerError,
 )
 
@@ -248,6 +249,52 @@ class TestUpdateFreightContractEsiErrors(AuthTestCase):
         self.assertEqual(location.name, f"Unknown structure {STRUCTURE_ID}")
         self.assertEqual(location.category_id, Category.STRUCTURE_ID)
         self.assertTrue(Contract.objects.filter(contract_id=1).exists())
+
+    @pook.on
+    def test_should_not_store_an_unknown_structure_on_rate_limit(self, mock_retry):
+        # Test Data
+        pook.get(
+            self._contracts_url(),
+            reply=200,
+            response_json=[self._esi_contract(STRUCTURE_ID)],
+        )
+        pook.get(
+            f"{ESI_URL}/universe/structures/{STRUCTURE_ID}",
+            reply=HTTPStatus.TOO_MANY_REQUESTS,
+            response_json={"error": "Too Many Requests"},
+        )
+
+        # Test Action
+        with self.assertRaises(HTTPClientError):
+            tasks.update_freight_contract(self.corporation_id)
+
+        # Expected Result
+        mock_retry.assert_not_called()
+        self.assertFalse(Location.objects.filter(id=STRUCTURE_ID).exists())
+        self.assertFalse(Contract.objects.filter(contract_id=1).exists())
+
+    @pook.on
+    def test_should_not_store_an_unknown_structure_on_server_error(self, mock_retry):
+        # Test Data
+        pook.get(
+            self._contracts_url(),
+            reply=200,
+            response_json=[self._esi_contract(STRUCTURE_ID)],
+        )
+        pook.get(
+            f"{ESI_URL}/universe/structures/{STRUCTURE_ID}",
+            reply=HTTPStatus.INTERNAL_SERVER_ERROR,
+            response_json={"error": "Internal Server Error"},
+        )
+
+        # Test Action
+        with self.assertRaises(HTTPServerError):
+            tasks.update_freight_contract(self.corporation_id)
+
+        # Expected Result
+        mock_retry.assert_not_called()
+        self.assertFalse(Location.objects.filter(id=STRUCTURE_ID).exists())
+        self.assertFalse(Contract.objects.filter(contract_id=1).exists())
 
     @patch(TASK_PATH + ".retry_task_on_esi_error")
     @patch(TASK_PATH + ".ContractHandler.objects.update_corporation_contract")

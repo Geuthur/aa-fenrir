@@ -2,6 +2,7 @@
 import hashlib
 import json
 from datetime import datetime
+from http import HTTPStatus
 from time import sleep
 from typing import TYPE_CHECKING, Any, Generic, TypeVar
 
@@ -208,6 +209,12 @@ class EveEntityManager(models.Manager):
 class LocationManager(models.Manager["LocationContext"]):
     STATION_ID_START = 60000000
     STATION_ID_END = 69999999
+    # Only these errors mean the token has no access to the structure
+    NO_ACCESS_STATUS_CODES = (
+        HTTPStatus.UNAUTHORIZED,
+        HTTPStatus.FORBIDDEN,
+        HTTPStatus.NOT_FOUND,
+    )
 
     def get_or_create_esi(
         self, token: Token, location_id: int, add_unknown: bool = True
@@ -261,6 +268,13 @@ class LocationManager(models.Manager["LocationContext"]):
                 use_etag=False,
             )
         except HTTPClientError as ex:
+            if ex.status_code not in self.NO_ACCESS_STATUS_CODES:
+                # Temporary errors like 429 must not be stored as unknown,
+                # because existing locations are never fetched again
+                logger.error(
+                    "%s: Failed to fetch structure from ESI: %s", location_id, ex
+                )
+                raise
             logger.warning("%s: No access to this structure: %s", location_id, ex)
             if add_unknown:
                 return self.get_or_create(
@@ -270,22 +284,15 @@ class LocationManager(models.Manager["LocationContext"]):
                         "category_id": Category.STRUCTURE_ID,
                     },
                 )
-            raise ex
+            raise
         except Exception as ex:
-            if is_retryable_esi_error(ex):
-                # ESI is down or limited, the task retries instead of
-                # storing the structure as unknown
-                raise
-            logger.error("%s: Failed to fetch structure from ESI: %s", location_id, ex)
-            if add_unknown:
-                return self.get_or_create(
-                    id=location_id,
-                    defaults={
-                        "name": f"Unknown structure {location_id}",
-                        "category_id": Category.STRUCTURE_ID,
-                    },
+            if not is_retryable_esi_error(ex):
+                logger.error(
+                    "%s: Failed to fetch structure from ESI: %s", location_id, ex
                 )
-            raise ex
+            # Retryable errors are retried by the task, all others are
+            # passed on instead of storing the structure as unknown
+            raise
 
         return self.update_or_create(
             id=location_id,
