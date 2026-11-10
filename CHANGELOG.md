@@ -89,6 +89,7 @@ Section Order:
 
 ### Changed
 
+- **AppLogger**: The `AppLogger` is created only once in `aafenrir/providers.py`. `managers.py`, `models/fenrir.py`, `tasks.py` and `thirdparty/discord.py` import it with `from aafenrir.providers import logger` instead of building their own. `views.py` never used its logger, so it no longer creates one. Log records now carry the logger name `aafenrir.providers` instead of the module name; the `[Fenrir]` prefix is unchanged.
 - **Translation Files**: The language files hold only real translations as Weblate writes them, missing keys fall back to English. The scanner maintains only `en`; empty placeholders were removed from the other languages.
 - **Bundled Package Translations**: `aa-geuthur-react` raised to `^1.3.0`. The package bundles its own translations and registers them with i18next through `AaReactProvider`, so `Main.tsx` lists only the namespace `translation`, the copies under `aafenrir/static/aafenrir/i18n/<lng>/aa-geuthur-react.json` are removed and `make react-copy-translations` no longer copies them. Untranslated strings in `frontend/i18n/<lng>/translation.json` are empty instead of English (`i18next-scanner` writes the key as value only for `en`); `returnEmptyString: false` shows the English fallback at runtime. Translate on Weblate as before.
 - **App Container Width**: The app container (`.aa-react.container`) now has a minimum width of 640px, like the other AA apps. Its maximum width of 1280px is unchanged.

@@ -4,15 +4,12 @@
 from celery import chain, shared_task
 
 # Alliance Auth
-from allianceauth.services.hooks import get_extension_logger
 from allianceauth.services.tasks import QueueOnce
 
 # AA Fenrir
-from aafenrir import __title__, app_settings
+from aafenrir import app_settings
 from aafenrir.models import Contract, ContractHandler
-from aafenrir.providers import AppLogger
-
-logger = AppLogger(get_extension_logger(__name__), __title__)
+from aafenrir.providers import logger
 
 MAX_RETRIES_DEFAULT = 3
 

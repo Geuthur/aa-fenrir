@@ -13,17 +13,13 @@ from django.utils.translation import gettext_lazy as _
 # Alliance Auth
 from allianceauth.authentication.models import User
 from allianceauth.eveonline.models import EveCharacter, EveCorporationInfo
-from allianceauth.services.hooks import get_extension_logger
 from esi.exceptions import HTTPClientError, HTTPNotModified
 from esi.models import Token
 
 # AA Fenrir
-from aafenrir import __title__
 from aafenrir.helpers.choice import Category, Status
 from aafenrir.models.general import General
-from aafenrir.providers import AppLogger, esi
-
-logger = AppLogger(get_extension_logger(__name__), __title__)
+from aafenrir.providers import esi, logger
 
 T = TypeVar("T", bound=models.Model)
 

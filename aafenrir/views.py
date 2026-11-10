@@ -9,17 +9,13 @@ from django.utils.translation import gettext_lazy as _
 
 # Alliance Auth
 from allianceauth.authentication.models import CharacterOwnership
-from allianceauth.services.hooks import get_extension_logger
 from esi.decorators import token_required
 
 # AA Fenrir
-from aafenrir import __app_name__, __title__, __version__
+from aafenrir import __app_name__, __version__
 from aafenrir.constants import MIN_PLAYER_CORPORATION_ID
 from aafenrir.models import ContractHandler, EveEntity, General
-from aafenrir.providers import AppLogger
 from aafenrir.tasks import update_freight
-
-logger = AppLogger(get_extension_logger(__name__), __title__)
 
 
 @login_required
