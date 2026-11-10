@@ -19,7 +19,7 @@ from esi.models import Token
 # AA Fenrir
 from aafenrir.helpers.choice import Category, Status
 from aafenrir.models.general import General
-from aafenrir.providers import esi, logger
+from aafenrir.providers import esi, is_retryable_esi_error, logger
 
 T = TypeVar("T", bound=models.Model)
 
@@ -272,6 +272,10 @@ class LocationManager(models.Manager["LocationContext"]):
                 )
             raise ex
         except Exception as ex:
+            if is_retryable_esi_error(ex):
+                # ESI is down or limited, the task retries instead of
+                # storing the structure as unknown
+                raise
             logger.error("%s: Failed to fetch structure from ESI: %s", location_id, ex)
             if add_unknown:
                 return self.get_or_create(
