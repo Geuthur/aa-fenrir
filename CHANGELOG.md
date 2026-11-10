@@ -60,6 +60,7 @@ Section Order:
 
 ### Fixed
 
+- **ESI Retry**: The contract update task now retries itself when ESI is down or limited (HTTP 502, 503, 504, error limit, rate limit bucket, network errors and the daily downtime from 11:00 to 11:15 UTC), instead of failing. A structure that ESI cannot return because of such an error is no longer stored as *Unknown structure*; the task retries instead. The daily downtime check honors `DISABLE_DAILY_DOWNTIME_CHECK`.
 - **User Settings**: Each user now has exactly one settings row (`UserSettings.user` is a `OneToOneField` instead of a nullable `ForeignKey`). Before, duplicate rows made loading or saving the settings fail with `MultipleObjectsReturned`. The migration keeps the newest row per user and removes rows without a user.
 - **Translation Scanner**: `make react-translations` writes new keys in `en` with the key as value again (`defaultValue` was lost in a config cleanup), instead of an empty string.
 - **Contract Sync**: A contract accepted by a corporation no longer aborts the sync of its contract handler. `EveEntity` now uses `eve_id` in `__repr__` and `icon_url` too.
