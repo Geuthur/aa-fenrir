@@ -10,14 +10,11 @@ from django.utils import timezone
 # Alliance Auth
 from allianceauth.authentication.models import User
 from allianceauth.notifications import notify
-from allianceauth.services.hooks import get_extension_logger
 
 # AA Fenrir
 from aafenrir import __title__
 from aafenrir.constants import DISCORD_EMBED_COLOR_MAP
-from aafenrir.providers import AppLogger
-
-logger = AppLogger(my_logger=get_extension_logger(__name__), prefix=__title__)
+from aafenrir.providers import logger
 
 
 def allianceauth_discordbot_installed() -> bool:

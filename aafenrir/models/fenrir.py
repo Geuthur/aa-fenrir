@@ -20,12 +20,10 @@ from allianceauth.eveonline.models import (
     EveCharacter,
     EveCorporationInfo,
 )
-from allianceauth.services.hooks import get_extension_logger
 from esi.errors import TokenError
 from esi.models import Token
 
 # AA Fenrir
-from aafenrir import __title__
 from aafenrir.helpers.choice import Category, EveType, Status
 from aafenrir.managers import (
     ContractHandlerManager,
@@ -34,10 +32,8 @@ from aafenrir.managers import (
     LocationManager,
 )
 from aafenrir.models.general import General
-from aafenrir.providers import AppLogger
+from aafenrir.providers import logger
 from aafenrir.thirdparty.discord import send_user_notification
-
-logger = AppLogger(get_extension_logger(__name__), __title__)
 
 DATETIME_FORMAT = "%Y-%m-%d %H:%M"
 
