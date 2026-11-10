@@ -60,6 +60,7 @@ Section Order:
 
 ### Fixed
 
+- **User Settings**: Each user now has exactly one settings row (`UserSettings.user` is a `OneToOneField` instead of a nullable `ForeignKey`). Before, duplicate rows made loading or saving the settings fail with `MultipleObjectsReturned`. The migration keeps the newest row per user and removes rows without a user.
 - **Translation Scanner**: `make react-translations` writes new keys in `en` with the key as value again (`defaultValue` was lost in a config cleanup), instead of an empty string.
 - **Contract Sync**: A contract accepted by a corporation no longer aborts the sync of its contract handler. `EveEntity` now uses `eve_id` in `__repr__` and `icon_url` too.
 - **Customer Notifications**: The title is now plain text instead of a Python tuple.
