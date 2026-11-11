@@ -1,18 +1,15 @@
 """App Tasks"""
 
 # Third Party
-from celery import chain, shared_task
+from celery import Task, chain, shared_task
 
 # Alliance Auth
-from allianceauth.services.hooks import get_extension_logger
 from allianceauth.services.tasks import QueueOnce
 
 # AA Fenrir
-from aafenrir import __title__, app_settings
+from aafenrir import app_settings
 from aafenrir.models import Contract, ContractHandler
-from aafenrir.providers import AppLogger
-
-logger = AppLogger(get_extension_logger(__name__), __title__)
+from aafenrir.providers import logger, retry_task_on_esi_error
 
 MAX_RETRIES_DEFAULT = 3
 
@@ -30,7 +27,7 @@ TASK_DEFAULTS_BIND_ONCE = {**TASK_DEFAULTS, **{"bind": True, "base": QueueOnce}}
 TASK_DEFAULTS_ONCE = {**TASK_DEFAULTS, **{"base": QueueOnce}}
 
 _update_fenrir_params = {
-    **TASK_DEFAULTS_ONCE,
+    **TASK_DEFAULTS_BIND_ONCE,
     **{"once": {"keys": ["corporation_id", "force_refresh"], "graceful": True}},
 }
 
@@ -73,15 +70,21 @@ def update_freight(corporation_id, force_refresh=False):
 
 
 @shared_task(**_update_fenrir_params)
-def update_freight_contract(corporation_id, force_refresh=False):
+def update_freight_contract(self: Task, corporation_id, force_refresh=False):
+    """
+    Update the courier contracts of a corporation from ESI.
+
+    ESI outages and limits retry the task through `retry_task_on_esi_error`.
+    """
     logger.debug(
         "Updating Freight Contracts for Corporation ID: %s, Force Refresh: %s",
         corporation_id,
         force_refresh,
     )
-    ContractHandler.objects.update_corporation_contract(
-        corporation_id, force_refresh=force_refresh
-    )
+    with retry_task_on_esi_error(self):
+        ContractHandler.objects.update_corporation_contract(
+            corporation_id, force_refresh=force_refresh
+        )
 
 
 @shared_task(**TASK_DEFAULTS_ONCE)

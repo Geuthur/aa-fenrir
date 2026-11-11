@@ -61,6 +61,10 @@ Section Order:
 
 ### Fixed
 
+- **ESI Retry**: The contract update task now retries itself when ESI is down or limited (HTTP 502, 503, 504, error limit, rate limit bucket, network errors and the daily downtime from 11:00 to 11:15 UTC), instead of failing. A structure that ESI cannot return because of such an error is no longer stored as *Unknown structure*; the task retries instead. The daily downtime check honors `DISABLE_DAILY_DOWNTIME_CHECK`.
+- **Test Cache**: Tests no longer share the Redis cache with other processes. `testauth/settings/local.py` and `testauth/settings/development/local.py` give each test run its own random cache `KEY_PREFIX`. Before, ESI responses cached by a running testauth instance on the same Redis were returned instead of the pook responses. Redis stays the cache backend because Alliance Auth needs `django_redis`.
+- **Unknown Structures**: A structure is only stored as *Unknown structure* when ESI denies access to it (HTTP 401, 403 or 404). Other errors, for example HTTP 429 or 500, are passed on instead, so the structure is fetched again on the next contract update and no longer stays *Unknown* for good.
+- **User Settings**: Each user now has exactly one settings row (`UserSettings.user` is a `OneToOneField` instead of a nullable `ForeignKey`). Before, duplicate rows made loading or saving the settings fail with `MultipleObjectsReturned`. The migration keeps the newest row per user and removes rows without a user.
 - **Translation Scanner**: `make react-translations` writes new keys in `en` with the key as value again (`defaultValue` was lost in a config cleanup), instead of an empty string.
 - **Contract Sync**: A contract accepted by a corporation no longer aborts the sync of its contract handler. `EveEntity` now uses `eve_id` in `__repr__` and `icon_url` too.
 - **Customer Notifications**: The title is now plain text instead of a Python tuple.
@@ -89,6 +93,7 @@ Section Order:
 
 ### Changed
 
+- **AppLogger**: The `AppLogger` is created only once in `aafenrir/providers.py`. `managers.py`, `models/fenrir.py`, `tasks.py` and `thirdparty/discord.py` import it with `from aafenrir.providers import logger` instead of building their own. `views.py` never used its logger, so it no longer creates one. Log records now carry the logger name `aafenrir.providers` instead of the module name; the `[Fenrir]` prefix is unchanged.
 - **Translation Files**: The language files hold only real translations as Weblate writes them, missing keys fall back to English. The scanner maintains only `en`; empty placeholders were removed from the other languages.
 - **Bundled Package Translations**: `aa-geuthur-react` raised to `^1.3.0`. The package bundles its own translations and registers them with i18next through `AaReactProvider`, so `Main.tsx` lists only the namespace `translation`, the copies under `aafenrir/static/aafenrir/i18n/<lng>/aa-geuthur-react.json` are removed and `make react-copy-translations` no longer copies them. Untranslated strings in `frontend/i18n/<lng>/translation.json` are empty instead of English (`i18next-scanner` writes the key as value only for `en`); `returnEmptyString: false` shows the English fallback at runtime. Translate on Weblate as before.
 - **App Container Width**: The app container (`.aa-react.container`) now has a minimum width of 640px, like the other AA apps. Its maximum width of 1280px is unchanged.
