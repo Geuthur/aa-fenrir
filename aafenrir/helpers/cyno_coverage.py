@@ -16,7 +16,7 @@ from django.db.models import F
 from allianceauth.authentication.models import User
 
 # AA Fenrir
-from aafenrir.models.general import General
+from aafenrir.managers.general import GeneralManager
 
 # Key under which corptools stores the time of the last location update
 # in ``CharacterAudit.update_timestamps``.
@@ -52,8 +52,8 @@ def get_cyno_coverage(system_ids: list[int], viewer: User) -> dict[int, list]:
     # pylint: disable=import-outside-toplevel
     from corptools.models import CharacterLocation
 
-    if General.has_admin_access(viewer):
-        owners = General.users_with_management_access()
+    if GeneralManager.has_admin_access(viewer):
+        owners = GeneralManager.users_with_management_access()
     else:
         owners = User.objects.filter(pk=viewer.pk)
 
