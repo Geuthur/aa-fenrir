@@ -2,16 +2,16 @@
 
 # Standard Library
 import uuid
-from typing import Any
 
 # Django
-from django.contrib.auth.models import Permission as AuthPermission
 from django.db import models
-from django.db.models import Q, QuerySet
 from django.utils.translation import gettext_lazy as _
 
 # Alliance Auth
 from allianceauth.authentication.models import User
+
+# AA Fenrir
+from aafenrir.managers.general import GeneralManager
 
 
 def generate_unique_string(length=12):
@@ -22,94 +22,25 @@ def generate_unique_string(length=12):
 
 
 class General(models.Model):
-    """General model for app permissions"""
+    """A model defining the permissions of AA Fenrir.
 
-    class Permission(models.TextChoices):
-        """Permissions of this app."""
+    Permissions are checked with Django and the full string, e.g.
+    `@permission_required("aafenrir.basic_access")` or
+    `user.has_perm("aafenrir.basic_access")`.
+    """
 
-        BASIC_ACCESS = "basic_access", _("Can access this app")
-        MANAGE_ACCESS = "manage_access", _("Can manage")
-        FULL_ACCESS = "full_access", _("Full access")
+    objects = GeneralManager()
 
     class Meta:
         managed = False
         verbose_name = "AA-Fenrir"
         verbose_name_plural = "AA-Fenrir"
         default_permissions = ()  # Remove standard permissions
-
-    # Inject dynamic permissions
-    Meta.permissions = tuple(Permission.choices)
-
-    @classmethod
-    def get_codename(cls, perm: "str | General.Permission") -> str:
-        """Return the codename of the permission, e.g. 'manage_access'."""
-        return perm.value if isinstance(perm, cls.Permission) else perm
-
-    @classmethod
-    def get_perm(cls, perm: "str | General.Permission") -> str:
-        """Return the full permission string 'aafenrir.<codename>'."""
-        return f"aafenrir.{cls.get_codename(perm)}"
-
-    @classmethod
-    def has_perm(cls, user: Any, perm: "str | General.Permission") -> bool:
-        """Return True if the user has the permission."""
-        if not user or not hasattr(user, "has_perm"):
-            return False
-        return user.has_perm(cls.get_perm(perm))
-
-    @classmethod
-    def has_any_perm(cls, user: Any, *perms: "str | General.Permission") -> bool:
-        """Return True if the user has any of the given permissions."""
-        if not user or not hasattr(user, "has_perm"):
-            return False
-        return any(user.has_perm(cls.get_perm(perm)) for perm in perms)
-
-    @classmethod
-    def has_basic_access(cls, user: Any) -> bool:
-        """Return True if the user may use the app."""
-        return cls.has_perm(user, cls.Permission.BASIC_ACCESS)
-
-    @classmethod
-    def has_management_access(cls, user: Any) -> bool:
-        """Return True if the user may manage routes (manage or full access)."""
-        return cls.has_any_perm(
-            user, cls.Permission.MANAGE_ACCESS, cls.Permission.FULL_ACCESS
+        permissions = (
+            ("basic_access", _("Can access this app")),
+            ("manage_access", _("Can manage")),
+            ("full_access", _("Full access")),
         )
-
-    @classmethod
-    def users_with_any_perm(cls, *perms: "str | General.Permission") -> QuerySet:
-        """Return all active users with any of the given permissions.
-
-        The counterpart of ``has_any_perm`` as one database query.
-        Permissions can come from the user, one of their groups or their
-        state. Superusers are included, as ``has_perm`` is always True for them.
-        """
-        permissions = AuthPermission.objects.filter(
-            content_type__app_label="aafenrir",
-            codename__in=[cls.get_codename(perm) for perm in perms],
-        )
-        return (
-            User.objects.filter(is_active=True)
-            .filter(
-                Q(is_superuser=True)
-                | Q(user_permissions__in=permissions)
-                | Q(groups__permissions__in=permissions)
-                | Q(profile__state__permissions__in=permissions)
-            )
-            .distinct()
-        )
-
-    @classmethod
-    def users_with_management_access(cls) -> QuerySet:
-        """Return all users who may manage routes (manage or full access)."""
-        return cls.users_with_any_perm(
-            cls.Permission.MANAGE_ACCESS, cls.Permission.FULL_ACCESS
-        )
-
-    @classmethod
-    def has_admin_access(cls, user: Any) -> bool:
-        """Return True if the user may use the Administration (full access)."""
-        return cls.has_perm(user, cls.Permission.FULL_ACCESS)
 
 
 class UserSettings(models.Model):

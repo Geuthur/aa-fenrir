@@ -13,7 +13,8 @@ from aafenrir import __title__
 from aafenrir.api import schema
 from aafenrir.app_settings import AA_FENRIR_MAX_COLLATERAL, AA_FENRIR_MAX_VOLUME
 from aafenrir.helpers.eveonline import get_character_portrait_url
-from aafenrir.models.general import General, UserSettings
+from aafenrir.managers.general import GeneralManager
+from aafenrir.models.general import UserSettings
 
 
 class GeneralApiEndpoints:
@@ -35,7 +36,7 @@ class GeneralApiEndpoints:
             left_menu.append(schema.MenuLink(name=_("Settings"), link="/settings/"))
 
             right_menu: list[schema.MenuLink] = []
-            if General.has_management_access(request.user):
+            if GeneralManager.has_management_access(request.user):
                 right_menu.append(
                     schema.MenuLink(name=_("Route Admin"), link="/routes/admin/")
                 )
@@ -47,7 +48,7 @@ class GeneralApiEndpoints:
                     )
                 )
 
-            if General.has_admin_access(request.user):
+            if GeneralManager.has_admin_access(request.user):
                 right_menu.append(
                     schema.MenuLink(name=_("Administration"), link="/administration/")
                 )
@@ -66,7 +67,7 @@ class GeneralApiEndpoints:
             tags=self.tags,
         )
         def get_user(request):
-            if not General.has_basic_access(request.user):
+            if not GeneralManager.has_basic_access(request.user):
                 return HTTPStatus.FORBIDDEN, {"error": _("Permission Denied.")}
 
             try:
@@ -108,8 +109,8 @@ class GeneralApiEndpoints:
                 is_admin=request.user.is_superuser,
                 notification=settings.disable_notifications,
                 quick_select_presets=settings.quick_select_presets or [],
-                has_manage_access=General.has_management_access(request.user),
-                has_admin_access=General.has_admin_access(request.user),
+                has_manage_access=GeneralManager.has_management_access(request.user),
+                has_admin_access=GeneralManager.has_admin_access(request.user),
                 calculator_max_volume=AA_FENRIR_MAX_VOLUME,
                 calculator_max_collateral=AA_FENRIR_MAX_COLLATERAL,
             )
@@ -124,7 +125,7 @@ class GeneralApiEndpoints:
             summary="Get current user's settings",
         )
         def get_user_settings(request):
-            if not General.has_basic_access(request.user):
+            if not GeneralManager.has_basic_access(request.user):
                 return HTTPStatus.FORBIDDEN, {"error": _("Permission Denied.")}
 
             settings = UserSettings.objects.get_or_create(user=request.user)[0]
@@ -143,7 +144,7 @@ class GeneralApiEndpoints:
             summary="Update current user's settings",
         )
         def update_user_settings(request, payload: schema.UserSettingsUpdateRequest):
-            if not General.has_basic_access(request.user):
+            if not GeneralManager.has_basic_access(request.user):
                 return HTTPStatus.FORBIDDEN, {"error": _("Permission Denied.")}
 
             settings = UserSettings.objects.get_or_create(user=request.user)[0]

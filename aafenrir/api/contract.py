@@ -17,8 +17,8 @@ from aafenrir import __title__
 from aafenrir.api import schema
 from aafenrir.helpers.cyno_coverage import get_cyno_coverage
 from aafenrir.helpers.eveonline import get_character_portrait_url
+from aafenrir.managers.general import GeneralManager
 from aafenrir.models import Contract, ContractHandler, RoutePreset, RouteSystem
-from aafenrir.models.general import General
 
 
 class ContractApiEndpoints:
@@ -35,7 +35,7 @@ class ContractApiEndpoints:
             tags=self.tags,
         )
         def get_contract_handlers(request: WSGIRequest):
-            if not General.has_basic_access(request.user):
+            if not GeneralManager.has_basic_access(request.user):
                 return HTTPStatus.FORBIDDEN, {"error": _("Permission Denied.")}
 
             handlers = ContractHandler.objects.select_related("organization").all()
@@ -56,7 +56,7 @@ class ContractApiEndpoints:
             tags=self.tags,
         )
         def get_route_presets(request: WSGIRequest):
-            if not General.has_basic_access(request.user):
+            if not GeneralManager.has_basic_access(request.user):
                 return HTTPStatus.FORBIDDEN, {"error": _("Permission Denied.")}
 
             presets = (
@@ -134,7 +134,7 @@ class ContractApiEndpoints:
             tags=self.tags,
         )
         def get_route_preset(request: WSGIRequest, preset_id: int):
-            if not General.has_basic_access(request.user):
+            if not GeneralManager.has_basic_access(request.user):
                 return HTTPStatus.FORBIDDEN, {"error": _("Permission Denied.")}
 
             try:
@@ -209,7 +209,7 @@ class ContractApiEndpoints:
             summary="Route admin characters in the systems of a route",
         )
         def get_route_preset_coverage(request: WSGIRequest, preset_id: int):
-            if not General.has_management_access(request.user):
+            if not GeneralManager.has_management_access(request.user):
                 return HTTPStatus.FORBIDDEN, {"error": _("Permission Denied.")}
 
             preset = (
@@ -274,7 +274,7 @@ class ContractApiEndpoints:
         def create_route_preset(
             request: WSGIRequest, data: schema.CreateRoutePresetSchema
         ):
-            if not General.has_management_access(request.user):
+            if not GeneralManager.has_management_access(request.user):
                 return HTTPStatus.FORBIDDEN, {"error": _("Permission Denied.")}
 
             if not data.origin_system_id or not data.destination_system_id:
@@ -401,7 +401,7 @@ class ContractApiEndpoints:
             preset_id: int,
             data: schema.CreateRoutePresetSchema,
         ):
-            if not General.has_management_access(request.user):
+            if not GeneralManager.has_management_access(request.user):
                 return HTTPStatus.FORBIDDEN, {"error": _("Permission Denied.")}
 
             try:
@@ -527,7 +527,7 @@ class ContractApiEndpoints:
             tags=self.tags,
         )
         def delete_route_preset(request: WSGIRequest, preset_id: int):
-            if not General.has_management_access(request.user):
+            if not GeneralManager.has_management_access(request.user):
                 return HTTPStatus.FORBIDDEN, {"error": _("Permission Denied.")}
 
             try:
@@ -550,7 +550,7 @@ class ContractApiEndpoints:
             tags=self.tags,
         )
         def get_route_systems(request: WSGIRequest):
-            if not General.has_basic_access(request.user):
+            if not GeneralManager.has_basic_access(request.user):
                 return HTTPStatus.FORBIDDEN, {"error": _("Permission Denied.")}
 
             route_systems = RouteSystem.objects.select_related(
@@ -605,7 +605,7 @@ class ContractApiEndpoints:
             tags=self.tags,
         )
         def add_route_system(request: WSGIRequest, data: schema.AddRouteSystemSchema):
-            if not General.has_management_access(request.user):
+            if not GeneralManager.has_management_access(request.user):
                 return HTTPStatus.FORBIDDEN, {"error": _("Permission Denied.")}
 
             try:
@@ -658,7 +658,7 @@ class ContractApiEndpoints:
             tags=self.tags,
         )
         def delete_route_system(request: WSGIRequest, system_id: int):
-            if not General.has_management_access(request.user):
+            if not GeneralManager.has_management_access(request.user):
                 return HTTPStatus.FORBIDDEN, {"error": _("Permission Denied.")}
 
             deleted_count = RouteSystem.objects.filter(
@@ -682,7 +682,7 @@ class ContractApiEndpoints:
             tags=self.tags,
         )
         def get_contract_queue(request: WSGIRequest):
-            if not General.has_basic_access(request.user):
+            if not GeneralManager.has_basic_access(request.user):
                 return HTTPStatus.FORBIDDEN, {"error": _("Permission Denied.")}
 
             contracts = Contract.objects.all().order_by("-date_issued")

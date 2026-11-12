@@ -19,7 +19,7 @@ from esi.models import Token
 
 # AA Fenrir
 from aafenrir.helpers.choice import Category, Status
-from aafenrir.models.general import General
+from aafenrir.managers.general import GeneralManager
 from aafenrir.providers import esi, is_retryable_esi_error, logger
 
 T = TypeVar("T", bound=models.Model)
@@ -47,7 +47,7 @@ class AccessQuerySet(models.QuerySet[T], Generic[T]):
             )
             return self
 
-        if General.has_admin_access(user):
+        if GeneralManager.has_admin_access(user):
             logger.debug("Returning all survey sessions for admin user %s.", user)
             return self
 
@@ -79,7 +79,7 @@ class AccessQuerySet(models.QuerySet[T], Generic[T]):
             )
             return self
 
-        if General.has_admin_access(user):
+        if GeneralManager.has_admin_access(user):
             logger.debug("Returning all survey sessions for admin user %s.", user)
             return self
 
@@ -120,7 +120,7 @@ class AccessManager(models.Manager[T], Generic[T]):
             logger.debug("Returning all characters for superuser %s.", user)
             return qs.all()
 
-        if General.has_admin_access(user):
+        if GeneralManager.has_admin_access(user):
             logger.debug("Returning all characters for %s.", user)
             return qs.all()
 
