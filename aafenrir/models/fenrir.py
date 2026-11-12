@@ -25,13 +25,13 @@ from esi.models import Token
 
 # AA Fenrir
 from aafenrir.helpers.choice import Category, EveType, Status
-from aafenrir.managers import (
+from aafenrir.managers.fenrir import (
     ContractHandlerManager,
     ContractManager,
     EveEntityManager,
     LocationManager,
 )
-from aafenrir.models.general import General
+from aafenrir.managers.general import GeneralManager
 from aafenrir.providers import logger
 from aafenrir.thirdparty.discord import send_user_notification
 
@@ -648,7 +648,7 @@ class Contract(models.Model):
 
             if self.date_notified is None:
                 for manager in managers:
-                    if General.has_admin_access(manager):
+                    if GeneralManager.has_admin_access(manager):
                         message = (
                             f"There is a new courier contract from {self.issuer} "
                             "looking to be picked up "

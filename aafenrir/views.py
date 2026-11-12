@@ -14,7 +14,8 @@ from esi.decorators import token_required
 # AA Fenrir
 from aafenrir import __app_name__, __version__
 from aafenrir.constants import MIN_PLAYER_CORPORATION_ID
-from aafenrir.models import ContractHandler, EveEntity, General
+from aafenrir.managers.general import GeneralManager
+from aafenrir.models import ContractHandler, EveEntity
 from aafenrir.tasks import update_freight
 
 
@@ -32,7 +33,7 @@ def react_base(request: WSGIRequest, character_id=None):  #
 
 
 @login_required
-@user_passes_test(General.has_management_access, login_url="aafenrir:index")
+@user_passes_test(GeneralManager.has_management_access, login_url="aafenrir:index")
 @token_required(scopes=ContractHandler.get_esi_scopes())
 def add_contract_handler(request: WSGIRequest, token):
     """Add or update the contract handler of the token character's corporation."""
