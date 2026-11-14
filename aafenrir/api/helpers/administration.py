@@ -1,7 +1,7 @@
 """Helpers for the Administration API."""
 
 # Django
-from django.db import models
+from django.db import IntegrityError, models, transaction
 from django.db.models import (
     Case,
     CharField,
@@ -24,6 +24,7 @@ from aafenrir.api import schema
 from aafenrir.constants import MIN_PLAYER_CORPORATION_ID
 from aafenrir.helpers.choice import Status
 from aafenrir.models import Contract, ContractCustomerNotification, ContractHandler
+from aafenrir.providers import logger
 
 RECENT_NOTIFICATIONS_LIMIT = 10
 
@@ -45,8 +46,17 @@ def get_handler_status(handler: ContractHandler) -> str:
     if handler.character is None:
         return "no_character"
     try:
-        handler.token()
-    except TokenError:
+        # require_valid() deletes tokens that fail to refresh. The delete can
+        # fail (e.g. a foreign key of another app), the savepoint keeps the
+        # request transaction usable. TokenError is caught inside, so a
+        # successful delete is kept.
+        with transaction.atomic():
+            try:
+                handler.token()
+            except TokenError:
+                return "token_error"
+    except IntegrityError as exc:
+        logger.warning("%s: Could not delete invalid token: %s", handler, exc)
         return "token_error"
     if handler.last_sync is None:
         return "never_synced"
