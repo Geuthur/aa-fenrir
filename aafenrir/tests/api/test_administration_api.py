@@ -8,6 +8,7 @@ from unittest.mock import patch
 # Django
 from django.db import IntegrityError, connection
 from django.db.models import ProtectedError
+from django.db.models.signals import pre_delete
 from django.urls import reverse
 from django.utils import timezone
 
@@ -89,11 +90,15 @@ class TestAdministrationApi(AuthTestCase):
         broken = self._handler_with_expired_token()
         other = ContractHandlerFactory()
 
+        def block_delete(**kwargs):
+            # Raised inside Django's delete transaction, like a DB constraint
+            raise delete_error
+
+        pre_delete.connect(block_delete, sender=Token)
+        self.addCleanup(pre_delete.disconnect, block_delete, sender=Token)
+
         # Test Action
-        with (
-            patch(f"{TOKEN_PATH}.refresh", side_effect=TokenError("invalid_grant")),
-            patch(f"{TOKEN_PATH}.delete", side_effect=delete_error),
-        ):
+        with patch(f"{TOKEN_PATH}.refresh", side_effect=TokenError("invalid_grant")):
             response = self._get(self.admin, "list_administration_handlers")
 
         # Expected Result
@@ -101,7 +106,13 @@ class TestAdministrationApi(AuthTestCase):
         rows = {row["id"]: row for row in response.json()}
         self.assertEqual(rows[broken.organization_id]["status"], "token_error")
         self.assertEqual(rows[other.organization_id]["status"], "no_character")
+        # The request transaction is still usable and the token was kept
         self.assertFalse(connection.needs_rollback)
+        self.assertTrue(
+            Token.objects.filter(user=broken.character.user)
+            .require_scopes(ContractHandler.get_esi_scopes())
+            .exists()
+        )
 
     def test_list_handlers_should_report_token_error_when_token_delete_fails(self):
         """django-esi deletes a token that fails to refresh; a foreign key of
