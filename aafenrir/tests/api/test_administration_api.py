@@ -6,8 +6,14 @@ from http import HTTPStatus
 from unittest.mock import patch
 
 # Django
+from django.db import IntegrityError, connection
+from django.db.models import ProtectedError
 from django.urls import reverse
 from django.utils import timezone
+
+# Alliance Auth
+from esi.errors import TokenError
+from esi.models import Token
 
 # AA Fenrir
 from aafenrir.helpers.choice import Status
@@ -23,6 +29,7 @@ from aafenrir.tests.testdata.fenrir import (
 
 API_URL = "aafenrir:api"
 TASK_PATH = "aafenrir.tasks"
+TOKEN_PATH = "esi.models.Token"
 
 
 class TestAdministrationApi(AuthTestCase):
@@ -65,6 +72,70 @@ class TestAdministrationApi(AuthTestCase):
         self.assertEqual(row["contracts_pending"], 1)
         self.assertEqual(row["contracts_in_progress"], 1)
         self.assertEqual(row["status"], "no_character")
+
+    def _handler_with_expired_token(self) -> ContractHandler:
+        """Return a handler whose token is expired and needs a refresh."""
+        handler_user = UserMainFactory(scopes=ContractHandler.get_esi_scopes())
+        handler = ContractHandlerFactory(
+            character=handler_user.character_ownerships.get()
+        )
+        Token.objects.filter(user=handler_user).update(
+            created=timezone.now() - timedelta(days=1)
+        )
+        return handler
+
+    def _assert_token_error_without_breaking_list(self, delete_error):
+        # Test Data
+        broken = self._handler_with_expired_token()
+        other = ContractHandlerFactory()
+
+        # Test Action
+        with (
+            patch(f"{TOKEN_PATH}.refresh", side_effect=TokenError("invalid_grant")),
+            patch(f"{TOKEN_PATH}.delete", side_effect=delete_error),
+        ):
+            response = self._get(self.admin, "list_administration_handlers")
+
+        # Expected Result
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        rows = {row["id"]: row for row in response.json()}
+        self.assertEqual(rows[broken.organization_id]["status"], "token_error")
+        self.assertEqual(rows[other.organization_id]["status"], "no_character")
+        self.assertFalse(connection.needs_rollback)
+
+    def test_list_handlers_should_report_token_error_when_token_delete_fails(self):
+        """django-esi deletes a token that fails to refresh; a foreign key of
+        another app (e.g. orphaned corpstats tables) rejects the delete."""
+        self._assert_token_error_without_breaking_list(
+            IntegrityError(
+                1451, "Cannot delete or update a parent row: a foreign key fails"
+            )
+        )
+
+    def test_list_handlers_should_report_token_error_when_token_is_protected(self):
+        self._assert_token_error_without_breaking_list(
+            ProtectedError("Token is protected", set())
+        )
+
+    def test_list_handlers_should_delete_token_and_report_token_error_when_refresh_fails(
+        self,
+    ):
+        # Test Data
+        broken = self._handler_with_expired_token()
+
+        # Test Action
+        with patch(f"{TOKEN_PATH}.refresh", side_effect=TokenError("invalid_grant")):
+            response = self._get(self.admin, "list_administration_handlers")
+
+        # Expected Result
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        row = next(r for r in response.json() if r["id"] == broken.organization_id)
+        self.assertEqual(row["status"], "token_error")
+        self.assertFalse(
+            Token.objects.filter(user=broken.character.user)
+            .require_scopes(ContractHandler.get_esi_scopes())
+            .exists()
+        )
 
     def test_list_handlers_should_not_count_expired_contracts_as_pending(self):
         # Test Data
