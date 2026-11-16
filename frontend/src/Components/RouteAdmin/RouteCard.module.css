@@ -1,4 +1,4 @@
-.routeCard {
+.route-card {
   margin-top: 0.5rem;
   display: flex;
   flex-direction: column;
@@ -6,21 +6,21 @@
   border-radius: 0.75rem;
   border-width: 1px;
   border-style: solid;
-  border-color: oklch(27.9% 0.041 260.031);
-  background-color: #111724;
+  border-color: oklch(27.9% 0.041 260.031deg);
+  background-color: rgb(17 23 36);
   padding: 1.25rem;
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
 
-:where(.routeCard > :not(:last-child)) {
+:where(.route-card > :not(:last-child)) {
   margin-block-end: 1rem;
 }
 
 @media (hover: hover) {
-  .routeCard:hover {
-    border-color: oklch(37.2% 0.044 257.287);
+  .route-card:hover {
+    border-color: oklch(37.2% 0.044 257.287deg);
   }
 }
 
@@ -36,49 +36,49 @@
   font-family: var(--font-mono);
   font-size: 0.75rem;
   line-height: calc(1 / 0.75);
-  color: oklch(70.4% 0.04 256.788) !important;
+  color: oklch(70.4% 0.04 256.788deg) !important;
 }
 
 .origin {
-  color: oklch(78.9% 0.154 211.53) !important;
+  color: oklch(78.9% 0.154 211.53deg) !important;
 }
 
 .destination {
-  color: oklch(67.3% 0.182 276.935) !important;
+  color: oklch(67.3% 0.182 276.935deg) !important;
 }
 
 .stats {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   border-radius: 0.5rem;
-  border-color: color-mix(in oklab, oklch(27.9% 0.041 260.031) 80%, transparent) !important;
-  background-color: color-mix(in oklab, oklch(20.8% 0.042 265.755) 60%, transparent) !important;
+  border-color: color-mix(in oklab, oklch(27.9% 0.041 260.031deg) 80%, transparent) !important;
+  background-color: color-mix(in oklab, oklch(20.8% 0.042 265.755deg) 60%, transparent) !important;
   font-family: var(--font-mono);
   font-size: 0.75rem;
   line-height: calc(1 / 0.75);
 }
 
-.statLabel {
+.stat-label {
   font-size: 10px;
-  color: oklch(55.4% 0.046 257.417) !important;
+  color: oklch(55.4% 0.046 257.417deg) !important;
 }
 
-.valueCyan {
-  color: oklch(86.5% 0.127 207.078) !important;
+.value-cyan {
+  color: oklch(86.5% 0.127 207.078deg) !important;
 }
 
-.valueSlate {
-  color: oklch(86.9% 0.022 252.894) !important;
+.value-slate {
+  color: oklch(86.9% 0.022 252.894deg) !important;
 }
 
-.valueAmber {
-  color: oklch(87.9% 0.169 91.605) !important;
+.value-amber {
+  color: oklch(87.9% 0.169 91.605deg) !important;
 }
 
 .footer {
   border-top-style: solid;
   border-top-width: 1px;
-  border-color: color-mix(in oklab, oklch(86.9% 0.022 252.894) 60%, transparent) !important;
+  border-color: color-mix(in oklab, oklch(86.9% 0.022 252.894deg) 60%, transparent) !important;
   font-size: 0.75rem;
   line-height: calc(1 / 0.75);
 }
@@ -90,23 +90,23 @@
   line-height: calc(1 / 0.75);
 }
 
-.dangerLabel {
+.danger-label {
   font-size: 11px;
-  color: oklch(70.4% 0.04 256.788) !important;
+  color: oklch(70.4% 0.04 256.788deg) !important;
 }
 
-.statusOk,
-.statusWarn {
+.status-ok,
+.status-warn {
   font-size: 0.75rem;
   line-height: calc(1 / 0.75);
 }
 
-.statusOk {
-  color: oklch(76.5% 0.177 163.223) !important;
+.status-ok {
+  color: oklch(76.5% 0.177 163.223deg) !important;
 }
 
-.statusWarn {
-  color: oklch(82.8% 0.189 84.429) !important;
+.status-warn {
+  color: oklch(82.8% 0.189 84.429deg) !important;
 }
 
 .icon {
@@ -114,11 +114,11 @@
   height: 0.875rem;
 }
 
-.editButton {
+.edit-button {
   padding-inline: 0.625rem;
-  background-color: color-mix(in oklab, oklch(30.2% 0.056 229.695) 40%, transparent) !important;
-  border-color: color-mix(in oklab, oklch(71.5% 0.143 215.221) 40%, transparent) !important;
-  color: oklch(86.5% 0.127 207.078) !important;
+  background-color: color-mix(in oklab, oklch(30.2% 0.056 229.695deg) 40%, transparent) !important;
+  border-color: color-mix(in oklab, oklch(71.5% 0.143 215.221deg) 40%, transparent) !important;
+  color: oklch(86.5% 0.127 207.078deg) !important;
   font-size: 0.75rem;
   line-height: calc(1 / 0.75);
   transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke;
@@ -127,12 +127,12 @@
 }
 
 @media (hover: hover) {
-  .editButton:hover {
-    background-color: color-mix(in oklab, oklch(39.8% 0.07 227.392) 60%, transparent) !important;
+  .edit-button:hover {
+    background-color: color-mix(in oklab, oklch(39.8% 0.07 227.392deg) 60%, transparent) !important;
   }
 }
 
-.deleteButton {
+.delete-button {
   display: flex;
   align-items: center;
   gap: 0.25rem;
@@ -145,17 +145,17 @@
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
-  background-color: rgba(69, 10, 10, 0.4) !important;
-  border: 1px solid rgba(239, 68, 68, 0.4) !important;
-  color: #fca5a5 !important;
+  background-color: rgb(69 10 10 / 40%) !important;
+  border: 1px solid rgb(239 68 68 / 40%) !important;
+  color: rgb(252 165 165) !important;
 }
 
-.deleteButton:disabled {
+.delete-button:disabled {
   opacity: 0.5;
 }
 
-.deleteButton:hover {
-  background-color: rgba(127, 29, 29, 0.6) !important;
-  border-color: rgba(239, 68, 68, 0.8) !important;
-  color: #fef2f2 !important;
+.delete-button:hover {
+  background-color: rgb(127 29 29 / 60%) !important;
+  border-color: rgb(239 68 68 / 80%) !important;
+  color: rgb(254 242 242) !important;
 }

@@ -2,9 +2,9 @@
 .container {
   margin-top: 1rem;
   border-radius: 0.75rem;
-  background-color: color-mix(in oklab, oklch(20.8% 0.042 265.755) 80%, transparent);
+  background-color: color-mix(in oklab, oklch(20.8% 0.042 265.755deg) 80%, transparent);
   padding: 1.25rem;
-  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -4px rgb(0 0 0 / 10%);
 }
 
 /* Header */
@@ -17,47 +17,47 @@
   gap: 0.5rem;
   border-bottom-style: solid;
   border-bottom-width: 1px;
-  border-color: color-mix(in oklab, oklch(86.9% 0.022 252.894) 60%, transparent);
+  border-color: color-mix(in oklab, oklch(86.9% 0.022 252.894deg) 60%, transparent);
   padding-bottom: 0.5rem;
 }
 
-.cornerGradient {
+.corner-gradient {
   pointer-events: none;
   position: absolute;
-  top: 0px;
-  right: 0px;
+  top: 0;
+  right: 0;
   height: 12rem;
   width: 12rem;
-  background-image: linear-gradient(to bottom left in oklab, color-mix(in oklab, oklch(71.5% 0.143 215.221) 10%, transparent), transparent, transparent);
+  background-image: linear-gradient(to bottom left in oklab, color-mix(in oklab, oklch(71.5% 0.143 215.221deg) 10%, transparent), transparent, transparent);
 }
 
-.titleGroup {
+.title-group {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-.titleIcon {
+.title-icon {
   height: 1.25rem;
   width: 1.25rem;
-  color: oklch(78.9% 0.154 211.53);
+  color: oklch(78.9% 0.154 211.53deg);
 }
 
-.titleHeading {
+.title-heading {
   font-family: 'Chakra Petch', -apple-system, sans-serif;
   font-size: 1.125rem;
-  line-height: 1.55556;
+  line-height: calc(14 / 9);
   font-weight: 700;
   letter-spacing: 0.025em;
-  color: #fff;
+  color: rgb(255 255 255);
 }
 
 /* Cargo Presets Bar */
-.presetsBar {
+.presets-bar {
   margin-bottom: 1.25rem;
 }
 
-.presetsLabel {
+.presets-label {
   margin-bottom: 0.375rem;
   display: flex;
   align-items: center;
@@ -65,23 +65,23 @@
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.05em;
-  color: oklch(70.4% 0.04 256.788);
+  color: oklch(70.4% 0.04 256.788deg);
   text-transform: uppercase;
 }
 
-.presetsIcon {
+.presets-icon {
   height: 0.875rem;
   width: 0.875rem;
-  color: oklch(78.9% 0.154 211.53);
+  color: oklch(78.9% 0.154 211.53deg);
 }
 
-.presetsGrid {
+.presets-grid {
   display: grid;
   gap: 0.5rem;
   grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
 }
 
-.presetBtn {
+.preset-btn {
   cursor: pointer;
   border-radius: 0.25rem;
   padding-inline: 0.5rem;
@@ -90,29 +90,33 @@
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
-  background-color: rgba(15, 23, 42, 0.6) !important;
-  border: 1px solid rgba(6, 182, 212, 0.5) !important;
-  --bs-btn-border-color: rgba(6, 182, 212, 0.5) !important;
-}
-.presetBtn:hover {
-  background-color: rgba(15, 23, 42, 0.9) !important;
-  border-color: #22d3ee !important;
-  --bs-btn-border-color: #22d3ee !important;
-}
-.presetBtn:hover .presetBtnLabel {
-  color: #67e8f9 !important;
+  background-color: rgb(15 23 42 / 60%) !important;
+  border: 1px solid rgb(6 182 212 / 50%) !important;
+
+  --bs-btn-border-color: rgb(6 182 212 / 50%) !important;
 }
 
-.presetBtnLabel {
+.preset-btn:hover {
+  background-color: rgb(15 23 42 / 90%) !important;
+  border-color: rgb(34 211 238) !important;
+
+  --bs-btn-border-color: rgb(34 211 238) !important;
+}
+
+.preset-btn:hover .preset-btn-label {
+  color: rgb(103 232 249) !important;
+}
+
+.preset-btn-label {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   font-size: 11px;
   font-weight: 500;
-  color: oklch(92.9% 0.013 255.508);
+  color: oklch(92.9% 0.013 255.508deg);
 }
 
-.presetBtnStats {
+.preset-btn-stats {
   margin-top: 0.125rem;
   display: flex;
   justify-content: space-between;
@@ -120,31 +124,32 @@
   font-family: var(--font-mono);
   font-size: 10px;
   white-space: nowrap;
-  color: oklch(55.4% 0.046 257.417);
+  color: oklch(55.4% 0.046 257.417deg);
 }
 
 /* Main Inputs (Volume & Collateral) */
-.inputsGrid {
+.inputs-grid {
   margin-bottom: 1.25rem;
   display: grid;
   grid-template-columns: repeat(1, minmax(0, 1fr));
   gap: 1.25rem;
 }
-@media (min-width: 48rem) {
-  .inputsGrid {
+
+@media (width >= 48rem) {
+  .inputs-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-.inputCard {
-  min-width: 0px;
+.input-card {
+  min-width: 0;
   border-radius: 0.5rem;
-  background-color: color-mix(in oklab, oklch(20.8% 0.042 265.755) 60%, transparent);
+  background-color: color-mix(in oklab, oklch(20.8% 0.042 265.755deg) 60%, transparent);
   padding: 1rem;
-  border: 1px solid rgba(6, 182, 212, 0.5);
+  border: 1px solid rgb(6 182 212 / 50%);
 }
 
-.inputCardHeader {
+.input-card-header {
   margin-bottom: 0.375rem;
   display: flex;
   flex-wrap: wrap;
@@ -153,166 +158,169 @@
   gap: 0.25rem;
 }
 
-.inputCardLabel {
-  margin: 0px;
+.input-card-label {
+  margin: 0;
   display: flex;
   align-items: center;
   gap: 0.375rem;
   font-family: var(--font-mono);
   font-size: 0.75rem;
-  line-height: 1.33333;
+  line-height: calc(4 / 3);
   letter-spacing: 0.05em;
-  color: oklch(86.9% 0.022 252.894);
+  color: oklch(86.9% 0.022 252.894deg);
   text-transform: uppercase;
 }
 
-.collateralIcon {
+.collateral-icon {
   height: 0.875rem;
   width: 0.875rem;
-  color: oklch(82.8% 0.189 84.429);
+  color: oklch(82.8% 0.189 84.429deg);
 }
 
-.valueDisplayCyan {
+.value-display-cyan {
   font-family: var(--font-mono);
   font-size: 0.75rem;
-  line-height: 1.33333;
+  line-height: calc(4 / 3);
   font-weight: 700;
-  color: oklch(86.5% 0.127 207.078);
+  color: oklch(86.5% 0.127 207.078deg);
 }
 
-.valueDisplayAmber {
+.value-display-amber {
   font-family: var(--font-mono);
   font-size: 0.75rem;
-  line-height: 1.33333;
+  line-height: calc(4 / 3);
   font-weight: 700;
-  color: oklch(87.9% 0.169 91.605);
+  color: oklch(87.9% 0.169 91.605deg);
 }
 
-.inputWrapper {
+.input-wrapper {
   position: relative;
   margin-top: 0.25rem;
 }
 
-.volumeInput {
+.volume-input {
   width: 100%;
   border-radius: 0.5rem;
   padding-inline: 0.75rem;
   padding-block: 0.5rem;
   font-family: var(--font-mono);
   font-size: 0.875rem;
-  line-height: 1.42857;
-}
-.volumeInput:focus {
-  outline: none;
-  border-color: #06b6d4 !important;
-  box-shadow: 0 0 0 1px #06b6d4;
+  line-height: calc(10 / 7);
 }
 
-.collateralInput {
+.volume-input:focus {
+  outline: none;
+  border-color: rgb(6 182 212) !important;
+  box-shadow: 0 0 0 1px rgb(6 182 212);
+}
+
+.collateral-input {
   width: 100%;
   border-radius: 0.5rem;
   padding-inline: 0.75rem;
   padding-block: 0.5rem;
   font-family: var(--font-mono);
   font-size: 0.875rem;
-  line-height: 1.42857;
+  line-height: calc(10 / 7);
 }
-.collateralInput:focus {
+
+.collateral-input:focus {
   outline: none;
-  border-color: #f59e0b !important;
-  box-shadow: 0 0 0 1px #f59e0b;
+  border-color: rgb(245 158 11) !important;
+  box-shadow: 0 0 0 1px rgb(245 158 11);
 }
 
 /* The native spin buttons would cover the unit, arrow keys still step the value */
-.volumeInput,
-.collateralInput {
+.volume-input,
+.collateral-input {
   appearance: textfield;
   padding-right: 3rem;
 }
-.volumeInput::-webkit-inner-spin-button,
-.volumeInput::-webkit-outer-spin-button,
-.collateralInput::-webkit-inner-spin-button,
-.collateralInput::-webkit-outer-spin-button {
+
+.volume-input::-webkit-inner-spin-button,
+.volume-input::-webkit-outer-spin-button,
+.collateral-input::-webkit-inner-spin-button,
+.collateral-input::-webkit-outer-spin-button {
   appearance: none;
   margin: 0;
 }
 
-.inputSuffix {
+.input-suffix {
   pointer-events: none;
   position: absolute;
   top: 0.625rem;
   right: 0.75rem;
   font-family: var(--font-mono);
   font-size: 0.75rem;
-  line-height: 1.33333;
-  color: oklch(55.4% 0.046 257.417);
+  line-height: calc(4 / 3);
+  color: oklch(55.4% 0.046 257.417deg);
 }
 
-.capacityContainer {
+.capacity-container {
   margin-top: 0.75rem;
 }
 
-.capacityHeader {
+.capacity-header {
   margin-bottom: 0.25rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   font-family: var(--font-mono);
   font-size: 11px;
-  color: oklch(70.4% 0.04 256.788);
+  color: oklch(70.4% 0.04 256.788deg);
 }
 
-.capacityOverload {
+.capacity-overload {
   font-weight: 700;
-  color: oklch(70.4% 0.191 22.216);
+  color: oklch(70.4% 0.191 22.216deg);
 }
 
-.capacityNormal {
-  color: oklch(86.9% 0.022 252.894);
+.capacity-normal {
+  color: oklch(86.9% 0.022 252.894deg);
 }
 
-.capacityTrack {
+.capacity-track {
   height: 0.375rem;
   width: 100%;
   overflow: hidden;
   border-radius: 9999px;
-  background-color: oklch(27.9% 0.041 260.031);
+  background-color: oklch(27.9% 0.041 260.031deg);
 }
 
-.capacityFill {
+.capacity-fill {
   height: 100%;
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 300ms;
 }
 
-.capacityFillNormal {
-  background-color: oklch(71.5% 0.143 215.221);
+.capacity-fill-normal {
+  background-color: oklch(71.5% 0.143 215.221deg);
 }
 
-.capacityFillWarning {
-  background-color: oklch(82.8% 0.189 84.429);
+.capacity-fill-warning {
+  background-color: oklch(82.8% 0.189 84.429deg);
 }
 
-.capacityFillDanger {
-  background-color: oklch(63.7% 0.237 25.331);
+.capacity-fill-danger {
+  background-color: oklch(63.7% 0.237 25.331deg);
 }
 
-.errorText {
+.error-text {
   margin-top: 0.25rem;
   font-family: var(--font-mono);
   font-size: 11px;
-  color: oklch(70.4% 0.191 22.216);
+  color: oklch(70.4% 0.191 22.216deg);
 }
 
-.quickIncrementContainer {
+.quick-increment-container {
   margin-top: 0.75rem;
   display: grid;
   gap: 0.375rem;
   grid-template-columns: repeat(auto-fill, minmax(4.25rem, 1fr));
 }
 
-.quickIncrementBtn {
+.quick-increment-btn {
   cursor: pointer;
   border-radius: 0.25rem;
   padding-inline: 0.5rem;
@@ -323,168 +331,175 @@
   transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
-  background-color: #1e293b !important;
-  border: 1px solid #334155 !important;
-  --bs-btn-border-color: #334155 !important;
-  color: #cbd5e1 !important;
+  background-color: rgb(30 41 59) !important;
+  border: 1px solid rgb(51 65 85) !important;
+
+  --bs-btn-border-color: rgb(51 65 85) !important;
+
+  color: rgb(203 213 225) !important;
 }
-.quickIncrementBtn:hover {
-  background-color: #334155 !important;
-  border-color: rgba(6, 182, 212, 0.6) !important;
-  --bs-btn-border-color: rgba(6, 182, 212, 0.6) !important;
-  color: #ffffff !important;
+
+.quick-increment-btn:hover {
+  background-color: rgb(51 65 85) !important;
+  border-color: rgb(6 182 212 / 60%) !important;
+
+  --bs-btn-border-color: rgb(6 182 212 / 60%) !important;
+
+  color: rgb(255 255 255) !important;
 }
 
 /* Surcharges & Perks */
-.surchargesRow {
+.surcharges-row {
   display: grid;
   grid-template-columns: repeat(1, minmax(0, 1fr));
   gap: 1rem;
   border-top-style: solid;
   border-top-width: 1px;
-  border-color: color-mix(in oklab, oklch(86.9% 0.022 252.894) 60%, transparent);
+  border-color: color-mix(in oklab, oklch(86.9% 0.022 252.894deg) 60%, transparent);
   padding-top: 0.75rem;
 }
-@media (min-width: 48rem) {
-  .surchargesRow {
+
+@media (width >= 48rem) {
+  .surcharges-row {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
-.perkCard {
+.perk-card {
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-radius: 0.5rem;
-  background-color: color-mix(in oklab, oklch(20.8% 0.042 265.755) 60%, transparent);
+  background-color: color-mix(in oklab, oklch(20.8% 0.042 265.755deg) 60%, transparent);
   padding: 0.75rem;
-  border: 1px solid rgba(6, 182, 212, 0.5);
+  border: 1px solid rgb(6 182 212 / 50%);
 }
 
-.perkInfo {
+.perk-info {
   display: flex;
   align-items: center;
   gap: 0.625rem;
 }
 
-.perkIconBox {
+.perk-icon-box {
   border-radius: 0.5rem;
   padding: 0.5rem;
 }
 
-.perkIconAmberActive {
+.perk-icon-amber-active {
   border-style: solid;
   border-width: 1px;
-  border-color: color-mix(in oklab, oklch(76.9% 0.188 70.08) 30%, transparent);
-  background-color: color-mix(in oklab, oklch(76.9% 0.188 70.08) 20%, transparent);
-  color: oklch(87.9% 0.169 91.605);
+  border-color: color-mix(in oklab, oklch(76.9% 0.188 70.08deg) 30%, transparent);
+  background-color: color-mix(in oklab, oklch(76.9% 0.188 70.08deg) 20%, transparent);
+  color: oklch(87.9% 0.169 91.605deg);
 }
 
-.perkIconEmeraldActive {
+.perk-icon-emerald-active {
   border-style: solid;
   border-width: 1px;
-  border-color: color-mix(in oklab, oklch(69.6% 0.17 162.48) 30%, transparent);
-  background-color: color-mix(in oklab, oklch(69.6% 0.17 162.48) 20%, transparent);
-  color: oklch(84.5% 0.143 164.978);
+  border-color: color-mix(in oklab, oklch(69.6% 0.17 162.48deg) 30%, transparent);
+  background-color: color-mix(in oklab, oklch(69.6% 0.17 162.48deg) 20%, transparent);
+  color: oklch(84.5% 0.143 164.978deg);
 }
 
-.perkIconInactive {
-  background-color: oklch(27.9% 0.041 260.031);
-  color: oklch(55.4% 0.046 257.417);
+.perk-icon-inactive {
+  background-color: oklch(27.9% 0.041 260.031deg);
+  color: oklch(55.4% 0.046 257.417deg);
 }
 
-.perkIcon {
+.perk-icon {
   display: block;
   height: 1rem;
   width: 1rem;
 }
 
-.perkTitle {
+.perk-title {
   font-size: 0.75rem;
-  line-height: 1.33333;
+  line-height: calc(4 / 3);
   font-weight: 600;
-  color: #fff;
+  color: rgb(255 255 255);
 }
 
-.perkSubtitle {
+.perk-subtitle {
   font-size: 10px;
-  color: oklch(70.4% 0.04 256.788);
+  color: oklch(70.4% 0.04 256.788deg);
 }
 
-.checkAmber {
+.check-amber {
   height: 1rem;
   width: 1rem;
   cursor: pointer;
   border-radius: 0.25rem;
-  accent-color: oklch(76.9% 0.188 70.08);
+  accent-color: oklch(76.9% 0.188 70.08deg);
 }
 
-.checkEmerald {
+.check-emerald {
   height: 1rem;
   width: 1rem;
   cursor: pointer;
   border-radius: 0.25rem;
-  accent-color: oklch(69.6% 0.17 162.48);
+  accent-color: oklch(69.6% 0.17 162.48deg);
 }
 
 /* Modal styles (FenrirModal body contents) */
 
-.pillBtn {
+.pill-btn {
   display: flex;
   cursor: pointer;
   align-items: center;
   gap: 0.375rem;
   border-radius: 0.5rem;
-  border-color: oklch(37.2% 0.044 257.287) !important;
-  background-color: oklch(20.8% 0.042 265.755) !important;
+  border-color: oklch(37.2% 0.044 257.287deg) !important;
+  background-color: oklch(20.8% 0.042 265.755deg) !important;
   padding-block: 0.375rem;
   font-size: 0.75rem;
-  line-height: 1.33333;
+  line-height: calc(4 / 3);
   font-weight: 600;
-  color: oklch(86.5% 0.127 207.078) !important;
+  color: oklch(86.5% 0.127 207.078deg) !important;
   transition-property: all;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
-.pillBtn:hover {
-  border-color: color-mix(in oklab, oklch(71.5% 0.143 215.221) 50%, transparent) !important;
-  background-color: oklch(27.9% 0.041 260.031) !important;
+
+.pill-btn:hover {
+  border-color: color-mix(in oklab, oklch(71.5% 0.143 215.221deg) 50%, transparent) !important;
+  background-color: oklch(27.9% 0.041 260.031deg) !important;
 }
 
-.pillBtnIcon {
+.pill-btn-icon {
   height: 1rem;
   width: 1rem;
 }
 
-.perkCardDisabled {
-  border-color: color-mix(in oklab, oklch(64.5% 0.246 16.439) 60%, transparent) !important;
-  background-color: color-mix(in oklab, oklch(27.1% 0.105 12.094) 40%, transparent) !important;
-  color: oklch(89.2% 0.058 10.001);
+.perk-card-disabled {
+  border-color: color-mix(in oklab, oklch(64.5% 0.246 16.439deg) 60%, transparent) !important;
+  background-color: color-mix(in oklab, oklch(27.1% 0.105 12.094deg) 40%, transparent) !important;
+  color: oklch(89.2% 0.058 10.001deg);
 }
 
-.perkIconDisabled {
+.perk-icon-disabled {
   border-style: solid !important;
   border-width: 1px !important;
-  border-color: color-mix(in oklab, oklch(64.5% 0.246 16.439) 50%, transparent) !important;
-  background-color: color-mix(in oklab, oklch(41% 0.159 10.272) 40%, transparent) !important;
-  color: oklch(71.2% 0.194 13.428) !important;
+  border-color: color-mix(in oklab, oklch(64.5% 0.246 16.439deg) 50%, transparent) !important;
+  background-color: color-mix(in oklab, oklch(41% 0.159 10.272deg) 40%, transparent) !important;
+  color: oklch(71.2% 0.194 13.428deg) !important;
 }
 
-.perkTitleDisabled {
+.perk-title-disabled {
   font-size: 0.75rem;
-  line-height: 1.33333;
+  line-height: calc(4 / 3);
   font-weight: 600;
-  color: oklch(89.2% 0.058 10.001);
+  color: oklch(89.2% 0.058 10.001deg);
 }
 
-.perkSubtitleDisabled {
+.perk-subtitle-disabled {
   margin-top: 0.125rem;
   font-family: var(--font-mono);
   font-size: 11px;
-  color: color-mix(in oklab, oklch(81% 0.117 11.638) 80%, transparent);
+  color: color-mix(in oklab, oklch(81% 0.117 11.638deg) 80%, transparent);
 }
 
-.checkDisabled {
+.check-disabled {
   cursor: not-allowed;
-  opacity: 40%;
+  opacity: 0.4;
 }

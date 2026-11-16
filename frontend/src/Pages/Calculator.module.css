@@ -3,12 +3,13 @@
   min-height: 100vh;
   flex-direction: column;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  color: oklch(92.9% 0.013 255.508) !important;
+  color: oklch(92.9% 0.013 255.508deg) !important;
 }
+
 .page::selection,
 .page *::selection {
-  background-color: color-mix(in oklab, oklch(71.5% 0.143 215.221) 30%, transparent) !important;
-  color: oklch(91.7% 0.08 205.041) !important;
+  background-color: color-mix(in oklab, oklch(71.5% 0.143 215.221deg) 30%, transparent) !important;
+  color: oklch(91.7% 0.08 205.041deg) !important;
 }
 
 .content {
@@ -24,13 +25,14 @@
   align-items: flex-start;
   gap: 1.5rem;
 }
-@media (min-width: 64rem) {
+
+@media (width >= 64rem) {
   .columns {
     grid-template-columns: repeat(12, minmax(0, 1fr));
   }
 }
 
-@media (min-width: 64rem) {
+@media (width >= 64rem) {
   .column {
     grid-column: span 6 / span 6;
   }
