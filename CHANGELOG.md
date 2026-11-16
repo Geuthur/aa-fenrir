@@ -93,6 +93,7 @@ Section Order:
 
 ### Changed
 
+- **Frontend Dependencies**: `eslint` `^10.15.0` (root and frontend), `typescript-eslint` `^8.72.2` and `zod` 4.6.7 fix the `minimatch` and `zod` security alerts; `aa-geuthur-react` raised to `^1.4.0`.
 - **Permissions**: `General.Meta.permissions` is a plain tuple; `General.Permission` and the wrappers `get_perm`, `has_perm` and `has_any_perm` are removed. Permission rules (`has_basic_access`, `has_management_access`, `has_admin_access`, `users_with_management_access`) live in `GeneralManager` (`aafenrir/managers/general.py`, `General.objects`). `managers.py` became the package `aafenrir/managers/`. Permissions and behavior are unchanged.
 - **AppLogger**: The `AppLogger` is created only once in `aafenrir/providers.py`. `managers.py`, `models/fenrir.py`, `tasks.py` and `thirdparty/discord.py` import it with `from aafenrir.providers import logger` instead of building their own. `views.py` never used its logger, so it no longer creates one. Log records now carry the logger name `aafenrir.providers` instead of the module name; the `[Fenrir]` prefix is unchanged.
 - **Translation Files**: The language files hold only real translations as Weblate writes them, missing keys fall back to English. The scanner maintains only `en`; empty placeholders were removed from the other languages.
