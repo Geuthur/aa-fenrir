@@ -35,6 +35,12 @@ export default defineConfig({
       },
     },
   },
+  css: {
+    modules: {
+      // Class names are kebab-case in CSS (stylelint), camelCase in TSX (styles.headerRow)
+      localsConvention: 'camelCaseOnly',
+    },
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

@@ -4,7 +4,7 @@
 }
 
 .card {
-  background-color: color-mix(in oklab, oklch(27.9% 0.041 260.031) 80%, transparent) !important;
+  background-color: color-mix(in oklab, oklch(27.9% 0.041 260.031deg) 80%, transparent) !important;
   border-radius: 0.75rem;
   display: flex;
   align-items: center;
@@ -14,28 +14,28 @@
 .label {
   font-size: 11px;
   font-family: var(--font-mono);
-  color: oklch(70.4% 0.04 256.788) !important;
+  color: oklch(70.4% 0.04 256.788deg) !important;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
 .value {
   font-size: 1.5rem;
-  line-height: 1.33333;
+  line-height: calc(4 / 3);
   font-family: 'Chakra Petch', -apple-system, sans-serif;
   font-weight: 700;
 }
 
-.valueWhite {
-  color: #fff !important;
+.value-white {
+  color: rgb(255 255 255) !important;
 }
 
-.valueCyan {
-  color: oklch(86.5% 0.127 207.078) !important;
+.value-cyan {
+  color: oklch(86.5% 0.127 207.078deg) !important;
 }
 
-.valueAmber {
-  color: oklch(87.9% 0.169 91.605) !important;
+.value-amber {
+  color: oklch(87.9% 0.169 91.605deg) !important;
 }
 
 .hint {
@@ -44,34 +44,34 @@
   margin-top: 0.125rem;
 }
 
-.hintCyan {
-  color: oklch(78.9% 0.154 211.53) !important;
+.hint-cyan {
+  color: oklch(78.9% 0.154 211.53deg) !important;
 }
 
-.hintSlate {
-  color: oklch(70.4% 0.04 256.788) !important;
+.hint-slate {
+  color: oklch(70.4% 0.04 256.788deg) !important;
 }
 
-.iconBox {
+.icon-box {
   border-radius: 0.75rem;
 }
 
-.iconCyan {
-  background-color: color-mix(in oklab, oklch(30.2% 0.056 229.695) 40%, transparent) !important;
-  border-color: color-mix(in oklab, oklch(71.5% 0.143 215.221) 30%, transparent) !important;
-  color: oklch(78.9% 0.154 211.53) !important;
+.icon-cyan {
+  background-color: color-mix(in oklab, oklch(30.2% 0.056 229.695deg) 40%, transparent) !important;
+  border-color: color-mix(in oklab, oklch(71.5% 0.143 215.221deg) 30%, transparent) !important;
+  color: oklch(78.9% 0.154 211.53deg) !important;
 }
 
-.iconBlue {
-  background-color: color-mix(in oklab, oklch(28.2% 0.091 267.935) 40%, transparent) !important;
-  border-color: color-mix(in oklab, oklch(62.3% 0.214 259.815) 30%, transparent) !important;
-  color: oklch(70.7% 0.165 254.624) !important;
+.icon-blue {
+  background-color: color-mix(in oklab, oklch(28.2% 0.091 267.935deg) 40%, transparent) !important;
+  border-color: color-mix(in oklab, oklch(62.3% 0.214 259.815deg) 30%, transparent) !important;
+  color: oklch(70.7% 0.165 254.624deg) !important;
 }
 
-.iconAmber {
-  background-color: color-mix(in oklab, oklch(27.9% 0.077 45.635) 40%, transparent) !important;
-  border-color: color-mix(in oklab, oklch(76.9% 0.188 70.08) 30%, transparent) !important;
-  color: oklch(82.8% 0.189 84.429) !important;
+.icon-amber {
+  background-color: color-mix(in oklab, oklch(27.9% 0.077 45.635deg) 40%, transparent) !important;
+  border-color: color-mix(in oklab, oklch(76.9% 0.188 70.08deg) 30%, transparent) !important;
+  color: oklch(82.8% 0.189 84.429deg) !important;
 }
 
 .icon {
@@ -79,7 +79,7 @@
   height: 1.5rem;
 }
 
-@media (min-width: 40rem) {
+@media (width >= 40rem) {
   .grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
