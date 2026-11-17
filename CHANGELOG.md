@@ -60,6 +60,7 @@ Section Order:
 
 ### Fixed
 
+- **Notifications**: The user setting *Disable Notifications* is now respected. Users who disabled notifications no longer receive customer or pilot notifications, neither in Alliance Auth nor via Discord.
 - **Administration**: A handler whose expired ESI token can not be deleted (for example because another app still references it) now shows *token error* instead of breaking the whole handler list with a server error.
 - **ESI Retry**: The contract update task now retries itself when ESI is down or limited (HTTP 502, 503, 504, error limit, rate limit bucket, network errors and the daily downtime from 11:00 to 11:15 UTC), instead of failing. A structure that ESI cannot return because of such an error is no longer stored as *Unknown structure*; the task retries instead. The daily downtime check honors `DISABLE_DAILY_DOWNTIME_CHECK`.
 - **Test Cache**: Tests no longer share the Redis cache with other processes. `testauth/settings/local.py` gives each test run its own random cache `KEY_PREFIX`. Before, ESI responses cached by a running testauth instance on the same Redis were returned instead of the pook responses. Redis stays the cache backend because Alliance Auth needs `django_redis`.
