@@ -14,6 +14,7 @@ from allianceauth.notifications import notify
 # AA Fenrir
 from aafenrir import __title__
 from aafenrir.constants import DISCORD_EMBED_COLOR_MAP
+from aafenrir.models.general import UserSettings
 from aafenrir.providers import logger
 
 
@@ -166,6 +167,12 @@ def send_user_notification(
         logger.warning(
             "User with ID %s does not exist. Notification not sent.", user_id
         )
+        return
+
+    if UserSettings.objects.filter(
+        user_id=user.pk, disable_notifications=True
+    ).exists():
+        logger.info("Notifications are disabled for user %s; skipping delivery.", user)
         return
 
     getattr(notify, level)(user=user, title=title, message=message)
