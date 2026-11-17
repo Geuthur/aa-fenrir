@@ -24,8 +24,18 @@ class TestViewAccess(AuthTestCase):
     """The React page requires login and basic_access on every path."""
 
     # Paths the page routes serve: index, frontend routes, and paths with a
-    # leading number (formerly a separate route with `character_id`).
-    PAGE_PATHS = ["", "queue/", "routes/admin/", "123/", "123/settings/", "123"]
+    # leading number (formerly a separate route with `character_id`). `api` and
+    # `apix/` are not the API prefix `api/` and belong to the page as well.
+    PAGE_PATHS = [
+        "",
+        "queue/",
+        "routes/admin/",
+        "123/",
+        "123/settings/",
+        "123",
+        "api",
+        "apix/",
+    ]
 
     @classmethod
     def setUpClass(cls):
