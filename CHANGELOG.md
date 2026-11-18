@@ -60,6 +60,7 @@ Section Order:
 
 ### Fixed
 
+- **Add Company** (`handler/add/`) now requires `aafenrir.basic_access` in addition to `manage_access` or `full_access`; the higher permissions do not include the basic access.
 - The app page (`react_base`) now requires `aafenrir.basic_access` like the repository template. Before, every logged-in user got the page. The unused `character_id` route and context value are removed.
 - **Notifications**: The user setting *Disable Notifications* is now respected. Users who disabled notifications no longer receive customer or pilot notifications, neither in Alliance Auth nor via Discord.
 - **Administration**: A handler whose expired ESI token can not be deleted (for example because another app still references it) now shows *token error* instead of breaking the whole handler list with a server error.

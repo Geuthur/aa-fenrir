@@ -32,6 +32,7 @@ def react_base(request: WSGIRequest):
 
 
 @login_required
+@permission_required("aafenrir.basic_access")
 @user_passes_test(GeneralManager.has_management_access, login_url="aafenrir:index")
 @token_required(scopes=ContractHandler.get_esi_scopes())
 def add_contract_handler(request: WSGIRequest, token):
