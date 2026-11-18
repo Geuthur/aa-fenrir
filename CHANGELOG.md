@@ -95,7 +95,7 @@ Section Order:
 
 ### Changed
 
-- **Discord Notifications**: `thirdparty/discord.py` is aligned with the aa-example building block (embed colours in the module instead of `constants.py`); a failed webhook notification no longer logs the webhook URL with its token; tests moved to `tests/test_discord.py`. No change for users.
+- **Discord Notifications**: `thirdparty/discord.py` is aligned with the aa-example building block (embed colours in the module instead of `constants.py`); a failed webhook notification no longer logs the webhook URL with its token, also not through exception texts of `requests` and Celery; tests moved to `tests/test_discord.py`. No change for users.
 - **Stylelint**: The pre-commit hook now checks the source CSS in `frontend/src/` (bundles stay excluded); findings fixed without visual change (hex colors as `rgb()`, kebab-case CSS module classes with `localsConvention: camelCaseOnly`).
 - **Frontend Dependencies**: `eslint` `^10.15.0` (root and frontend), `typescript-eslint` `^8.72.2` and `zod` 4.6.7 fix the `minimatch` and `zod` security alerts; `aa-geuthur-react` raised to `^1.4.0`.
 - **Permissions**: `General.Meta.permissions` is a plain tuple; `General.Permission` and the wrappers `get_perm`, `has_perm` and `has_any_perm` are removed. Permission rules (`has_basic_access`, `has_management_access`, `has_admin_access`, `users_with_management_access`) live in `GeneralManager` (`aafenrir/managers/general.py`, `General.objects`). `managers.py` became the package `aafenrir/managers/`. Permissions and behavior are unchanged.
