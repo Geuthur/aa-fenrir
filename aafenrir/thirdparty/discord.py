@@ -1,4 +1,4 @@
-"""Discord helper functions"""
+"""Discord notifications via Alliance Auth, aadiscordbot, discordproxy or a webhook."""
 
 # Third Party
 from celery import shared_task
@@ -13,9 +13,22 @@ from allianceauth.notifications import notify
 
 # AA Fenrir
 from aafenrir import __title__
-from aafenrir.constants import DISCORD_EMBED_COLOR_MAP
 from aafenrir.models.general import UserSettings
 from aafenrir.providers import logger
+
+# Embed colors
+DISCORD_EMBED_COLOR_INFO = 0x5BC0DE
+DISCORD_EMBED_COLOR_SUCCESS = 0x5CB85C
+DISCORD_EMBED_COLOR_WARNING = 0xF0AD4E
+DISCORD_EMBED_COLOR_DANGER = 0xD9534F
+
+# Discord embed color map
+DISCORD_EMBED_COLOR_MAP = {
+    "info": DISCORD_EMBED_COLOR_INFO,
+    "success": DISCORD_EMBED_COLOR_SUCCESS,
+    "warning": DISCORD_EMBED_COLOR_WARNING,
+    "danger": DISCORD_EMBED_COLOR_DANGER,
+}
 
 
 def allianceauth_discordbot_installed() -> bool:
@@ -169,9 +182,7 @@ def send_user_notification(
         )
         return
 
-    if UserSettings.objects.filter(
-        user_id=user.pk, disable_notifications=True
-    ).exists():
+    if UserSettings.objects.filter(user=user, disable_notifications=True).exists():
         logger.info("Notifications are disabled for user %s; skipping delivery.", user)
         return
 
@@ -221,9 +232,7 @@ def send_webhook_notification(
 ) -> None:
     """Send a notification as a Celery Task to a webhook."""
     if webhook_url is None:
-        logger.debug(
-            "BELT_RADAR_WEBHOOK_URL is not set in settings. Webhook notification not sent."
-        )
+        logger.debug("No webhook URL given. Webhook notification not sent.")
         return
 
     # Send the message to the webhook using the appropriate method
