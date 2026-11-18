@@ -50,3 +50,6 @@ class TestPermissionStrings(TestCase):
             with self.subTest(file=filename, permission=f"{label}.{codename}"):
                 self.assertEqual(label, __app_name__)
                 self.assertIn(codename, codenames)
+
+    def test_views_should_require_basic_access(self):
+        self.assertIn(("views.py", __app_name__, "basic_access"), _used_permissions())
