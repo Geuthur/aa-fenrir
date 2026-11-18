@@ -4,6 +4,8 @@
 
 > [!IMPORTANT]
 > A new **Administration** page is available for users with the `aafenrir.full_access` permission (no new permission was added). Users with only `manage_access` do not see it. Users with `full_access` now also see the *Route Admin* menu entry, as `full_access` already allowed editing routes.
+>
+> **Basic access is only granted by `aafenrir.basic_access`.** Users with `manage_access` or `full_access` but without `basic_access` lose access to the pages and the whole API. Give them `basic_access` as well.
 
 <!--
 > [!NOTE]
@@ -60,6 +62,8 @@ Section Order:
 
 ### Fixed
 
+- **API**: Every URL of the API now requires `aafenrir.basic_access`, checked centrally by `basic_access_required` (`aafenrir/api/auth.py`) around the API URLs; without it the answer is `403` `{"error": "Permission Denied"}`. Before, the route admin and Administration endpoints checked only `manage_access` or `full_access`, and `menu/` checked nothing.
+- **Add Company** (`handler/add/`) now requires `aafenrir.basic_access` in addition to `manage_access` or `full_access`; the higher permissions do not include the basic access.
 - The app page (`react_base`) now requires `aafenrir.basic_access` like the repository template. Before, every logged-in user got the page. The unused `character_id` route and context value are removed.
 - **Notifications**: The user setting *Disable Notifications* is now respected. Users who disabled notifications no longer receive customer or pilot notifications, neither in Alliance Auth nor via Discord.
 - **Administration**: A handler whose expired ESI token can not be deleted (for example because another app still references it) now shows *token error* instead of breaking the whole handler list with a server error.
@@ -95,7 +99,7 @@ Section Order:
 
 ### Changed
 
-- **Discord Notifications**: `thirdparty/discord.py` is aligned with the aa-example building block (embed colours in the module instead of `constants.py`); a failed webhook notification no longer logs the webhook URL with its token; tests moved to `tests/test_discord.py`. No change for users.
+- **Discord Notifications**: `thirdparty/discord.py` is aligned with the aa-example building block (embed colours in the module instead of `constants.py`); a failed webhook notification no longer logs the webhook URL with its token, also not through exception texts of `requests` and Celery; tests moved to `tests/test_discord.py`. No change for users.
 - **Stylelint**: The pre-commit hook now checks the source CSS in `frontend/src/` (bundles stay excluded); findings fixed without visual change (hex colors as `rgb()`, kebab-case CSS module classes with `localsConvention: camelCaseOnly`).
 - **Frontend Dependencies**: `eslint` `^10.15.0` (root and frontend), `typescript-eslint` `^8.72.2` and `zod` 4.6.7 fix the `minimatch` and `zod` security alerts; `aa-geuthur-react` raised to `^1.4.0`.
 - **Permissions**: `General.Meta.permissions` is a plain tuple; `General.Permission` and the wrappers `get_perm`, `has_perm` and `has_any_perm` are removed. Permission rules (`has_basic_access`, `has_management_access`, `has_admin_access`, `users_with_management_access`) live in `GeneralManager` (`aafenrir/managers/general.py`, `General.objects`). `managers.py` became the package `aafenrir/managers/`. Permissions and behavior are unchanged.
@@ -129,6 +133,7 @@ Section Order:
 
 ### Removed
 
+- Unused Django templates `aafenrir/base.html`, `aafenrir/navigation/navigation.html` and `aafenrir/navigation/administration.html`. No view rendered them, and the last one linked to the missing route `aafenrir:admin`.
 - **Python 3.10**: End of life. Removed from the CI matrix, the tox environments and the classifiers; `requires-python` is now `>=3.11`.
 - **Tailwind**: Tailwind CSS (`tailwindcss`, `@tailwindcss/vite`) was removed from the frontend. The styles use Bootstrap utilities and CSS modules and look as before; the shared classes `fenrir-gradient`, `fenrir-border-500`, `fenrir-border-700` and `font-eve` moved to `Styles/index.css`.
 - Endpoint `POST modify/user/settings/` (replaced by `PUT settings/`) and the field `is_superuser` of `user/` (replaced by `is_admin`).

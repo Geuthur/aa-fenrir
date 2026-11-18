@@ -37,8 +37,12 @@ class TestAdministrationApi(AuthTestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.admin = UserMainFactory(permissions__=["aafenrir.full_access"])
-        cls.manager = UserMainFactory(permissions__=["aafenrir.manage_access"])
+        cls.admin = UserMainFactory(
+            permissions__=["aafenrir.basic_access", "aafenrir.full_access"]
+        )
+        cls.manager = UserMainFactory(
+            permissions__=["aafenrir.basic_access", "aafenrir.manage_access"]
+        )
 
     def _get(self, user, name, **kwargs):
         self.client.force_login(user)
