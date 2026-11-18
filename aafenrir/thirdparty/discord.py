@@ -247,8 +247,7 @@ def send_webhook_notification(
     # If the notification was not sent successfully, retry sending the notification with a delay and a maximum of 3 retries
     if notification_sent is False:
         logger.warning(
-            "Failed to send webhook notification to %s. Check the webhook URL and try again.",
-            webhook_url,
+            "Failed to send webhook notification. Check the webhook URL and try again."
         )
         send_webhook_notification.retry(
             args=[webhook_url, title, message, embed_message, level],
