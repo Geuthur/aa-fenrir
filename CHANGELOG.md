@@ -4,6 +4,8 @@
 
 > [!IMPORTANT]
 > A new **Administration** page is available for users with the `aafenrir.full_access` permission (no new permission was added). Users with only `manage_access` do not see it. Users with `full_access` now also see the *Route Admin* menu entry, as `full_access` already allowed editing routes.
+>
+> **Basic access is only granted by `aafenrir.basic_access`.** Users with `manage_access` or `full_access` but without `basic_access` lose access to the pages and the whole API. Give them `basic_access` as well.
 
 <!--
 > [!NOTE]
@@ -60,6 +62,7 @@ Section Order:
 
 ### Fixed
 
+- **API**: Every URL of the API now requires `aafenrir.basic_access`, checked centrally by `basic_access_required` (`aafenrir/api/auth.py`) around the API URLs; without it the answer is `403` `{"error": "Permission Denied"}`. Before, the route admin and Administration endpoints checked only `manage_access` or `full_access`, and `menu/` checked nothing.
 - **Add Company** (`handler/add/`) now requires `aafenrir.basic_access` in addition to `manage_access` or `full_access`; the higher permissions do not include the basic access.
 - The app page (`react_base`) now requires `aafenrir.basic_access` like the repository template. Before, every logged-in user got the page. The unused `character_id` route and context value are removed.
 - **Notifications**: The user setting *Disable Notifications* is now respected. Users who disabled notifications no longer receive customer or pilot notifications, neither in Alliance Auth nor via Discord.
