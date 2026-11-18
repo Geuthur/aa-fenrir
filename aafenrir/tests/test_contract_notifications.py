@@ -54,7 +54,10 @@ class TestSendCompanyNotification(AuthTestCase):
 @patch(f"{DISCORD_PATH}.notify")
 @patch(f"{MODEL_PATH}.send_user_notification.delay", new=send_user_notification)
 class TestDisabledNotifications(AuthTestCase):
-    """The setting ``disable_notifications`` is respected by the real task."""
+    """Customer and pilot notifications run through the real task.
+
+    The cases of the setting itself are covered in ``test_discord.py``.
+    """
 
     @classmethod
     def setUpClass(cls):
@@ -98,17 +101,6 @@ class TestDisabledNotifications(AuthTestCase):
         # Expected Result
         self.assertEqual(self._notified_users(mock_notify), [self.user.id])
 
-    def test_should_notify_customer_with_enabled_notifications(self, mock_notify):
-        # Test Data
-        UserSettings.objects.create(user=self.user, disable_notifications=False)
-        contract = self._customer_contract()
-
-        # Test Action
-        contract._report_to_customer(Status.OUTSTANDING)
-
-        # Expected Result
-        self.assertEqual(self._notified_users(mock_notify), [self.user.id])
-
     def test_should_not_notify_pilot_with_disabled_notifications(self, mock_notify):
         # Test Data
         UserSettings.objects.create(user=self.admin, disable_notifications=True)
@@ -120,18 +112,3 @@ class TestDisabledNotifications(AuthTestCase):
         # Expected Result
         self.assertNotIn(self.admin.id, self._notified_users(mock_notify))
         self.assertIn(self.superuser.id, self._notified_users(mock_notify))
-
-    def test_should_notify_pilots_without_or_with_enabled_user_settings(
-        self, mock_notify
-    ):
-        # Test Data
-        UserSettings.objects.create(user=self.superuser, disable_notifications=False)
-        contract = self._pilot_contract()
-
-        # Test Action
-        contract.send_company_notification()
-
-        # Expected Result
-        self.assertCountEqual(
-            self._notified_users(mock_notify), [self.admin.id, self.superuser.id]
-        )
