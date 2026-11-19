@@ -99,6 +99,7 @@ Section Order:
 
 ### Changed
 
+- **Frontend on aa-geuthur-react 1.5.0**: `Main.tsx` calls `initI18n`, the settings (Settings page and the quick-select routes of the Calculator) use `useUserSettings` and read and save `settings/` instead of `user/`, `FilterButtonGroup` comes from the package, and `Styles/index.css` keeps only the tokens and values that differ from the package. Unused `validation.ts` and `getExampleColumns` are removed. No visible change.
 - **Discord Notifications**: `thirdparty/discord.py` is aligned with the aa-example building block (embed colours in the module instead of `constants.py`); a failed webhook notification no longer logs the webhook URL with its token, also not through exception texts of `requests` and Celery; tests moved to `tests/test_discord.py`. No change for users.
 - **Stylelint**: The pre-commit hook now checks the source CSS in `frontend/src/` (bundles stay excluded); findings fixed without visual change (hex colors as `rgb()`, kebab-case CSS module classes with `localsConvention: camelCaseOnly`).
 - **Frontend Dependencies**: `eslint` `^10.15.0` (root and frontend), `typescript-eslint` `^8.72.2` and `zod` 4.6.7 fix the `minimatch` and `zod` security alerts; `aa-geuthur-react` raised to `^1.4.0`.
