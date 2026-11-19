@@ -3,13 +3,24 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { apiClient } from '@/Api/Api';
 import {
+    addRouteSystem,
     createRoutePreset,
+    deleteAdministrationHandler,
     deleteRoutePreset,
+    deleteRouteSystem,
+    loadAdministrationHandler,
+    loadAdministrationHandlers,
+    loadContractHandlers,
+    loadContractQueue,
     loadRoutePresetCoverage,
     loadRoutePresets,
-    loadUserSettings,
-    updateUserSettings,
+    loadRouteSystems,
+    searchSolarSystems,
+    updateAdministrationAll,
+    updateAdministrationHandler,
+    updateRoutePreset,
 } from '@/Api/ApiCalls';
+import type { components } from '@/Api/OpenApi';
 import { ProjectName } from '@/constants';
 
 describe('General API client functions', () => {
@@ -66,7 +77,7 @@ describe('General API client functions', () => {
                 response: new Response(),
             } as never);
 
-            await expect(loadRoutePresetCoverage(3)).rejects.toThrow('Failed to load route coverage');
+            await expect(loadRoutePresetCoverage(3)).rejects.toThrow('Permission Denied.');
         });
     });
 
@@ -126,61 +137,76 @@ describe('General API client functions', () => {
             await expect(deleteRoutePreset(99)).rejects.toThrow('Route preset not found.');
         });
     });
+});
 
-    describe('updateUserSettings', () => {
-        it('PUTs disable_notifications to settings/ and returns the settings', async () => {
-            const settings = { disable_notifications: true, quick_select_presets: [] };
-            vi.spyOn(apiClient, 'PUT').mockResolvedValueOnce({
-                data: settings,
-                error: undefined,
-                response: new Response(),
-            } as never);
+type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
-            const result = await updateUserSettings({ disable_notifications: true });
-            expect(result).toEqual(settings);
-            expect(apiClient.PUT).toHaveBeenCalledWith(`/${ProjectName}/api/settings/`, {
-                body: { disable_notifications: true },
-            });
-        });
+const presetPayload: components['schemas']['CreateRoutePresetSchema'] = {
+    name: 'Corridor',
+    origin_system_id: 30000142,
+    origin_system_station: '',
+    destination_system_id: 30004759,
+    destination_system_station: '',
+    service_type: 'jumpfreighter',
+    max_volume: 0,
+    max_collateral: 0,
+    base_fee: 5000000,
+    fee_per_m3: 0,
+    fee_per_ly: 0,
+    collateral_percent: 0,
+    min_reward: 0,
+    estimated_time: 0,
+    is_cyno_route: false,
+    cyno_waypoint_ids: [],
+    danger_level: 'safe',
+    has_alliance_subsidy: true,
+    expiration_days: 7,
+    days_to_complete: 3,
+};
 
-        it('PUTs quick_select_presets to settings/', async () => {
-            const settings = { disable_notifications: false, quick_select_presets: [1, 2, 3] };
-            vi.spyOn(apiClient, 'PUT').mockResolvedValueOnce({
-                data: settings,
-                error: undefined,
-                response: new Response(),
-            } as never);
+/** Every call of `ApiCalls.ts`: [name, HTTP method, call, fixed text]. */
+const calls: [string, Method, () => Promise<unknown>, string][] = [
+    ['loadRoutePresets', 'GET', () => loadRoutePresets(), 'Failed to load route presets'],
+    ['loadRoutePresetCoverage', 'GET', () => loadRoutePresetCoverage(3), 'Failed to load route coverage'],
+    ['createRoutePreset', 'POST', () => createRoutePreset(presetPayload), 'Failed to create route preset'],
+    ['updateRoutePreset', 'PUT', () => updateRoutePreset(3, presetPayload), 'Failed to update route preset'],
+    ['deleteRoutePreset', 'DELETE', () => deleteRoutePreset(3), 'Failed to delete route preset'],
+    ['loadContractQueue', 'GET', () => loadContractQueue(), 'Failed to load contracts queue'],
+    ['loadRouteSystems', 'GET', () => loadRouteSystems(), 'Failed to load route systems'],
+    ['addRouteSystem', 'POST', () => addRouteSystem(30000142), 'Failed to add route system'],
+    ['deleteRouteSystem', 'DELETE', () => deleteRouteSystem(30000142), 'Failed to delete route system'],
+    ['searchSolarSystems', 'GET', () => searchSolarSystems('Jita'), 'Failed to search solar systems'],
+    ['loadContractHandlers', 'GET', () => loadContractHandlers(), 'Failed to load contract handlers'],
+    ['loadAdministrationHandlers', 'GET', () => loadAdministrationHandlers(), 'Failed to load handlers'],
+    ['loadAdministrationHandler', 'GET', () => loadAdministrationHandler(2001), 'Failed to load handler'],
+    ['updateAdministrationHandler', 'POST', () => updateAdministrationHandler(2001, false), 'Failed to queue update'],
+    ['deleteAdministrationHandler', 'DELETE', () => deleteAdministrationHandler(2001), 'Failed to delete handler'],
+    ['updateAdministrationAll', 'POST', () => updateAdministrationAll(false), 'Failed to queue update'],
+];
 
-            const result = await updateUserSettings({ quick_select_presets: [1, 2, 3] });
-            expect(result).toEqual(settings);
-            expect(apiClient.PUT).toHaveBeenCalledWith(`/${ProjectName}/api/settings/`, {
-                body: { quick_select_presets: [1, 2, 3] },
-            });
-        });
+const failWith = (method: Method, error: unknown) =>
+    vi.spyOn(apiClient, method).mockResolvedValueOnce({
+        data: undefined,
+        error,
+        response: new Response(),
+    } as never);
 
-        it('throws the error message when the update fails', async () => {
-            vi.spyOn(apiClient, 'PUT').mockResolvedValueOnce({
-                data: undefined,
-                error: { error: 'Permission Denied.' },
-                response: new Response(),
-            } as never);
-
-            await expect(updateUserSettings({ disable_notifications: false })).rejects.toThrow('Permission Denied.');
-        });
+describe('API error messages', () => {
+    beforeEach(() => {
+        vi.restoreAllMocks();
     });
 
-    describe('loadUserSettings', () => {
-        it('calls GET settings/ and returns the settings', async () => {
-            const settings = { disable_notifications: false, quick_select_presets: [] };
-            vi.spyOn(apiClient, 'GET').mockResolvedValueOnce({
-                data: settings,
-                error: undefined,
-                response: new Response(),
-            } as never);
+    describe.each(calls)('%s', (_name, method, call, fixedText) => {
+        it('throws the message of the API', async () => {
+            failWith(method, { error: 'Permission Denied' });
 
-            const result = await loadUserSettings();
-            expect(result).toEqual(settings);
-            expect(apiClient.GET).toHaveBeenCalledWith(`/${ProjectName}/api/settings/`);
+            await expect(call()).rejects.toThrow('Permission Denied');
+        });
+
+        it('throws the fixed text when the API sends no message', async () => {
+            failWith(method, {});
+
+            await expect(call()).rejects.toThrow(fixedText);
         });
     });
 });

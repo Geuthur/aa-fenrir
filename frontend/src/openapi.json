@@ -21,6 +21,16 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorSchema"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -177,9 +187,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": true,
-                  "title": "Response",
-                  "type": "object"
+                  "$ref": "#/components/schemas/ErrorSchema"
                 }
               }
             }
@@ -226,9 +234,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": true,
-                  "title": "Response",
-                  "type": "object"
+                  "$ref": "#/components/schemas/ErrorSchema"
                 }
               }
             }
@@ -238,9 +244,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": true,
-                  "title": "Response",
-                  "type": "object"
+                  "$ref": "#/components/schemas/ErrorSchema"
                 }
               }
             }
@@ -287,9 +291,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": true,
-                  "title": "Response",
-                  "type": "object"
+                  "$ref": "#/components/schemas/ErrorSchema"
                 }
               }
             }
@@ -299,9 +301,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": true,
-                  "title": "Response",
-                  "type": "object"
+                  "$ref": "#/components/schemas/ErrorSchema"
                 }
               }
             }
@@ -360,9 +360,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": true,
-                  "title": "Response",
-                  "type": "object"
+                  "$ref": "#/components/schemas/ErrorSchema"
                 }
               }
             }
@@ -372,9 +370,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": true,
-                  "title": "Response",
-                  "type": "object"
+                  "$ref": "#/components/schemas/ErrorSchema"
                 }
               }
             }
@@ -424,9 +420,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": true,
-                  "title": "Response",
-                  "type": "object"
+                  "$ref": "#/components/schemas/ErrorSchema"
                 }
               }
             }
@@ -467,9 +461,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": true,
-                  "title": "Response",
-                  "type": "object"
+                  "$ref": "#/components/schemas/ErrorSchema"
                 }
               }
             }
@@ -510,9 +502,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": true,
-                  "title": "Response",
-                  "type": "object"
+                  "$ref": "#/components/schemas/ErrorSchema"
                 }
               }
             }
@@ -547,9 +537,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": true,
-                  "title": "Response",
-                  "type": "object"
+                  "$ref": "#/components/schemas/ErrorSchema"
                 }
               }
             }
@@ -559,9 +547,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": true,
-                  "title": "Response",
-                  "type": "object"
+                  "$ref": "#/components/schemas/ErrorSchema"
                 }
               }
             }
@@ -618,9 +604,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": true,
-                  "title": "Response",
-                  "type": "object"
+                  "$ref": "#/components/schemas/ErrorSchema"
                 }
               }
             }
@@ -630,9 +614,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": true,
-                  "title": "Response",
-                  "type": "object"
+                  "$ref": "#/components/schemas/ErrorSchema"
                 }
               }
             }
@@ -677,9 +659,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": true,
-                  "title": "Response",
-                  "type": "object"
+                  "$ref": "#/components/schemas/ErrorSchema"
                 }
               }
             }
@@ -689,9 +669,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": true,
-                  "title": "Response",
-                  "type": "object"
+                  "$ref": "#/components/schemas/ErrorSchema"
                 }
               }
             }
@@ -701,9 +679,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": true,
-                  "title": "Response",
-                  "type": "object"
+                  "$ref": "#/components/schemas/ErrorSchema"
                 }
               }
             }
@@ -760,9 +736,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": true,
-                  "title": "Response",
-                  "type": "object"
+                  "$ref": "#/components/schemas/ErrorSchema"
                 }
               }
             }
@@ -772,9 +746,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": true,
-                  "title": "Response",
-                  "type": "object"
+                  "$ref": "#/components/schemas/ErrorSchema"
                 }
               }
             }
@@ -825,9 +797,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": true,
-                  "title": "Response",
-                  "type": "object"
+                  "$ref": "#/components/schemas/ErrorSchema"
                 }
               }
             }
@@ -837,9 +807,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": true,
-                  "title": "Response",
-                  "type": "object"
+                  "$ref": "#/components/schemas/ErrorSchema"
                 }
               }
             }
@@ -880,9 +848,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": true,
-                  "title": "Response",
-                  "type": "object"
+                  "$ref": "#/components/schemas/ErrorSchema"
                 }
               }
             }
@@ -917,9 +883,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": true,
-                  "title": "Response",
-                  "type": "object"
+                  "$ref": "#/components/schemas/ErrorSchema"
                 }
               }
             }
@@ -929,9 +893,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": true,
-                  "title": "Response",
-                  "type": "object"
+                  "$ref": "#/components/schemas/ErrorSchema"
                 }
               }
             }
@@ -990,9 +952,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": true,
-                  "title": "Response",
-                  "type": "object"
+                  "$ref": "#/components/schemas/ErrorSchema"
                 }
               }
             }
@@ -1002,9 +962,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": true,
-                  "title": "Response",
-                  "type": "object"
+                  "$ref": "#/components/schemas/ErrorSchema"
                 }
               }
             }
@@ -1045,9 +1003,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": true,
-                  "title": "Response",
-                  "type": "object"
+                  "$ref": "#/components/schemas/ErrorSchema"
                 }
               }
             }
@@ -1094,9 +1050,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": true,
-                  "title": "Response",
-                  "type": "object"
+                  "$ref": "#/components/schemas/ErrorSchema"
                 }
               }
             }
@@ -1106,9 +1060,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": true,
-                  "title": "Response",
-                  "type": "object"
+                  "$ref": "#/components/schemas/ErrorSchema"
                 }
               }
             }
@@ -1160,9 +1112,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": true,
-                  "title": "Response",
-                  "type": "object"
+                  "$ref": "#/components/schemas/ErrorSchema"
                 }
               }
             }
@@ -1326,6 +1276,20 @@
         "title": "ModalSchema",
         "type": "object"
       },
+      "ErrorSchema": {
+        "description": "Error response of an endpoint, e.g. for 403 and 404.",
+        "properties": {
+          "error": {
+            "title": "Error",
+            "type": "string"
+          }
+        },
+        "required": [
+          "error"
+        ],
+        "title": "ErrorSchema",
+        "type": "object"
+      },
       "UserData": {
         "description": "Schema for user data, including character ID and character name.\n\nParameters:\n    user_id (int): The ID of the user.\n    character_id (int): The ID of the character associated with the user.\n    character_name (str): The name of the character.\n    corporation_id (int): The ID of the corporation of the character.\n    corporation_name (str): The name of the corporation of the character.\n    alliance_id (int | None): The ID of the alliance of the character, if any.\n    alliance_name (str | None): The name of the alliance of the character, if any.\n    portrait (str | None): The URL or path to the character's portrait image.\n    is_admin (bool): Whether the user is a superuser (Administration: force refresh).\n    notification (boolean): The notification status for the user.",
         "properties": {
@@ -1429,20 +1393,6 @@
           "calculator_max_collateral"
         ],
         "title": "UserData",
-        "type": "object"
-      },
-      "ErrorSchema": {
-        "description": "Error response of an endpoint, e.g. for 403 and 404.",
-        "properties": {
-          "error": {
-            "title": "Error",
-            "type": "string"
-          }
-        },
-        "required": [
-          "error"
-        ],
-        "title": "ErrorSchema",
         "type": "object"
       },
       "UserSettingsSchema": {

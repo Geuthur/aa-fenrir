@@ -2,40 +2,35 @@
 import { useState } from 'react';
 
 // Third Party
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { ErrorLoader, FetchingLoader, useUserData } from "aa-geuthur-react";
+import { ErrorLoader, FetchingLoader, useUserSettings } from "aa-geuthur-react";
 import Alert from 'react-bootstrap/Alert';
 import { useTranslation } from 'react-i18next';
 
-import { updateUserSettings } from '@/Api/ApiCalls';
-import { queryKeys } from '@/Api/query';
-import type { UserData } from "@/Api/schema";
+import type { UserSettingsSchema, UserSettingsUpdateRequest } from "@/Api/schema";
 import UserSettingsForm from '@/Components/Forms/UserSettingsForm';
 
 function Settings() {
     const { t } = useTranslation();
-    const queryClient = useQueryClient();
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-    const { data, isLoading, isError, error } = useUserData<UserData>();
-
-    const mutation = useMutation({
-        mutationFn: (disableNotifications: boolean) =>
-            updateUserSettings({ disable_notifications: disableNotifications }),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: queryKeys.User });
-            setErrorMessage(null);
-            setSuccessMessage(t("Settings saved successfully."));
-        },
-        onError: (err: unknown) => {
-            setSuccessMessage(null);
-            setErrorMessage(err instanceof Error ? err.message : t("Failed to save settings."));
-        },
-    });
+    // Loads the settings and saves them optimistically (rollback on error)
+    const { data, isLoading, isError, error, updateMutation } = useUserSettings<UserSettingsSchema, UserSettingsUpdateRequest>();
 
     const handleSave = (disableNotifications: boolean) => {
-        mutation.mutate(disableNotifications);
+        updateMutation.mutate(
+            { disable_notifications: disableNotifications },
+            {
+                onSuccess: () => {
+                    setErrorMessage(null);
+                    setSuccessMessage(t("Settings saved successfully."));
+                },
+                onError: (err: unknown) => {
+                    setSuccessMessage(null);
+                    setErrorMessage(err instanceof Error ? err.message : t("Failed to save settings."));
+                },
+            },
+        );
     };
 
     return (
@@ -68,10 +63,10 @@ function Settings() {
 
                     {!isLoading && !isError && data && (
                         <UserSettingsForm
-                            key={String(data.user.notification)}
-                            initialDisableNotifications={data.user.notification}
+                            key={String(data.disable_notifications)}
+                            initialDisableNotifications={data.disable_notifications}
                             onSubmit={handleSave}
-                            isPending={mutation.isPending}
+                            isPending={updateMutation.isPending}
                         />
                     )}
                 </div>

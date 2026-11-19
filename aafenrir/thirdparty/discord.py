@@ -1,7 +1,9 @@
-"""Discord helper functions"""
+"""Discord notifications via Alliance Auth, aadiscordbot, discordproxy or a webhook."""
 
 # Third Party
 from celery import shared_task
+from celery.exceptions import MaxRetriesExceededError
+from requests.exceptions import RequestException
 
 # Django
 from django.apps import apps
@@ -13,8 +15,22 @@ from allianceauth.notifications import notify
 
 # AA Fenrir
 from aafenrir import __title__
-from aafenrir.constants import DISCORD_EMBED_COLOR_MAP
+from aafenrir.models.general import UserSettings
 from aafenrir.providers import logger
+
+# Embed colors
+DISCORD_EMBED_COLOR_INFO = 0x5BC0DE
+DISCORD_EMBED_COLOR_SUCCESS = 0x5CB85C
+DISCORD_EMBED_COLOR_WARNING = 0xF0AD4E
+DISCORD_EMBED_COLOR_DANGER = 0xD9534F
+
+# Discord embed color map
+DISCORD_EMBED_COLOR_MAP = {
+    "info": DISCORD_EMBED_COLOR_INFO,
+    "success": DISCORD_EMBED_COLOR_SUCCESS,
+    "warning": DISCORD_EMBED_COLOR_WARNING,
+    "danger": DISCORD_EMBED_COLOR_DANGER,
+}
 
 
 def allianceauth_discordbot_installed() -> bool:
@@ -122,19 +138,28 @@ def _discordwebhook_send_message(
     import dhooks_lite
 
     hook = dhooks_lite.Webhook(url=webhook_url)
-    if embed_message is True:
-        # Third Party
-        from dhooks_lite import Embed
+    try:
+        if embed_message is True:
+            # Third Party
+            from dhooks_lite import Embed
 
-        embed = Embed(
-            title=str(title),
-            description=message,
-            color=DISCORD_EMBED_COLOR_MAP.get(level),
-            timestamp=timezone.now(),
+            embed = Embed(
+                title=str(title),
+                description=message,
+                color=DISCORD_EMBED_COLOR_MAP.get(level),
+                timestamp=timezone.now(),
+            )
+            response = hook.execute(embeds=[embed])
+        else:
+            response = hook.execute(content=f"**{title}**\n\n{message}")
+    except RequestException as exc:
+        # The exception text contains the webhook URL with the token, so only
+        # the type of the exception is logged and the exception is not raised.
+        logger.warning(
+            "Webhook failed to send message to Discord. Error: %s",
+            type(exc).__name__,
         )
-        response = hook.execute(embeds=[embed])
-    else:
-        response = hook.execute(content=f"**{title}**\n\n{message}")
+        return False
 
     logger.debug("headers: %s", response.headers)
     logger.debug("status_code: %s", response.status_code)
@@ -166,6 +191,10 @@ def send_user_notification(
         logger.warning(
             "User with ID %s does not exist. Notification not sent.", user_id
         )
+        return
+
+    if UserSettings.objects.filter(user=user, disable_notifications=True).exists():
+        logger.info("Notifications are disabled for user %s; skipping delivery.", user)
         return
 
     getattr(notify, level)(user=user, title=title, message=message)
@@ -214,9 +243,7 @@ def send_webhook_notification(
 ) -> None:
     """Send a notification as a Celery Task to a webhook."""
     if webhook_url is None:
-        logger.debug(
-            "BELT_RADAR_WEBHOOK_URL is not set in settings. Webhook notification not sent."
-        )
+        logger.debug("No webhook URL given. Webhook notification not sent.")
         return
 
     # Send the message to the webhook using the appropriate method
@@ -231,11 +258,17 @@ def send_webhook_notification(
     # If the notification was not sent successfully, retry sending the notification with a delay and a maximum of 3 retries
     if notification_sent is False:
         logger.warning(
-            "Failed to send webhook notification to %s. Check the webhook URL and try again.",
-            webhook_url,
+            "Failed to send webhook notification. Check the webhook URL and try again."
         )
-        send_webhook_notification.retry(
-            args=[webhook_url, title, message, embed_message, level],
-            countdown=2,  # Delay in seconds before retrying
-            max_retries=3,
-        )
+        try:
+            send_webhook_notification.retry(
+                args=[webhook_url, title, message, embed_message, level],
+                countdown=2,  # Delay in seconds before retrying
+                max_retries=3,
+            )
+        except MaxRetriesExceededError:
+            # The exception text contains the task arguments and with them the
+            # webhook URL with the token, so the exception is not raised.
+            logger.warning(
+                "Failed to send webhook notification after the maximum number of retries."
+            )

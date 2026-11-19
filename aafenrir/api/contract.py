@@ -30,14 +30,12 @@ class ContractApiEndpoints:
             "contract/handlers/",
             response={
                 HTTPStatus.OK: list[schema.ContractHandlerSchema],
-                HTTPStatus.FORBIDDEN: dict,
+                HTTPStatus.FORBIDDEN: schema.ErrorSchema,
             },
             tags=self.tags,
         )
+        # pylint: disable=unused-argument
         def get_contract_handlers(request: WSGIRequest):
-            if not GeneralManager.has_basic_access(request.user):
-                return HTTPStatus.FORBIDDEN, {"error": _("Permission Denied.")}
-
             handlers = ContractHandler.objects.select_related("organization").all()
             return HTTPStatus.OK, [
                 schema.ContractHandlerSchema(
@@ -51,14 +49,12 @@ class ContractApiEndpoints:
             "contract/presets/",
             response={
                 HTTPStatus.OK: list[schema.RoutePresetSchema],
-                HTTPStatus.FORBIDDEN: dict,
+                HTTPStatus.FORBIDDEN: schema.ErrorSchema,
             },
             tags=self.tags,
         )
+        # pylint: disable=unused-argument
         def get_route_presets(request: WSGIRequest):
-            if not GeneralManager.has_basic_access(request.user):
-                return HTTPStatus.FORBIDDEN, {"error": _("Permission Denied.")}
-
             presets = (
                 RoutePreset.objects.select_related(
                     "origin_system",
@@ -128,15 +124,13 @@ class ContractApiEndpoints:
             "contract/preset/{preset_id}/",
             response={
                 HTTPStatus.OK: schema.RoutePresetSchema,
-                HTTPStatus.NOT_FOUND: dict,
-                HTTPStatus.FORBIDDEN: dict,
+                HTTPStatus.NOT_FOUND: schema.ErrorSchema,
+                HTTPStatus.FORBIDDEN: schema.ErrorSchema,
             },
             tags=self.tags,
         )
+        # pylint: disable=unused-argument
         def get_route_preset(request: WSGIRequest, preset_id: int):
-            if not GeneralManager.has_basic_access(request.user):
-                return HTTPStatus.FORBIDDEN, {"error": _("Permission Denied.")}
-
             try:
                 p = (
                     RoutePreset.objects.select_related(
@@ -149,7 +143,7 @@ class ContractApiEndpoints:
                     .get(id=preset_id)
                 )
             except RoutePreset.DoesNotExist:
-                return HTTPStatus.NOT_FOUND, {"detail": _("Route preset not found.")}
+                return HTTPStatus.NOT_FOUND, {"error": _("Route preset not found.")}
 
             return HTTPStatus.OK, schema.RoutePresetSchema(
                 id=p.id,
@@ -202,8 +196,8 @@ class ContractApiEndpoints:
             "contract/preset/{preset_id}/coverage/",
             response={
                 HTTPStatus.OK: list[schema.CynoCoverageSystemSchema],
-                HTTPStatus.NOT_FOUND: dict,
-                HTTPStatus.FORBIDDEN: dict,
+                HTTPStatus.NOT_FOUND: schema.ErrorSchema,
+                HTTPStatus.FORBIDDEN: schema.ErrorSchema,
             },
             tags=self.tags,
             summary="Route admin characters in the systems of a route",
@@ -266,8 +260,8 @@ class ContractApiEndpoints:
             "contract/presets/",
             response={
                 HTTPStatus.CREATED: schema.RoutePresetSchema,
-                HTTPStatus.BAD_REQUEST: dict,
-                HTTPStatus.FORBIDDEN: dict,
+                HTTPStatus.BAD_REQUEST: schema.ErrorSchema,
+                HTTPStatus.FORBIDDEN: schema.ErrorSchema,
             },
             tags=self.tags,
         )
@@ -390,9 +384,9 @@ class ContractApiEndpoints:
             "contract/preset/{preset_id}/",
             response={
                 HTTPStatus.OK: schema.RoutePresetSchema,
-                HTTPStatus.BAD_REQUEST: dict,
-                HTTPStatus.NOT_FOUND: dict,
-                HTTPStatus.FORBIDDEN: dict,
+                HTTPStatus.BAD_REQUEST: schema.ErrorSchema,
+                HTTPStatus.NOT_FOUND: schema.ErrorSchema,
+                HTTPStatus.FORBIDDEN: schema.ErrorSchema,
             },
             tags=self.tags,
         )
@@ -407,7 +401,7 @@ class ContractApiEndpoints:
             try:
                 preset = RoutePreset.objects.get(id=preset_id)
             except RoutePreset.DoesNotExist:
-                return HTTPStatus.NOT_FOUND, {"detail": _("Route preset not found.")}
+                return HTTPStatus.NOT_FOUND, {"error": _("Route preset not found.")}
 
             if not data.origin_system_id or not data.destination_system_id:
                 return HTTPStatus.BAD_REQUEST, {
@@ -521,8 +515,8 @@ class ContractApiEndpoints:
             "contract/preset/{preset_id}/",
             response={
                 HTTPStatus.OK: dict,
-                HTTPStatus.NOT_FOUND: dict,
-                HTTPStatus.FORBIDDEN: dict,
+                HTTPStatus.NOT_FOUND: schema.ErrorSchema,
+                HTTPStatus.FORBIDDEN: schema.ErrorSchema,
             },
             tags=self.tags,
         )
@@ -533,7 +527,7 @@ class ContractApiEndpoints:
             try:
                 preset = RoutePreset.objects.get(id=preset_id)
             except RoutePreset.DoesNotExist:
-                return HTTPStatus.NOT_FOUND, {"detail": _("Route preset not found.")}
+                return HTTPStatus.NOT_FOUND, {"error": _("Route preset not found.")}
 
             preset.delete()
             return HTTPStatus.OK, {
@@ -545,14 +539,12 @@ class ContractApiEndpoints:
             "contract/systems/",
             response={
                 HTTPStatus.OK: list[schema.RouteSystemSchema],
-                HTTPStatus.FORBIDDEN: dict,
+                HTTPStatus.FORBIDDEN: schema.ErrorSchema,
             },
             tags=self.tags,
         )
+        # pylint: disable=unused-argument
         def get_route_systems(request: WSGIRequest):
-            if not GeneralManager.has_basic_access(request.user):
-                return HTTPStatus.FORBIDDEN, {"error": _("Permission Denied.")}
-
             route_systems = RouteSystem.objects.select_related(
                 "system__constellation__region"
             ).order_by("system__name")
@@ -599,8 +591,8 @@ class ContractApiEndpoints:
             "contract/systems/",
             response={
                 HTTPStatus.CREATED: schema.RouteSystemSchema,
-                HTTPStatus.BAD_REQUEST: dict,
-                HTTPStatus.FORBIDDEN: dict,
+                HTTPStatus.BAD_REQUEST: schema.ErrorSchema,
+                HTTPStatus.FORBIDDEN: schema.ErrorSchema,
             },
             tags=self.tags,
         )
@@ -652,8 +644,8 @@ class ContractApiEndpoints:
             "contract/system/{system_id}/",
             response={
                 HTTPStatus.OK: dict,
-                HTTPStatus.NOT_FOUND: dict,
-                HTTPStatus.FORBIDDEN: dict,
+                HTTPStatus.NOT_FOUND: schema.ErrorSchema,
+                HTTPStatus.FORBIDDEN: schema.ErrorSchema,
             },
             tags=self.tags,
         )
@@ -666,7 +658,7 @@ class ContractApiEndpoints:
             ).delete()[0]
 
             if deleted_count == 0:
-                return HTTPStatus.NOT_FOUND, {"detail": _("Route system not found.")}
+                return HTTPStatus.NOT_FOUND, {"error": _("Route system not found.")}
 
             return HTTPStatus.OK, {
                 "success": True,
@@ -677,14 +669,12 @@ class ContractApiEndpoints:
             "contract/queue/",
             response={
                 HTTPStatus.OK: list[schema.ContractSchema],
-                HTTPStatus.FORBIDDEN: dict,
+                HTTPStatus.FORBIDDEN: schema.ErrorSchema,
             },
             tags=self.tags,
         )
+        # pylint: disable=unused-argument
         def get_contract_queue(request: WSGIRequest):
-            if not GeneralManager.has_basic_access(request.user):
-                return HTTPStatus.FORBIDDEN, {"error": _("Permission Denied.")}
-
             contracts = Contract.objects.all().order_by("-date_issued")
 
             results = []

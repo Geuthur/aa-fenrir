@@ -2,8 +2,8 @@
 import { useEffect, useMemo, useState } from 'react';
 
 // Third Party
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useUserData } from "aa-geuthur-react";
+import { useQuery } from '@tanstack/react-query';
+import { useUserData, useUserSettings } from "aa-geuthur-react";
 import { useTranslation } from 'react-i18next';
 
 // Styles
@@ -13,10 +13,9 @@ import {
     loadRoutePresetCoverage,
     loadRoutePresets,
     loadRouteSystems,
-    updateUserSettings,
 } from '@/Api/ApiCalls';
 import { queryKeys } from '@/Api/query';
-import type { UserData } from "@/Api/schema";
+import type { UserData, UserSettingsSchema, UserSettingsUpdateRequest } from "@/Api/schema";
 import {
   CargoInput,
   QuoteBreakdown,
@@ -40,7 +39,6 @@ const EMPTY_SYSTEM: EveSolarSystem = {
 
 export default function Calculator() {
     const { t } = useTranslation();
-    const queryClient = useQueryClient();
     const [showContractModal, setShowContractModal] = useState(false);
     const [showConfigurePresetsModal, setShowConfigurePresetsModal] = useState(false);
 
@@ -77,15 +75,9 @@ export default function Calculator() {
         }));
     }, [routeSystems]);
 
-    // Save Quick-Select Presets Mutation
-    const savePresetsMutation = useMutation({
-        mutationFn: (presetIds: number[]) =>
-            updateUserSettings({ quick_select_presets: presetIds }),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: queryKeys.User });
-            setShowConfigurePresetsModal(false);
-        },
-    });
+    // Quick-Select Presets (settings/), saved optimistically
+    const { data: userSettings, updateMutation: savePresetsMutation } =
+        useUserSettings<UserSettingsSchema, UserSettingsUpdateRequest>();
 
     // Corridor & Route State
     const [selectedCorridor, setSelectedCorridor] = useState<FreightCorridor | null>(null);
@@ -289,7 +281,7 @@ export default function Calculator() {
                 stargateJumps={stargateJumps}
                 serviceType={effectiveCorridor?.service_type || 'jump_freighter'}
                 corridors={presets}
-                quickSelectPresetIds={userData?.user.quick_select_presets}
+                quickSelectPresetIds={userSettings?.quick_select_presets}
                 onOpenConfigurePresets={() => setShowConfigurePresetsModal(true)}
                 systems={availableSystems}
             />
@@ -342,8 +334,13 @@ export default function Calculator() {
             isOpen={showConfigurePresetsModal}
             onClose={() => setShowConfigurePresetsModal(false)}
             corridors={presets}
-            currentSelectedIds={userData?.user.quick_select_presets || []}
-            onSave={(ids) => savePresetsMutation.mutate(ids)}
+            currentSelectedIds={userSettings?.quick_select_presets || []}
+            onSave={(ids) =>
+                savePresetsMutation.mutate(
+                    { quick_select_presets: ids },
+                    { onSuccess: () => setShowConfigurePresetsModal(false) },
+                )
+            }
             isPending={savePresetsMutation.isPending}
         />
     </main>

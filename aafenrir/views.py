@@ -2,7 +2,11 @@
 
 # Django
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import (
+    login_required,
+    permission_required,
+    user_passes_test,
+)
 from django.core.handlers.wsgi import WSGIRequest
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
@@ -20,19 +24,15 @@ from aafenrir.tasks import update_freight
 
 
 @login_required
-def react_base(request: WSGIRequest, character_id=None):  #
-    if character_id is None:
-        character_id = request.user.profile.main_character.character_id
-
-    context = {
-        "version": __version__,
-        "app_name": __app_name__,
-        "character_id": character_id,
-    }
+@permission_required("aafenrir.basic_access")
+def react_base(request: WSGIRequest):
+    """Serve the React app; routing and permissions of the pages are handled by the API."""
+    context = {"version": __version__, "app_name": __app_name__}
     return render(request, "aafenrir/react_base.html", context=context)
 
 
 @login_required
+@permission_required("aafenrir.basic_access")
 @user_passes_test(GeneralManager.has_management_access, login_url="aafenrir:index")
 @token_required(scopes=ContractHandler.get_esi_scopes())
 def add_contract_handler(request: WSGIRequest, token):

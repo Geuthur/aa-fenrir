@@ -10,155 +10,158 @@
   transition-duration: 150ms;
 }
 
-.activeContainer {
-  background-color: color-mix(in oklab, oklch(20.8% 0.042 265.755) 60%, transparent);
-  border-color: rgba(6, 182, 212, 0.5);
+.active-container {
+  background-color: color-mix(in oklab, oklch(20.8% 0.042 265.755deg) 60%, transparent);
+  border-color: rgb(6 182 212 / 50%);
 }
 
-.availableContainer {
-  background-color: color-mix(in oklab, oklch(20.8% 0.042 265.755) 60%, transparent);
-  border-color: rgba(16, 185, 129, 0.5);
+.available-container {
+  background-color: color-mix(in oklab, oklch(20.8% 0.042 265.755deg) 60%, transparent);
+  border-color: rgb(16 185 129 / 50%);
 }
 
-.standardContainer {
-  background-color: color-mix(in oklab, oklch(20.8% 0.042 265.755) 60%, transparent);
-  border-color: rgba(6, 182, 212, 0.5);
+.standard-container {
+  background-color: color-mix(in oklab, oklch(20.8% 0.042 265.755deg) 60%, transparent);
+  border-color: rgb(6 182 212 / 50%);
 }
 
-.headerRow {
+.header-row {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   gap: 0.75rem;
 }
-@media (min-width: 40rem) {
-  .headerRow {
+
+@media (width >= 40rem) {
+  .header-row {
     flex-direction: row;
     align-items: center;
   }
 }
 
-.titleGroup {
+.title-group {
   display: flex;
   align-items: center;
   gap: 0.625rem;
 }
 
-.iconActive {
+.icon-active {
   height: 1.25rem;
   width: 1.25rem;
   flex-shrink: 0;
-  color: oklch(78.9% 0.154 211.53);
+  color: oklch(78.9% 0.154 211.53deg);
 }
 
-.iconAvailable {
+.icon-available {
   height: 1.25rem;
   width: 1.25rem;
   flex-shrink: 0;
-  color: oklch(76.5% 0.177 163.223);
+  color: oklch(76.5% 0.177 163.223deg);
 }
 
-.iconStandard {
+.icon-standard {
   height: 1.25rem;
   width: 1.25rem;
   flex-shrink: 0;
-  color: oklch(70.4% 0.04 256.788);
+  color: oklch(70.4% 0.04 256.788deg);
 }
 
-.titleText {
+.title-text {
   font-family: 'Chakra Petch', -apple-system, sans-serif;
   font-size: 0.875rem;
-  line-height: 1.42857;
+  line-height: calc(10 / 7);
   font-weight: 700;
   letter-spacing: 0.025em;
-  color: #fff;
+  color: rgb(255 255 255);
 }
 
-.badgeActive {
+.badge-active {
   border-radius: 0.25rem;
   border-style: solid;
   border-width: 1px;
-  border-color: color-mix(in oklab, oklch(71.5% 0.143 215.221) 50%, transparent);
-  background-color: color-mix(in oklab, oklch(30.2% 0.056 229.695) 60%, transparent);
+  border-color: color-mix(in oklab, oklch(71.5% 0.143 215.221deg) 50%, transparent);
+  background-color: color-mix(in oklab, oklch(30.2% 0.056 229.695deg) 60%, transparent);
   padding-inline: 0.5rem;
   padding-block: 0.125rem;
   font-family: var(--font-mono);
   font-size: 10px;
-  color: oklch(86.5% 0.127 207.078);
+  color: oklch(86.5% 0.127 207.078deg);
 }
 
-.badgeAvailable {
+.badge-available {
   border-radius: 0.25rem;
   border-style: solid;
   border-width: 1px;
-  border-color: color-mix(in oklab, oklch(69.6% 0.17 162.48) 50%, transparent);
-  background-color: color-mix(in oklab, oklch(26.2% 0.051 172.552) 60%, transparent);
+  border-color: color-mix(in oklab, oklch(69.6% 0.17 162.48deg) 50%, transparent);
+  background-color: color-mix(in oklab, oklch(26.2% 0.051 172.552deg) 60%, transparent);
   padding-inline: 0.5rem;
   padding-block: 0.125rem;
   font-family: var(--font-mono);
   font-size: 10px;
-  color: oklch(84.5% 0.143 164.978);
+  color: oklch(84.5% 0.143 164.978deg);
 }
 
-.badgeStandard {
+.badge-standard {
   border-radius: 0.25rem;
   border-style: solid;
   border-width: 1px;
-  border-color: oklch(37.2% 0.044 257.287);
-  background-color: oklch(27.9% 0.041 260.031);
+  border-color: oklch(37.2% 0.044 257.287deg);
+  background-color: oklch(27.9% 0.041 260.031deg);
   padding-inline: 0.5rem;
   padding-block: 0.125rem;
   font-family: var(--font-mono);
   font-size: 10px;
-  color: oklch(70.4% 0.04 256.788);
+  color: oklch(70.4% 0.04 256.788deg);
 }
 
-.ratesGrid {
+.rates-grid {
   margin-top: 0.75rem;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.5rem;
   border-top-style: solid;
   border-top-width: 1px;
-  border-color: color-mix(in oklab, oklch(27.9% 0.041 260.031) 80%, transparent);
+  border-color: color-mix(in oklab, oklch(27.9% 0.041 260.031deg) 80%, transparent);
   padding-top: 0.75rem;
   font-family: var(--font-mono);
   font-size: 0.75rem;
-  line-height: 1.33333;
+  line-height: calc(4 / 3);
 }
-@media (min-width: 40rem) {
-  .ratesGrid {
+
+@media (width >= 40rem) {
+  .rates-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
-@media (min-width: 80rem) {
-  .ratesGrid {
+
+@media (width >= 80rem) {
+  .rates-grid {
     grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 }
 
-.rateItem {
+.rate-item {
   border-radius: 0.25rem;
   border-style: solid;
   border-width: 1px;
-  border-color: color-mix(in oklab, oklch(27.9% 0.041 260.031) 60%, transparent);
-  background-color: color-mix(in oklab, oklch(12.9% 0.042 264.695) 50%, transparent);
+  border-color: color-mix(in oklab, oklch(27.9% 0.041 260.031deg) 60%, transparent);
+  background-color: color-mix(in oklab, oklch(12.9% 0.042 264.695deg) 50%, transparent);
   padding: 0.5rem;
 }
 
-.rateLabel {
+.rate-label {
   display: block;
   font-size: 9px;
-  color: oklch(55.4% 0.046 257.417);
+  color: oklch(55.4% 0.046 257.417deg);
   text-transform: uppercase;
 }
 
-.rateValue {
+.rate-value {
   font-weight: 600;
-  color: #fff;
+  color: rgb(255 255 255);
 }
 
-.toggleBtn {
+.toggle-btn {
   flex-shrink: 0;
   border-radius: 0.25rem;
   border-style: solid;
@@ -167,46 +170,47 @@
   padding-block: 0.25rem;
   font-family: var(--font-mono);
   font-size: 0.75rem;
-  line-height: 1.33333;
+  line-height: calc(4 / 3);
   transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
 
-.hintText {
-  margin: 0px;
+.hint-text {
+  margin: 0;
   margin-top: 0.125rem;
   font-family: var(--font-mono);
   font-size: 11px;
-  color: oklch(70.4% 0.04 256.788) !important;
+  color: oklch(70.4% 0.04 256.788deg) !important;
 }
 
-.badgeRow {
+.badge-row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
 }
 
-.actionGroup {
+.action-group {
   display: flex;
   align-items: center;
 }
 
-.toggleBtnTheme {
-  border-color: oklch(37.2% 0.044 257.287);
-  background-color: color-mix(in oklab, oklch(20.8% 0.042 265.755) 80%, transparent) !important;
-  color: oklch(86.9% 0.022 252.894) !important;
-}
-.toggleBtnTheme:hover {
-  background-color: oklch(27.9% 0.041 260.031) !important;
+.toggle-btn-theme {
+  border-color: oklch(37.2% 0.044 257.287deg);
+  background-color: color-mix(in oklab, oklch(20.8% 0.042 265.755deg) 80%, transparent) !important;
+  color: oklch(86.9% 0.022 252.894deg) !important;
 }
 
-.feeValue {
-  font-weight: 600;
-  color: oklch(86.5% 0.127 207.078) !important;
+.toggle-btn-theme:hover {
+  background-color: oklch(27.9% 0.041 260.031deg) !important;
 }
 
-.amberValue {
+.fee-value {
   font-weight: 600;
-  color: oklch(87.9% 0.169 91.605) !important;
+  color: oklch(86.5% 0.127 207.078deg) !important;
+}
+
+.amber-value {
+  font-weight: 600;
+  color: oklch(87.9% 0.169 91.605deg) !important;
 }

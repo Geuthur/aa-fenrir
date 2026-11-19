@@ -82,3 +82,48 @@ class TestContractQueueApi(AuthTestCase):
         # Expected Result
         self.assertEqual(row["status"], Status.IN_PROGRESS)
         self.assertEqual(row["status_display"], "In Progress")
+
+
+class TestNotFoundErrorFormat(AuthTestCase):
+    """The 404 answers carry the message below `error`, like every other error."""
+
+    def _assert_not_found(self, method, name, message, **kwargs):
+        self.client.force_login(self.superuser)
+
+        response = getattr(self.client, method)(
+            reverse(f"{API_URL}:{name}", kwargs=kwargs),
+            **(
+                {"data": "{}", "content_type": "application/json"}
+                if method == "put"
+                else {}
+            ),
+        )
+
+        self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
+        self.assertEqual(response.json(), {"error": message})
+
+    def test_get_route_preset_should_return_error_body(self):
+        self._assert_not_found(
+            "get", "get_route_preset", "Route preset not found.", preset_id=999_999
+        )
+
+    def test_delete_route_preset_should_return_error_body(self):
+        self._assert_not_found(
+            "delete",
+            "delete_route_preset",
+            "Route preset not found.",
+            preset_id=999_999,
+        )
+
+    def test_delete_route_system_should_return_error_body(self):
+        self._assert_not_found(
+            "delete",
+            "delete_route_system",
+            "Route system not found.",
+            system_id=999_999,
+        )
+
+    def test_get_solar_system_should_return_error_body(self):
+        self._assert_not_found(
+            "get", "get_solar_system", "Solar system not found.", eve_id=999_999
+        )

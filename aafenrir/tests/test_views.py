@@ -25,8 +25,12 @@ class TestAddContractHandler(AuthTestCase):
     def setUpClass(cls):
         super().setUpClass()
         cls.url = reverse("aafenrir:add_contract_handler")
-        cls.manager = UserMainFactory(permissions__=["aafenrir.manage_access"])
-        cls.admin = UserMainFactory(permissions__=["aafenrir.full_access"])
+        cls.manager = UserMainFactory(
+            permissions__=["aafenrir.basic_access", "aafenrir.manage_access"]
+        )
+        cls.admin = UserMainFactory(
+            permissions__=["aafenrir.basic_access", "aafenrir.full_access"]
+        )
         cls.ownership = cls.manager.profile.main_character.character_ownership
         cls.character = cls.ownership.character
 
@@ -57,6 +61,27 @@ class TestAddContractHandler(AuthTestCase):
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
         self.assertFalse(ContractHandler.objects.exists())
         mock_task.apply_async.assert_not_called()
+
+    @patch(f"{VIEWS_PATH}.update_freight")
+    def test_should_deny_higher_access_without_basic_access(self, mock_task):
+        """`manage_access` and `full_access` do not include the basic access."""
+        for permissions in (
+            [],
+            ["aafenrir.manage_access"],
+            ["aafenrir.full_access"],
+            ["aafenrir.manage_access", "aafenrir.full_access"],
+        ):
+            with self.subTest(permissions=permissions):
+                user = UserMainFactory(permissions__=permissions)
+
+                # Test Action
+                response = self._get_with_token(user)
+
+                # Expected Result
+                self.assertEqual(response.status_code, HTTPStatus.FOUND)
+                self.assertIn("login", response.url)
+                self.assertFalse(ContractHandler.objects.exists())
+                mock_task.apply_async.assert_not_called()
 
     @patch(f"{VIEWS_PATH}.update_freight")
     def test_should_create_handler_and_start_update(self, mock_task):

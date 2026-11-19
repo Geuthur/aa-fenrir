@@ -4,6 +4,8 @@
 
 > [!IMPORTANT]
 > A new **Administration** page is available for users with the `aafenrir.full_access` permission (no new permission was added). Users with only `manage_access` do not see it. Users with `full_access` now also see the *Route Admin* menu entry, as `full_access` already allowed editing routes.
+>
+> **Basic access is only granted by `aafenrir.basic_access`.** Users with `manage_access` or `full_access` but without `basic_access` lose access to the pages and the whole API. Give them `basic_access` as well.
 
 <!--
 > [!NOTE]
@@ -61,6 +63,10 @@ Section Order:
 
 ### Fixed
 
+- **API**: Every URL of the API now requires `aafenrir.basic_access`, checked centrally by `basic_access_required` (`aafenrir/api/auth.py`) around the API URLs; without it the answer is `403` `{"error": "Permission Denied"}`. Before, the route admin and Administration endpoints checked only `manage_access` or `full_access`, and `menu/` checked nothing.
+- **Add Company** (`handler/add/`) now requires `aafenrir.basic_access` in addition to `manage_access` or `full_access`; the higher permissions do not include the basic access.
+- The app page (`react_base`) now requires `aafenrir.basic_access` like the repository template. Before, every logged-in user got the page. The unused `character_id` route and context value are removed.
+- **Notifications**: The user setting *Disable Notifications* is now respected. Users who disabled notifications no longer receive customer or pilot notifications, neither in Alliance Auth nor via Discord.
 - **Administration**: A handler whose expired ESI token can not be deleted (for example because another app still references it) now shows *token error* instead of breaking the whole handler list with a server error.
 - **ESI Retry**: The contract update task now retries itself when ESI is down or limited (HTTP 502, 503, 504, error limit, rate limit bucket, network errors and the daily downtime from 11:00 to 11:15 UTC), instead of failing. A structure that ESI cannot return because of such an error is no longer stored as *Unknown structure*; the task retries instead. The daily downtime check honors `DISABLE_DAILY_DOWNTIME_CHECK`.
 - **Test Cache**: Tests no longer share the Redis cache with other processes. `testauth/settings/local.py` and `testauth/settings/development/local.py` give each test run its own random cache `KEY_PREFIX`. Before, ESI responses cached by a running testauth instance on the same Redis were returned instead of the pook responses. Redis stays the cache backend because Alliance Auth needs `django_redis`.
@@ -94,37 +100,77 @@ Section Order:
 
 ### Changed
 
+- **API error format**: Every error answer of the API (4xx) now has the body `{"error": "<message>"}` and is listed as `ErrorSchema` in the OpenAPI schema, every endpoint lists the `403` of the basic access check. The 404 answers of the route preset, route system and solar system endpoints used `detail` before. The interface shows the message of the API in front of its fixed text.
+
+- The endpoints no longer check `basic_access` themselves, the API checks it centrally for all URLs.
+
+- **Frontend on aa-geuthur-react 1.5.0**: `Main.tsx` calls `initI18n`, the settings (Settings page and the quick-select routes of the Calculator) use `useUserSettings` and read and save `settings/` instead of `user/`, `FilterButtonGroup` comes from the package, and `Styles/index.css` keeps only the tokens and values that differ from the package. Unused `validation.ts` and `getExampleColumns` are removed. No visible change.
+
+- **Discord Notifications**: `thirdparty/discord.py` is aligned with the aa-example building block (embed colours in the module instead of `constants.py`); a failed webhook notification no longer logs the webhook URL with its token, also not through exception texts of `requests` and Celery; tests moved to `tests/test_discord.py`. No change for users.
+
+- **Stylelint**: The pre-commit hook now checks the source CSS in `frontend/src/` (bundles stay excluded); findings fixed without visual change (hex colors as `rgb()`, kebab-case CSS module classes with `localsConvention: camelCaseOnly`).
+
+- **Frontend Dependencies**: `eslint` `^10.15.0` (root and frontend), `typescript-eslint` `^8.72.2` and `zod` 4.6.7 fix the `minimatch` and `zod` security alerts; `aa-geuthur-react` raised to `^1.4.0`.
+
 - **Permissions**: `General.Meta.permissions` is a plain tuple; `General.Permission` and the wrappers `get_perm`, `has_perm` and `has_any_perm` are removed. Permission rules (`has_basic_access`, `has_management_access`, `has_admin_access`, `users_with_management_access`) live in `GeneralManager` (`aafenrir/managers/general.py`, `General.objects`). `managers.py` became the package `aafenrir/managers/`. Permissions and behavior are unchanged.
+
 - **AppLogger**: The `AppLogger` is created only once in `aafenrir/providers.py`. `managers.py`, `models/fenrir.py`, `tasks.py` and `thirdparty/discord.py` import it with `from aafenrir.providers import logger` instead of building their own. `views.py` never used its logger, so it no longer creates one. Log records now carry the logger name `aafenrir.providers` instead of the module name; the `[Fenrir]` prefix is unchanged.
+
 - **Translation Files**: The language files hold only real translations as Weblate writes them, missing keys fall back to English. The scanner maintains only `en`; empty placeholders were removed from the other languages.
+
 - **Bundled Package Translations**: `aa-geuthur-react` raised to `^1.3.0`. The package bundles its own translations and registers them with i18next through `AaReactProvider`, so `Main.tsx` lists only the namespace `translation`, the copies under `aafenrir/static/aafenrir/i18n/<lng>/aa-geuthur-react.json` are removed and `make react-copy-translations` no longer copies them. Untranslated strings in `frontend/i18n/<lng>/translation.json` are empty instead of English (`i18next-scanner` writes the key as value only for `en`); `returnEmptyString: false` shows the English fallback at runtime. Translate on Weblate as before.
+
 - **App Container Width**: The app container (`.aa-react.container`) now has a minimum width of 640px, like the other AA apps. Its maximum width of 1280px is unchanged.
+
 - **Page Width**: All pages now share the width of the Administration page, like aa-ledger and aa-example: at least 640px, at most 1280px and centered. The page wrapper now carries `aa-react container`. The Administration page uses the new class `aa-admin` instead of `container` for its button styles, its look is unchanged.
+
 - **Tests**: The test base classes in `aafenrir/tests/__init__.py` match the aa-example template (docstrings only, no behavior change).
+
 - **Modal Design**: Modals match the calculator view through Bootstrap overrides under `.modal-content.aa-react`, with cards, uppercase labels and a boxed title icon. They follow the Darkly and Flatly themes. The clipboard appraiser moved to `BaseModal`, `FenrirModal` is removed, and `CynoWaypointManager` moved from Tailwind to Bootstrap.
+
 - **Calculator Layout**: Thin theme-coloured scrollbars on aa-fenrir pages. Collateral buttons and quick load presets wrap instead of scrolling or squeezing their text.
+
 - **GitHub Workflows**: `autotester.yml` matches the aa-example template again (`actions-setup-redis` v1.60.0 instead of v1.58.0, no Python 3.10 in the matrix), and `tox.ini` no longer has its own `[testenv:react]` (the frontend tests run with `make react-test` and in the React CI job). `pypi.yml`, `release.yml` and `dependabot.yml` already matched.
+
 - **Shared React Base**: The frontend now uses the npm package [`aa-geuthur-react`](https://github.com/Geuthur/aa-geuthur-react) 1.2.0 like the other AA apps (BaseTable stack, `BaseModal`, loaders, `BaseSectionHeader`, menu, `useMenu`, `useUserData`, `AuthBase`, `ErrorPage`, utils, `createApiClient`, `queryKeys`, styles, ESLint rule `import-headings`). The copies in `Components/Base/BaseTable`, `Components/Base/BaseModal`, `Components/Loader`, `Components/Sections`, `Menu`, `Utils` and `Styles/table.css` were removed. `Routing.tsx` wraps the app in `AaReactProvider` and `AuthBase` (with `fluidOnSmallScreens`, so the pages fit on phones narrower than 640px), `Main.tsx` loads the namespace `aa-geuthur-react` next to `translation`, and `Styles/index.css` imports `aa-geuthur-react/styles.css` first. `make react-copy-translations` also copies `aa-geuthur-react.json` of the package.
+
 - **Frontend Structure**: `App.tsx` and `main.tsx` became `Routing.tsx` and `Main.tsx`, the app names live in `constants.ts`, the unit tests moved to `src/__tests__/` and run in jsdom (`setupTests.ts`).
+
 - **Visible Differences**: The tables use the footer layout of the package (page size, status and paging side by side), the menu links keep their query parameters, the Administration menu entry is highlighted like in the other apps, and the page headers of the package are flat grey.
+
 - **API `user/`**: The response follows the `UserData` contract of `aa-geuthur-react`: it now contains `corporation_id`, `corporation_name`, `alliance_id`, `alliance_name` and `is_admin` (the superuser flag, replacing `is_superuser`). `MenuLink` has the optional `badge` and `has_errors`. The additional fields `notification`, `quick_select_presets`, `has_manage_access`, `has_admin_access` and the calculator limits stay.
+
 - **API `settings/`**: The user settings are served by `GET settings/` and `PUT settings/` (JSON, `403` without basic access). `PUT` changes only the sent fields `disable_notifications` and `quick_select_presets` (at most five presets).
+
 - **Tables**: Migrated to `@tanstack/react-table` 9.
+
 - **Modals and Forms**: Calculator, Route Admin and Administration modals now share `BaseModal` and `ConfirmDeleteModal`, and the route forms share `RouteForm`. They use Bootstrap instead of Tailwind and CSS modules.
+
 - **Shared `BaseTable`**: Replaced the Fenrir-specific table with the shared `BaseTable` used in the other plugins (moved to `Components/Base/BaseTable`). The tables in *Route Admin* and *Contracts Queue* now use its default look. Formatting helpers moved to `Utils/format`.
+
 - **Central Permissions**: All permission checks use the `General` model (`General.Permission`, `has_perm`, `has_basic_access`, `has_management_access`, `has_admin_access`). The helper `aafenrir.helpers.permission` was removed.
+
 - **Editable Origin & Destination Stations**:
+
   - Made *Origin Station / Structure Name* and *Destination Station / Structure Name* fully editable in both `CreateRouteModal` and `EditRouteModal`.
+
 - **Consistent Danger Rating Styling**:
+
   - Standardized the `Cyno-Guarded` presentation in Route Admin cards to match the Calculator (Navigation icon with emerald green styling).
+
 - **CSS Modularization**:
+
   - Extracted header action button styling (`Create New Route`, `Add System`) into `RouteAdminHeader.module.css`.
+
 - Replaced `pook` with `pookx` in the test dependencies.
+
 - **ESI Client**: The client now loads its spec from the bundled `aafenrir/openapi_2026-08-18.json` instead of fetching it at runtime. The ESI compatibility date moved from `2025-12-16` to `2026-08-18`. Added the `make update-compatibility-date` target.
+
 - **Contract Manager Tests**: `test_contract_manager.py` now runs through `update_corporation_contract` and the real ESI client with `pookx`, instead of a rebuilt ESI response and patched `_identify_*` helpers.
 
 ### Removed
 
+- Unused Django templates `aafenrir/base.html`, `aafenrir/navigation/navigation.html` and `aafenrir/navigation/administration.html`. No view rendered them, and the last one linked to the missing route `aafenrir:admin`.
 - **Python 3.10**: End of life. Removed from the CI matrix, the tox environments and the classifiers; `requires-python` is now `>=3.11`.
 - **Tailwind**: Tailwind CSS (`tailwindcss`, `@tailwindcss/vite`) was removed from the frontend. The styles use Bootstrap utilities and CSS modules and look as before; the shared classes `fenrir-gradient`, `fenrir-border-500`, `fenrir-border-700` and `font-eve` moved to `Styles/index.css`.
 - Endpoint `POST modify/user/settings/` (replaced by `PUT settings/`) and the field `is_superuser` of `user/` (replaced by `is_admin`).
