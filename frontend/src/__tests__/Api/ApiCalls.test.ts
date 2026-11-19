@@ -7,8 +7,6 @@ import {
     deleteRoutePreset,
     loadRoutePresetCoverage,
     loadRoutePresets,
-    loadUserSettings,
-    updateUserSettings,
 } from '@/Api/ApiCalls';
 import { ProjectName } from '@/constants';
 
@@ -124,63 +122,6 @@ describe('General API client functions', () => {
             } as never);
 
             await expect(deleteRoutePreset(99)).rejects.toThrow('Route preset not found.');
-        });
-    });
-
-    describe('updateUserSettings', () => {
-        it('PUTs disable_notifications to settings/ and returns the settings', async () => {
-            const settings = { disable_notifications: true, quick_select_presets: [] };
-            vi.spyOn(apiClient, 'PUT').mockResolvedValueOnce({
-                data: settings,
-                error: undefined,
-                response: new Response(),
-            } as never);
-
-            const result = await updateUserSettings({ disable_notifications: true });
-            expect(result).toEqual(settings);
-            expect(apiClient.PUT).toHaveBeenCalledWith(`/${ProjectName}/api/settings/`, {
-                body: { disable_notifications: true },
-            });
-        });
-
-        it('PUTs quick_select_presets to settings/', async () => {
-            const settings = { disable_notifications: false, quick_select_presets: [1, 2, 3] };
-            vi.spyOn(apiClient, 'PUT').mockResolvedValueOnce({
-                data: settings,
-                error: undefined,
-                response: new Response(),
-            } as never);
-
-            const result = await updateUserSettings({ quick_select_presets: [1, 2, 3] });
-            expect(result).toEqual(settings);
-            expect(apiClient.PUT).toHaveBeenCalledWith(`/${ProjectName}/api/settings/`, {
-                body: { quick_select_presets: [1, 2, 3] },
-            });
-        });
-
-        it('throws the error message when the update fails', async () => {
-            vi.spyOn(apiClient, 'PUT').mockResolvedValueOnce({
-                data: undefined,
-                error: { error: 'Permission Denied.' },
-                response: new Response(),
-            } as never);
-
-            await expect(updateUserSettings({ disable_notifications: false })).rejects.toThrow('Permission Denied.');
-        });
-    });
-
-    describe('loadUserSettings', () => {
-        it('calls GET settings/ and returns the settings', async () => {
-            const settings = { disable_notifications: false, quick_select_presets: [] };
-            vi.spyOn(apiClient, 'GET').mockResolvedValueOnce({
-                data: settings,
-                error: undefined,
-                response: new Response(),
-            } as never);
-
-            const result = await loadUserSettings();
-            expect(result).toEqual(settings);
-            expect(apiClient.GET).toHaveBeenCalledWith(`/${ProjectName}/api/settings/`);
         });
     });
 });

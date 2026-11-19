@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 // Third Party
-import { ErrorLoader, FetchingLoader } from "aa-geuthur-react";
+import { ErrorLoader, FetchingLoader, FilterButtonGroup } from "aa-geuthur-react";
 import { ShieldAlert } from "lucide-react";
 import { Alert, Card, Form } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
@@ -24,7 +24,6 @@ import {
   useAdministrationActions,
   useAdministrationHandlers,
 } from "@/Components/Administration/Hooks";
-import { FilterButtonGroup } from "@/Components/Base/FilterButtonGroup";
 
 type HandlerFilter = "all" | "synced" | "issues";
 type Handler = components["schemas"]["AdministrationHandlerSchema"];
