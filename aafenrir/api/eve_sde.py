@@ -13,7 +13,6 @@ from eve_sde.models import SolarSystem
 # AA Fenrir
 from aafenrir import __title__
 from aafenrir.api import schema
-from aafenrir.managers.general import GeneralManager
 
 
 class EveSdeApiEndpoints:
@@ -24,21 +23,17 @@ class EveSdeApiEndpoints:
             "eve_sde/solar-system/{eve_id}",
             response={
                 HTTPStatus.OK: schema.SolarSystemSchema,
-                HTTPStatus.FORBIDDEN: dict,
-                HTTPStatus.NOT_FOUND: dict,
+                HTTPStatus.FORBIDDEN: schema.ErrorSchema,
+                HTTPStatus.NOT_FOUND: schema.ErrorSchema,
             },
             tags=self.tags,
         )
+        # pylint: disable=unused-argument
         def get_solar_system(request, eve_id: int):
-            if not GeneralManager.has_basic_access(request.user):
-                return HTTPStatus.FORBIDDEN, {
-                    "detail": _("You do not have access to this resource.")
-                }
-
             try:
                 solar_system = SolarSystem.objects.get(id=eve_id)
             except SolarSystem.DoesNotExist:
-                return HTTPStatus.NOT_FOUND, {"detail": _("Solar system not found.")}
+                return HTTPStatus.NOT_FOUND, {"error": _("Solar system not found.")}
 
             return HTTPStatus.OK, schema.SolarSystemSchema.from_orm(solar_system)
 
@@ -46,16 +41,12 @@ class EveSdeApiEndpoints:
             "eve_sde/solar-systems/search/",
             response={
                 HTTPStatus.OK: list[schema.SolarSystemSearchSchema],
-                HTTPStatus.FORBIDDEN: dict,
+                HTTPStatus.FORBIDDEN: schema.ErrorSchema,
             },
             tags=self.tags,
         )
+        # pylint: disable=unused-argument
         def search_solar_systems(request, query: str = ""):
-            if not GeneralManager.has_basic_access(request.user):
-                return HTTPStatus.FORBIDDEN, {
-                    "detail": _("You do not have access to this resource.")
-                }
-
             if not query or len(query.strip()) < 2:
                 return HTTPStatus.OK, []
 
