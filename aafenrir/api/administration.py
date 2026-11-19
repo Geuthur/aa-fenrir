@@ -27,7 +27,7 @@ class AdministrationApiEndpoints:
             "administration/handlers/",
             response={
                 HTTPStatus.OK: list[schema.AdministrationHandlerSchema],
-                HTTPStatus.FORBIDDEN: dict,
+                HTTPStatus.FORBIDDEN: schema.ErrorSchema,
             },
             tags=self.tags,
         )
@@ -41,8 +41,8 @@ class AdministrationApiEndpoints:
             "administration/handlers/{corporation_id}/",
             response={
                 HTTPStatus.OK: schema.AdministrationHandlerDetailSchema,
-                HTTPStatus.FORBIDDEN: dict,
-                HTTPStatus.NOT_FOUND: dict,
+                HTTPStatus.FORBIDDEN: schema.ErrorSchema,
+                HTTPStatus.NOT_FOUND: schema.ErrorSchema,
             },
             tags=self.tags,
         )
@@ -60,8 +60,8 @@ class AdministrationApiEndpoints:
             "administration/handlers/{corporation_id}/update/",
             response={
                 HTTPStatus.OK: dict,
-                HTTPStatus.FORBIDDEN: dict,
-                HTTPStatus.NOT_FOUND: dict,
+                HTTPStatus.FORBIDDEN: schema.ErrorSchema,
+                HTTPStatus.NOT_FOUND: schema.ErrorSchema,
             },
             tags=self.tags,
         )
@@ -92,8 +92,8 @@ class AdministrationApiEndpoints:
             "administration/handlers/{corporation_id}/",
             response={
                 HTTPStatus.OK: dict,
-                HTTPStatus.FORBIDDEN: dict,
-                HTTPStatus.NOT_FOUND: dict,
+                HTTPStatus.FORBIDDEN: schema.ErrorSchema,
+                HTTPStatus.NOT_FOUND: schema.ErrorSchema,
             },
             tags=self.tags,
         )
@@ -116,7 +116,7 @@ class AdministrationApiEndpoints:
             "administration/update/",
             response={
                 HTTPStatus.OK: dict,
-                HTTPStatus.FORBIDDEN: dict,
+                HTTPStatus.FORBIDDEN: schema.ErrorSchema,
             },
             tags=self.tags,
         )

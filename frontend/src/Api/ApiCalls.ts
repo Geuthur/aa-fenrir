@@ -1,3 +1,7 @@
+// Third Party
+import { apiErrorMessage } from "aa-geuthur-react";
+
+// AA Fenrir
 import { apiClient } from "@/Api/Api";
 import type { components } from "@/Api/OpenApi";
 import { ProjectName } from "@/constants";
@@ -6,7 +10,7 @@ import type { FreightCorridor } from "@/types";
 export async function loadRoutePresets(): Promise<FreightCorridor[]> {
   const { data, error } = await apiClient.GET(`/${ProjectName}/api/contract/presets/`);
   if (error || !data) {
-    throw new Error("Failed to load route presets");
+    throw new Error(apiErrorMessage(error, "Failed to load route presets"));
   }
   return data as unknown as FreightCorridor[];
 }
@@ -18,7 +22,7 @@ export async function loadRoutePresetCoverage(
     params: { path: { preset_id: presetId } },
   });
   if (error || !data) {
-    throw new Error("Failed to load route coverage");
+    throw new Error(apiErrorMessage(error, "Failed to load route coverage"));
   }
   return data;
 }
@@ -30,9 +34,7 @@ export async function createRoutePreset(
     body: presetData,
   });
   if (error || !data) {
-    throw new Error(
-      (error as { error?: string } | undefined)?.error ?? "Failed to create route preset"
-    );
+    throw new Error(apiErrorMessage(error, "Failed to create route preset"));
   }
   return data as unknown as FreightCorridor;
 }
@@ -51,11 +53,7 @@ export async function updateRoutePreset(
     }
   );
   if (error || !data) {
-    throw new Error(
-      (error as { error?: string; detail?: string } | undefined)?.error ??
-        (error as { error?: string; detail?: string } | undefined)?.detail ??
-        "Failed to update route preset"
-    );
+    throw new Error(apiErrorMessage(error, "Failed to update route preset"));
   }
   return data as unknown as FreightCorridor;
 }
@@ -72,11 +70,7 @@ export async function deleteRoutePreset(
     }
   );
   if (error || !data) {
-    throw new Error(
-      (error as { detail?: string; error?: string } | undefined)?.detail ??
-        (error as { detail?: string; error?: string } | undefined)?.error ??
-        "Failed to delete route preset"
-    );
+    throw new Error(apiErrorMessage(error, "Failed to delete route preset"));
   }
   return data as { success: boolean; message?: string };
 }
@@ -84,7 +78,7 @@ export async function deleteRoutePreset(
 export async function loadContractQueue(): Promise<components["schemas"]["ContractSchema"][]> {
   const { data, error } = await apiClient.GET(`/${ProjectName}/api/contract/queue/`);
   if (error || !data) {
-    throw new Error("Failed to load contracts queue");
+    throw new Error(apiErrorMessage(error, "Failed to load contracts queue"));
   }
   return data;
 }
@@ -92,7 +86,7 @@ export async function loadContractQueue(): Promise<components["schemas"]["Contra
 export async function loadRouteSystems(): Promise<components["schemas"]["RouteSystemSchema"][]> {
   const { data, error } = await apiClient.GET(`/${ProjectName}/api/contract/systems/`);
   if (error || !data) {
-    throw new Error("Failed to load route systems");
+    throw new Error(apiErrorMessage(error, "Failed to load route systems"));
   }
   return data;
 }
@@ -104,9 +98,7 @@ export async function addRouteSystem(
     body: { system_id: systemId },
   });
   if (error || !data) {
-    throw new Error(
-      (error as { error?: string } | undefined)?.error ?? "Failed to add route system"
-    );
+    throw new Error(apiErrorMessage(error, "Failed to add route system"));
   }
   return data;
 }
@@ -123,11 +115,7 @@ export async function deleteRouteSystem(
     }
   );
   if (error || !data) {
-    throw new Error(
-      (error as { detail?: string; error?: string } | undefined)?.detail ??
-        (error as { detail?: string; error?: string } | undefined)?.error ??
-        "Failed to delete route system"
-    );
+    throw new Error(apiErrorMessage(error, "Failed to delete route system"));
   }
   return data as { success: boolean; message?: string };
 }
@@ -144,7 +132,7 @@ export async function searchSolarSystems(
     }
   );
   if (error || !data) {
-    throw new Error("Failed to search solar systems");
+    throw new Error(apiErrorMessage(error, "Failed to search solar systems"));
   }
   return data;
 }
@@ -159,7 +147,7 @@ export async function loadContractHandlers(): Promise<ContractHandlerItem[]> {
     `/${ProjectName}/api/contract/handlers/` as never
   );
   if (error || !data) {
-    throw new Error("Failed to load contract handlers");
+    throw new Error(apiErrorMessage(error, "Failed to load contract handlers"));
   }
   return data as unknown as ContractHandlerItem[];
 }
@@ -169,17 +157,12 @@ export async function loadContractHandlers(): Promise<ContractHandlerItem[]> {
 
 type AdministrationMessage = { success: boolean; message: string };
 
-function getApiError(error: unknown, fallback: string): string {
-  const e = error as { detail?: string; error?: string } | undefined;
-  return e?.detail ?? e?.error ?? fallback;
-}
-
 export async function loadAdministrationHandlers(): Promise<
   components["schemas"]["AdministrationHandlerSchema"][]
 > {
   const { data, error } = await apiClient.GET(`/${ProjectName}/api/administration/handlers/`);
   if (error || !data) {
-    throw new Error(getApiError(error, "Failed to load handlers"));
+    throw new Error(apiErrorMessage(error, "Failed to load handlers"));
   }
   return data;
 }
@@ -192,7 +175,7 @@ export async function loadAdministrationHandler(
     { params: { path: { corporation_id: corporationId } } }
   );
   if (error || !data) {
-    throw new Error(getApiError(error, "Failed to load handler"));
+    throw new Error(apiErrorMessage(error, "Failed to load handler"));
   }
   return data;
 }
@@ -211,7 +194,7 @@ export async function updateAdministrationHandler(
     }
   );
   if (error || !data) {
-    throw new Error(getApiError(error, "Failed to queue update"));
+    throw new Error(apiErrorMessage(error, "Failed to queue update"));
   }
   return data as AdministrationMessage;
 }
@@ -224,7 +207,7 @@ export async function deleteAdministrationHandler(
     { params: { path: { corporation_id: corporationId } } }
   );
   if (error || !data) {
-    throw new Error(getApiError(error, "Failed to delete handler"));
+    throw new Error(apiErrorMessage(error, "Failed to delete handler"));
   }
   return data as AdministrationMessage;
 }
@@ -236,7 +219,7 @@ export async function updateAdministrationAll(
     params: { query: { force_refresh: forceRefresh } },
   });
   if (error || !data) {
-    throw new Error(getApiError(error, "Failed to queue update"));
+    throw new Error(apiErrorMessage(error, "Failed to queue update"));
   }
   return data as AdministrationMessage;
 }
