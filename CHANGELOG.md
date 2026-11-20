@@ -104,6 +104,8 @@ Section Order:
 
 - The endpoints no longer check `basic_access` themselves, the API checks it centrally for all URLs.
 
+- Internal: The frontend API calls are split by area into `Api/calls/{routes,contracts,administration}.ts`, each with its own query keys, replacing `Api/ApiCalls.ts` and `Api/query.ts`.
+
 - **Frontend on aa-geuthur-react 1.5.0**: `Main.tsx` calls `initI18n`, the settings (Settings page and the quick-select routes of the Calculator) use `useUserSettings` and read and save `settings/` instead of `user/`, `FilterButtonGroup` comes from the package, and `Styles/index.css` keeps only the tokens and values that differ from the package. Unused `validation.ts` and `getExampleColumns` are removed. No visible change.
 
 - **Discord Notifications**: `thirdparty/discord.py` is aligned with the aa-example building block (embed colours in the module instead of `constants.py`); a failed webhook notification no longer logs the webhook URL with its token, also not through exception texts of `requests` and Celery; tests moved to `tests/test_discord.py`. No change for users.

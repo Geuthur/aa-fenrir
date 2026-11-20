@@ -6,13 +6,13 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useUserData } from "aa-geuthur-react";
 
 import {
+  administrationQueryKeys,
   deleteAdministrationHandler,
   loadAdministrationHandler,
   loadAdministrationHandlers,
   updateAdministrationAll,
   updateAdministrationHandler,
-} from "@/Api/ApiCalls";
-import { queryKeys } from "@/Api/query";
+} from "@/Api/calls/administration";
 import type { UserData } from "@/Api/schema";
 
 export interface TaskFeedback {
@@ -33,7 +33,7 @@ export function useAdministrationAccess() {
 /** Loads all contract handlers of the Administration. */
 export function useAdministrationHandlers(enabled = true) {
   return useQuery({
-    queryKey: queryKeys.AdministrationHandlers,
+    queryKey: administrationQueryKeys.handlers,
     queryFn: loadAdministrationHandlers,
     refetchOnWindowFocus: false,
     enabled,
@@ -43,7 +43,7 @@ export function useAdministrationHandlers(enabled = true) {
 /** Loads one handler with its contract statistics for the inspection view. */
 export function useAdministrationHandler(corporationId: number | null) {
   return useQuery({
-    queryKey: queryKeys.AdministrationHandler(corporationId ?? 0),
+    queryKey: administrationQueryKeys.handler(corporationId ?? 0),
     queryFn: () => loadAdministrationHandler(corporationId as number),
     refetchOnWindowFocus: false,
     enabled: corporationId !== null,
@@ -61,7 +61,7 @@ export function useAdministrationActions(onDeleted?: () => void) {
   const [taskFeedback, setTaskFeedback] = useState<TaskFeedback | null>(null);
 
   const refresh = () =>
-    queryClient.invalidateQueries({ queryKey: queryKeys.AdministrationHandlers });
+    queryClient.invalidateQueries({ queryKey: administrationQueryKeys.handlers });
 
   const onError = (err: Error) => setTaskFeedback({ variant: "danger", message: err.message });
 

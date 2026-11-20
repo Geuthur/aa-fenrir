@@ -28,10 +28,10 @@ import {
   deleteRouteSystem,
   loadRoutePresets,
   loadRouteSystems,
+  routesQueryKeys,
   updateRoutePreset,
-} from '@/Api/ApiCalls';
+} from '@/Api/calls/routes';
 import type { components } from '@/Api/OpenApi';
-import { queryKeys } from '@/Api/query';
 import type { UserData } from "@/Api/schema";
 import { RouteAdminHeader, RouteCard } from '@/Components/RouteAdmin';
 import {
@@ -64,14 +64,14 @@ export default function RouteAdmin() {
 
   // Load existing routes
   const { data: presets = [], isLoading: isPresetsLoading } = useQuery({
-    queryKey: queryKeys.RoutePresets,
+    queryKey: routesQueryKeys.presets,
     queryFn: loadRoutePresets,
     refetchOnWindowFocus: false,
   });
 
   // Load configured route systems
   const { data: routeSystems = [], isLoading: isSystemsLoading } = useQuery({
-    queryKey: queryKeys.RouteSystems,
+    queryKey: routesQueryKeys.systems,
     queryFn: loadRouteSystems,
     refetchOnWindowFocus: false,
   });
@@ -99,7 +99,7 @@ export default function RouteAdmin() {
     mutationFn: (newPreset: components['schemas']['CreateRoutePresetSchema']) =>
       createRoutePreset(newPreset),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.RoutePresets });
+      queryClient.invalidateQueries({ queryKey: routesQueryKeys.presets });
       setSuccessMessage(t('Route preset created successfully.'));
       setErrorMessage(null);
       setIsCreateModalOpen(false);
@@ -119,7 +119,7 @@ export default function RouteAdmin() {
       data: components['schemas']['CreateRoutePresetSchema'];
     }) => updateRoutePreset(id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.RoutePresets });
+      queryClient.invalidateQueries({ queryKey: routesQueryKeys.presets });
       setSuccessMessage(t('Route preset updated successfully.'));
       setErrorMessage(null);
       setPresetToEdit(null);
@@ -133,7 +133,7 @@ export default function RouteAdmin() {
   const deleteMutation = useMutation({
     mutationFn: (id: number) => deleteRoutePreset(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.RoutePresets });
+      queryClient.invalidateQueries({ queryKey: routesQueryKeys.presets });
       setSuccessMessage(t('Route preset deleted successfully.'));
       setErrorMessage(null);
       setPresetToDelete(null);
@@ -147,7 +147,7 @@ export default function RouteAdmin() {
   const addSystemMutation = useMutation({
     mutationFn: (systemId: number) => addRouteSystem(systemId),
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.RouteSystems });
+      queryClient.invalidateQueries({ queryKey: routesQueryKeys.systems });
       setSuccessMessage(t('Added {{name}} to available route systems.', { name: data.name }));
       setErrorMessage(null);
       setIsAddSystemModalOpen(false);
@@ -161,7 +161,7 @@ export default function RouteAdmin() {
   const deleteSystemMutation = useMutation({
     mutationFn: (systemId: number) => deleteRouteSystem(systemId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.RouteSystems });
+      queryClient.invalidateQueries({ queryKey: routesQueryKeys.systems });
       setSuccessMessage(t('Route system removed successfully.'));
       setErrorMessage(null);
       setSystemToDelete(null);
