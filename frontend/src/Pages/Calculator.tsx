@@ -13,8 +13,8 @@ import {
     loadRoutePresetCoverage,
     loadRoutePresets,
     loadRouteSystems,
-} from '@/Api/ApiCalls';
-import { queryKeys } from '@/Api/query';
+    routesQueryKeys,
+} from '@/Api/calls/routes';
 import type { UserData, UserSettingsSchema, UserSettingsUpdateRequest } from "@/Api/schema";
 import {
   CargoInput,
@@ -47,14 +47,14 @@ export default function Calculator() {
 
     // Load Presets from API
     const { data: presets = [] } = useQuery({
-        queryKey: queryKeys.RoutePresets,
+        queryKey: routesQueryKeys.presets,
         queryFn: loadRoutePresets,
         refetchOnWindowFocus: false,
     });
 
     // Load Available Route Systems from API
     const { data: routeSystems = [] } = useQuery({
-        queryKey: queryKeys.RouteSystems,
+        queryKey: routesQueryKeys.systems,
         queryFn: loadRouteSystems,
         refetchOnWindowFocus: false,
     });
@@ -235,7 +235,7 @@ export default function Calculator() {
     // Route admin characters in the waypoint systems (route admins only)
     const coveragePresetId = typeof effectiveCorridor?.id === 'number' ? effectiveCorridor.id : null;
     const { data: coverage = [] } = useQuery({
-        queryKey: queryKeys.RoutePresetCoverage(coveragePresetId ?? 0),
+        queryKey: routesQueryKeys.presetCoverage(coveragePresetId ?? 0),
         queryFn: () => loadRoutePresetCoverage(coveragePresetId as number),
         enabled: Boolean(userData?.user.has_manage_access) && coveragePresetId !== null,
         refetchOnWindowFocus: false,

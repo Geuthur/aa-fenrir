@@ -4,22 +4,21 @@ import { useMemo } from 'react';
 // Third Party
 import { useQuery } from '@tanstack/react-query';
 
-import { loadContractHandlers, loadRouteSystems } from '@/Api/ApiCalls';
-import { queryKeys } from '@/Api/query';
+import { loadContractHandlers, loadRouteSystems, routesQueryKeys } from '@/Api/calls/routes';
 import type { EveSolarSystem, SecurityClass } from '@/types';
 
 /** Loads the selectable systems and contract handlers for the route preset forms. */
 export function useRouteFormOptions() {
   // Configured RouteSystems from the backend
   const { data: routeSystems = [] } = useQuery({
-    queryKey: queryKeys.RouteSystems,
+    queryKey: routesQueryKeys.systems,
     queryFn: loadRouteSystems,
     refetchOnWindowFocus: false,
   });
 
   // Available ContractHandlers from the backend
   const { data: contractHandlers = [] } = useQuery({
-    queryKey: queryKeys.ContractHandlers,
+    queryKey: routesQueryKeys.contractHandlers,
     queryFn: loadContractHandlers,
     refetchOnWindowFocus: false,
   });
