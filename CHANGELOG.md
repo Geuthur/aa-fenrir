@@ -177,6 +177,7 @@ Section Order:
 
 - Unused Django templates `aafenrir/base.html`, `aafenrir/navigation/navigation.html` and `aafenrir/navigation/administration.html`. No view rendered them, and the last one linked to the missing route `aafenrir:admin`.
 - Unused `aafenrir/forms.py` (`UserSettingsForm`); nothing imported it.
+- Unused `AccessQuerySet` and `AccessManager` (copied from Belt Radar); no model used them.
 - **Python 3.10**: End of life. Removed from the CI matrix, the tox environments and the classifiers; `requires-python` is now `>=3.11`.
 - **Tailwind**: Tailwind CSS (`tailwindcss`, `@tailwindcss/vite`) was removed from the frontend. The styles use Bootstrap utilities and CSS modules and look as before; the shared classes `fenrir-gradient`, `fenrir-border-500`, `fenrir-border-700` and `font-eve` moved to `Styles/index.css`.
 - Endpoint `POST modify/user/settings/` (replaced by `PUT settings/`) and the field `is_superuser` of `user/` (replaced by `is_admin`).
