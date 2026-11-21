@@ -18,15 +18,16 @@ import {
 import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-// Styles
-import styles from '@/Components/Calculator/QuoteBreakdown.module.css';
-
+// AA Fenrir
 import type { CynoCoverageSystemSchema } from '@/Api/schema';
 import { findWaypointCoverage, formatIsk, formatIskCompact, formatM3 } from '@/Components/Calculator/calculator';
 import { MatchedCorridorIndicator } from '@/Components/Calculator/MatchedCorridorIndicator';
 import type { MatchedCorridorIndicatorProps } from '@/Components/Calculator/MatchedCorridorIndicator';
 import { WaypointCoverageBadge } from '@/Components/Calculator/WaypointCoverageBadge';
 import type { FreightCorridor, QuoteCalculation } from '@/types';
+
+// Styles
+import styles from '@/Components/Calculator/QuoteBreakdown.module.css';
 
 interface QuoteBreakdownProps extends MatchedCorridorIndicatorProps {
   /** Callback to apply the matching corridor's tariffs */

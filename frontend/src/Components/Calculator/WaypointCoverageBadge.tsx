@@ -3,11 +3,12 @@ import { formatDate, formatRelativeTime } from "aa-geuthur-react";
 import { OverlayTrigger, Popover } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-// Styles
-import styles from '@/Components/Calculator/QuoteBreakdown.module.css';
-
+// AA Fenrir
 import type { CynoCoverageCharacterSchema, CynoCoverageSystemSchema } from '@/Api/schema';
 import { splitCoverageCharacters } from '@/Components/Calculator/calculator';
+
+// Styles
+import styles from '@/Components/Calculator/QuoteBreakdown.module.css';
 
 interface WaypointCoverageBadgeProps {
   /** Name of the waypoint system */

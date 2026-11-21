@@ -7,14 +7,14 @@ import { CheckCircle, Clock, Search, Truck, XCircle } from 'lucide-react';
 import { Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-// Styles
-import styles from '@/Components/Queue/ContractQueue.module.css';
-
 // AA Fenrir
 import { formatIskCompact, formatM3 } from '@/Components/Calculator/calculator';
 import QueueFilter from '@/Components/Queue/Partial/QueueFilter';
 import { QueueMetrics } from '@/Components/Queue/Partial/QueueMetrics';
 import type { ContractItem } from '@/types';
+
+// Styles
+import styles from '@/Components/Queue/ContractQueue.module.css';
 
 export interface ContractQueueProps {
   contracts: ContractItem[];

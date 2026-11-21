@@ -6,9 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useUserData, useUserSettings } from "aa-geuthur-react";
 import { useTranslation } from 'react-i18next';
 
-// Styles
-import styles from '@/Pages/Calculator.module.css';
-
+// AA Fenrir
 import {
     loadRoutePresetCoverage,
     loadRoutePresets,
@@ -27,6 +25,9 @@ import {
 } from '@/Components/Calculator';
 import { ConfigurePresetsModal, ContractModal } from '@/Components/Calculator/Modals';
 import type { EveSolarSystem, FreightCorridor, SecurityClass } from '@/types';
+
+// Styles
+import styles from '@/Pages/Calculator.module.css';
 
 const EMPTY_SYSTEM: EveSolarSystem = {
     id: 0,

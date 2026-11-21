@@ -2,11 +2,11 @@
 import { Clock, FileText, Truck } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-// Styles
-import styles from '@/Components/Queue/Partial/QueueMetrics.module.css';
-
 // AA Fenrir
 import { formatIskCompact, formatM3 } from '@/Components/Calculator/calculator';
+
+// Styles
+import styles from '@/Components/Queue/Partial/QueueMetrics.module.css';
 
 export function QueueMetrics({
   pendingCount,

@@ -8,9 +8,7 @@ import { ShieldAlert } from "lucide-react";
 import { Alert, Card, Form } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 
-// Styles
-import styles from "@/Styles/modules/Administration.module.css";
-
+// AA Fenrir
 import type { components } from "@/Api/OpenApi";
 import {
   AdministrationDeleteModal,
@@ -24,6 +22,9 @@ import {
   useAdministrationActions,
   useAdministrationHandlers,
 } from "@/Components/Administration/Hooks";
+
+// Styles
+import styles from "@/Styles/modules/Administration.module.css";
 
 type HandlerFilter = "all" | "synced" | "issues";
 type Handler = components["schemas"]["AdministrationHandlerSchema"];
