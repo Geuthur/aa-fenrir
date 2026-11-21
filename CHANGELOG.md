@@ -62,6 +62,7 @@ Section Order:
 
 ### Fixed
 
+- **Discord webhook**: A message that `dhooks_lite` rejects (`ValueError`, e.g. content over 2000 characters, or `TypeError`) no longer fails the Celery task; only the type of the exception is logged, so the webhook URL stays out of the log record.
 - **Frontend**: React Query no longer retries 403, 404 and other 4xx answers three times, so the error shows at once instead of after about seven seconds: `Routing.tsx` uses `createQueryClient` of `aa-geuthur-react` (`^1.7.0`), which retries only network errors and 502/503/504.
 - **API**: Every URL of the API now requires `aafenrir.basic_access`, checked centrally by `basic_access_required` (`aafenrir/api/auth.py`) around the API URLs; without it the answer is `403` `{"error": "Permission Denied"}`. Before, the route admin and Administration endpoints checked only `manage_access` or `full_access`, and `menu/` checked nothing.
 - **Add Company** (`handler/add/`) now requires `aafenrir.basic_access` in addition to `manage_access` or `full_access`; the higher permissions do not include the basic access.
