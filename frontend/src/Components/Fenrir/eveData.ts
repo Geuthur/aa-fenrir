@@ -1,3 +1,4 @@
+// AA Fenrir
 import type { JumpFreighterShip } from '@/types';
 
 export const JUMP_FREIGHTERS: JumpFreighterShip[] = [

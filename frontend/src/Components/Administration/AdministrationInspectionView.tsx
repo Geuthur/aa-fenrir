@@ -4,6 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import { Button, Card, Col, Row, Table } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 
+// AA Fenrir
 import { HandlerStatusBadge } from "@/Components/Administration/HandlerStatusBadge";
 import { useAdministrationHandler } from "@/Components/Administration/Hooks";
 import { getContractStatusLabel } from "@/Components/Administration/status";

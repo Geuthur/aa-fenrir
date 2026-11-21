@@ -1,3 +1,4 @@
+// AA Fenrir
 import type { CynoCoverageCharacterSchema, CynoCoverageSystemSchema } from '@/Api/schema';
 import { JUMP_FREIGHTERS } from '@/Components/Fenrir/eveData';
 import type { EveSolarSystem, FreightCorridor, JumpFreighterShip, QuoteCalculation } from '@/types';

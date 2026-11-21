@@ -170,6 +170,8 @@ Section Order:
 
 - **Contract Manager Tests**: `test_contract_manager.py` now runs through `update_corporation_contract` and the real ESI client with `pookx`, instead of a rebuilt ESI response and patched `_identify_*` helpers.
 
+- Enforce the frontend import order (React, third party, `@/`, styles) via eslint.
+
 ### Removed
 
 - Unused Django templates `aafenrir/base.html`, `aafenrir/navigation/navigation.html` and `aafenrir/navigation/administration.html`. No view rendered them, and the last one linked to the missing route `aafenrir:admin`.

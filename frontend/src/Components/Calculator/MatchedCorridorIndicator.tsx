@@ -3,15 +3,16 @@ import { CheckCircle2, Compass, Sparkles } from 'lucide-react';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-// Styles
-import styles from '@/Components/Calculator/MatchedCorridorIndicator.module.css';
-
+// AA Fenrir
 import {
   formatIskCompact,
   formatM3,
 } from '@/Components/Calculator/calculator';
 import { ServiceBadge } from '@/Components/Calculator/ServiceBadge';
 import type { EveSolarSystem, FreightCorridor } from '@/types';
+
+// Styles
+import styles from '@/Components/Calculator/MatchedCorridorIndicator.module.css';
 
 export interface MatchedCorridorIndicatorProps {
   /** The currently applied freight corridor in the quote calculation */

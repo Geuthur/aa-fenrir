@@ -7,14 +7,15 @@ import { Box, Check, Clipboard, Coins, Info, Package, Users, Zap } from 'lucide-
 import { Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-// Styles
-import styles from '@/Components/Calculator/CargoInput.module.css';
-
+// AA Fenrir
 import { ModalTitle } from '@/Components/Base/ModalTitle';
 import { formatIskCompact, formatM3 } from '@/Components/Calculator/calculator';
 import { parseEveClipboard } from '@/Components/Fenrir/cargoParser';
 import { JUMP_FREIGHTERS, POPULAR_CARGO_PRESETS } from '@/Components/Fenrir/eveData';
 import type { CargoAppraisalItem, FreightCorridor, JumpFreighterShip } from '@/types';
+
+// Styles
+import styles from '@/Components/Calculator/CargoInput.module.css';
 
 interface CargoInputProps {
   volumeM3: number;
