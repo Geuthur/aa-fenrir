@@ -9,6 +9,7 @@ from unittest.mock import MagicMock, patch
 import pook
 from aiopenapi3 import RequestError
 from celery.exceptions import Retry
+from evesde_factory.eve_sde import NPCStationFactory
 
 # Django
 from django.core.cache import cache
@@ -22,6 +23,9 @@ from esi.exceptions import (
     HTTPClientError,
     HTTPServerError,
 )
+
+# Alliance Auth (External Libs)
+from eve_sde.models import NPCStation
 
 # AA Fenrir
 from aafenrir import tasks
@@ -37,6 +41,8 @@ TASK_PATH = "aafenrir.tasks"
 ESI_URL = "https://esi.evetech.net"
 ESI_DATE_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
 STRUCTURE_ID = 1_000_000_000_001
+STATION_ID = 60_003_760
+STATION_NAME = "Jita IV - Moon 4 - Caldari Navy Assembly Plant"
 
 
 @override_settings(CELERY_ALWAYS_EAGER=True, CELERY_EAGER_PROPAGATES_EXCEPTIONS=True)
@@ -294,6 +300,86 @@ class TestUpdateFreightContractEsiErrors(AuthTestCase):
         # Expected Result
         mock_retry.assert_not_called()
         self.assertFalse(Location.objects.filter(id=STRUCTURE_ID).exists())
+        self.assertFalse(Contract.objects.filter(contract_id=1).exists())
+
+    @pook.on
+    def test_should_store_a_station_from_the_sde_with_the_esi_name(self, mock_retry):
+        # Test Data
+        station = NPCStationFactory(id=STATION_ID, name="")
+        pook.get(
+            self._contracts_url(),
+            reply=200,
+            response_json=[self._esi_contract(STATION_ID)],
+        )
+        names_mock = pook.post(
+            f"{ESI_URL}/universe/names",
+            reply=200,
+            response_json=[
+                {"category": "station", "id": STATION_ID, "name": STATION_NAME}
+            ],
+        )
+
+        # Test Action
+        tasks.update_freight_contract(self.corporation_id)
+
+        # Expected Result
+        mock_retry.assert_not_called()
+        self.assertEqual(names_mock.calls, 1)
+        location = Location.objects.get(id=STATION_ID)
+        self.assertEqual(location.name, STATION_NAME)
+        self.assertEqual(location.solar_system_id, station.solar_system_id)
+        self.assertEqual(location.type_id, station.item_type_id)
+        self.assertEqual(location.category_id, Category.STATION_ID)
+        self.assertEqual(Contract.objects.get(contract_id=1).start_location, location)
+
+    @pook.on
+    def test_should_not_store_a_station_missing_in_the_sde(self, mock_retry):
+        # Test Data
+        pook.get(
+            self._contracts_url(),
+            reply=200,
+            response_json=[self._esi_contract(STATION_ID)],
+        )
+        names_mock = pook.post(
+            f"{ESI_URL}/universe/names",
+            reply=200,
+            response_json=[
+                {"category": "station", "id": STATION_ID, "name": STATION_NAME}
+            ],
+        )
+
+        # Test Action
+        with self.assertRaises(NPCStation.DoesNotExist):
+            tasks.update_freight_contract(self.corporation_id)
+
+        # Expected Result
+        mock_retry.assert_not_called()
+        self.assertEqual(names_mock.calls, 0)
+        self.assertFalse(Location.objects.filter(id=STATION_ID).exists())
+        self.assertFalse(Contract.objects.filter(contract_id=1).exists())
+
+    @pook.on
+    def test_should_retry_instead_of_storing_a_station_without_name(self, mock_retry):
+        # Test Data
+        NPCStationFactory(id=STATION_ID, name="")
+        pook.get(
+            self._contracts_url(),
+            reply=200,
+            response_json=[self._esi_contract(STATION_ID)],
+        )
+        pook.post(
+            f"{ESI_URL}/universe/names",
+            reply=HTTPStatus.BAD_GATEWAY,
+            response_json={"error": "Bad Gateway"},
+        )
+
+        # Test Action
+        with self.assertRaises(Retry):
+            tasks.update_freight_contract(self.corporation_id)
+
+        # Expected Result
+        self._assert_retried(mock_retry, HTTPServerError, DOWNTIME_TIMER)
+        self.assertFalse(Location.objects.filter(id=STATION_ID).exists())
         self.assertFalse(Contract.objects.filter(contract_id=1).exists())
 
     @patch(TASK_PATH + ".retry_task_on_esi_error")

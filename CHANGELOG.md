@@ -103,6 +103,8 @@ Section Order:
 
 ### Changed
 
+- **NPC stations**: Solar system and type of an NPC station come from the SDE (`eve_sde`), only its name still comes from ESI (`/universe/names`), as CCP removes the static ESI station route. A station missing in the SDE is not stored, the contract update fails until the SDE is up to date.
+
 - **API error format**: Every error answer of the API (4xx) now has the body `{"error": "<message>"}` and is listed as `ErrorSchema` in the OpenAPI schema, every endpoint lists the `403` of the basic access check. The 404 answers of the route preset, route system and solar system endpoints used `detail` before. The interface shows the message of the API in front of its fixed text.
 
 - The endpoints no longer check `basic_access` themselves, the API checks it centrally for all URLs.

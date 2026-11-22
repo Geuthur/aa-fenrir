@@ -17,8 +17,5 @@ __operations__ = [
     "GetCharactersCharacterIdShip",
     # Universe operations
     "PostUniverseNames",
-    "GetUniverseStationsStationId",
     "GetUniverseStructuresStructureId",
-    "GetUniverseTypesTypeId",
-    "GetUniverseSystemsSystemId",
 ]
