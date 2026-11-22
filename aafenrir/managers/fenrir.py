@@ -4,7 +4,7 @@ import json
 from datetime import datetime
 from http import HTTPStatus
 from time import sleep
-from typing import TYPE_CHECKING, Any, Generic, TypeVar
+from typing import TYPE_CHECKING, Any
 
 # Django
 from django.db import models, transaction
@@ -17,12 +17,12 @@ from allianceauth.eveonline.models import EveCharacter, EveCorporationInfo
 from esi.exceptions import HTTPClientError, HTTPNotModified
 from esi.models import Token
 
+# Alliance Auth (External Libs)
+from eve_sde.models import NPCStation
+
 # AA Fenrir
 from aafenrir.helpers.choice import Category, Status
-from aafenrir.managers.general import GeneralManager
 from aafenrir.providers import esi, is_retryable_esi_error, logger
-
-T = TypeVar("T", bound=models.Model)
 
 if TYPE_CHECKING:
     # Alliance Auth
@@ -32,114 +32,6 @@ if TYPE_CHECKING:
     from aafenrir.models import Contract as ContractContext
     from aafenrir.models import ContractHandler as ContractHandlerContext
     from aafenrir.models import Location as LocationContext
-
-
-class AccessQuerySet(models.QuerySet[T], Generic[T]):
-    """QuerySet with access control methods for Belt Radar models."""
-
-    def visible_to(self, user):
-        """Get all survey sessions visible to the user."""
-        # superusers get all visible
-        if user.is_superuser:
-            logger.debug(
-                "Returning all survey sessions for superuser %s.",
-                user,
-            )
-            return self
-
-        if GeneralManager.has_admin_access(user):
-            logger.debug("Returning all survey sessions for admin user %s.", user)
-            return self
-
-        try:
-            char = user.profile.main_character
-            assert char
-            queries = [models.Q(owner=user)]
-            queries.append(models.Q(is_public=True))
-
-            logger.debug(
-                "%s queries for user %s visible survey sessions.", len(queries), user
-            )
-
-            query = queries.pop()
-            for q in queries:
-                query |= q
-            return self.filter(query)
-        except AssertionError:
-            logger.debug("User %s has no main character. Nothing visible.", user)
-            return self.none()
-
-    def manage_to(self, user):
-        """Get all survey sessions that the user can manage."""
-        # superusers get all visible
-        if user.is_superuser:
-            logger.debug(
-                "Returning all survey sessions for superuser %s.",
-                user,
-            )
-            return self
-
-        if GeneralManager.has_admin_access(user):
-            logger.debug("Returning all survey sessions for admin user %s.", user)
-            return self
-
-        try:
-            char = user.profile.main_character
-            assert char
-            queries = [models.Q(owner=user)]
-
-            logger.debug(
-                "%s queries for user %s visible survey sessions.", len(queries), user
-            )
-
-            query = queries.pop()
-            for q in queries:
-                query |= q
-            return self.filter(query)
-        except AssertionError:
-            logger.debug("User %s has no main character. Nothing visible.", user)
-            return self.none()
-
-
-class AccessManager(models.Manager[T], Generic[T]):
-    """Manager with access control methods for Belt Radar models."""
-
-    def get_queryset(self) -> AccessQuerySet[T]:
-        return AccessQuerySet(self.model, using=self._db)
-
-    def visible_to(self, user):
-        return self.get_queryset().visible_to(user)
-
-    def manage_to(self, user):
-        return self.get_queryset().manage_to(user)
-
-    @staticmethod
-    def visible_eve_characters(user):
-        qs = EveCharacter.objects.get_queryset()
-        if user.is_superuser:
-            logger.debug("Returning all characters for superuser %s.", user)
-            return qs.all()
-
-        if GeneralManager.has_admin_access(user):
-            logger.debug("Returning all characters for %s.", user)
-            return qs.all()
-
-        try:
-            char = user.profile.main_character
-            assert char
-            queries = [models.Q(character_ownership__user=user)]
-
-            logger.debug(
-                "%s queries for user %s visible chracters.", len(queries), user
-            )
-
-            query = queries.pop()
-            for q in queries:
-                query |= q
-            return qs.filter(query)
-        except AssertionError:
-            logger.debug("User %s has no main character. Nothing visible.", user)
-            return qs.none()
 
 
 class EveEntityManager(models.Manager):
@@ -238,22 +130,32 @@ class LocationManager(models.Manager["LocationContext"]):
     ) -> tuple["LocationContext", bool]:
         """updates or creates location object with data fetched from ESI"""
         if self.STATION_ID_START <= location_id <= self.STATION_ID_END:
-            logger.info("%s: Fetching station from ESI", location_id)
-            station = esi.client.Universe.GetUniverseStationsStationId(
-                station_id=location_id
-            )
+            logger.info("%s: Loading station from the SDE", location_id)
+            try:
+                station = NPCStation.objects.get(id=location_id)
+            except NPCStation.DoesNotExist:
+                # Nothing is stored here, because existing locations are never
+                # fetched again and a placeholder would stay forever
+                logger.error(
+                    "%s: Station not found in the SDE, is the SDE loaded and "
+                    "up to date?",
+                    location_id,
+                )
+                raise
 
-            station_item = station.result(
-                force_refresh=True,
-                use_etag=False,
+            # The SDE has no station names, ESI still resolves them
+            names = esi.client.Universe.PostUniverseNames(body=[location_id]).results(
+                use_etag=False
             )
+            if len(names) != 1:
+                raise ValueError(f"Station name for ID {location_id} not found.")
 
             return self.update_or_create(
                 id=location_id,
                 defaults={
-                    "name": station_item.name,
-                    "solar_system_id": station_item.system_id,
-                    "type_id": station_item.type_id,
+                    "name": names[0].name,
+                    "solar_system_id": station.solar_system_id,
+                    "type_id": station.item_type_id,
                     "category_id": Category.STATION_ID,
                 },
             )

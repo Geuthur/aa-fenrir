@@ -1,29 +1,37 @@
 // Third Party
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+// AA Fenrir
 import { apiClient } from '@/Api/Api';
 import {
     addRouteSystem,
     createRoutePreset,
-    deleteAdministrationHandler,
     deleteRoutePreset,
     deleteRouteSystem,
-    loadAdministrationHandler,
-    loadAdministrationHandlers,
     loadContractHandlers,
-    loadContractQueue,
     loadRoutePresetCoverage,
     loadRoutePresets,
     loadRouteSystems,
+    routesQueryKeys,
     searchSolarSystems,
-    updateAdministrationAll,
-    updateAdministrationHandler,
     updateRoutePreset,
-} from '@/Api/ApiCalls';
+} from '@/Api/calls/routes';
 import type { components } from '@/Api/OpenApi';
 import { ProjectName } from '@/constants';
 
-describe('General API client functions', () => {
+describe('routesQueryKeys', () => {
+    it('provides the route keys', () => {
+        expect(routesQueryKeys.presets).toEqual(['RoutePresets']);
+        expect(routesQueryKeys.systems).toEqual(['RouteSystems']);
+        expect(routesQueryKeys.contractHandlers).toEqual(['ContractHandlers']);
+    });
+
+    it('provides the route coverage key per preset', () => {
+        expect(routesQueryKeys.presetCoverage(7)).toEqual(['RoutePresetCoverage', 7]);
+    });
+});
+
+describe('Route API calls', () => {
     beforeEach(() => {
         vi.restoreAllMocks();
     });
@@ -164,24 +172,18 @@ const presetPayload: components['schemas']['CreateRoutePresetSchema'] = {
     days_to_complete: 3,
 };
 
-/** Every call of `ApiCalls.ts`: [name, HTTP method, call, fixed text]. */
+/** Every call of `Api/calls/routes.ts`: [name, HTTP method, call, fixed text]. */
 const calls: [string, Method, () => Promise<unknown>, string][] = [
     ['loadRoutePresets', 'GET', () => loadRoutePresets(), 'Failed to load route presets'],
     ['loadRoutePresetCoverage', 'GET', () => loadRoutePresetCoverage(3), 'Failed to load route coverage'],
     ['createRoutePreset', 'POST', () => createRoutePreset(presetPayload), 'Failed to create route preset'],
     ['updateRoutePreset', 'PUT', () => updateRoutePreset(3, presetPayload), 'Failed to update route preset'],
     ['deleteRoutePreset', 'DELETE', () => deleteRoutePreset(3), 'Failed to delete route preset'],
-    ['loadContractQueue', 'GET', () => loadContractQueue(), 'Failed to load contracts queue'],
     ['loadRouteSystems', 'GET', () => loadRouteSystems(), 'Failed to load route systems'],
     ['addRouteSystem', 'POST', () => addRouteSystem(30000142), 'Failed to add route system'],
     ['deleteRouteSystem', 'DELETE', () => deleteRouteSystem(30000142), 'Failed to delete route system'],
     ['searchSolarSystems', 'GET', () => searchSolarSystems('Jita'), 'Failed to search solar systems'],
     ['loadContractHandlers', 'GET', () => loadContractHandlers(), 'Failed to load contract handlers'],
-    ['loadAdministrationHandlers', 'GET', () => loadAdministrationHandlers(), 'Failed to load handlers'],
-    ['loadAdministrationHandler', 'GET', () => loadAdministrationHandler(2001), 'Failed to load handler'],
-    ['updateAdministrationHandler', 'POST', () => updateAdministrationHandler(2001, false), 'Failed to queue update'],
-    ['deleteAdministrationHandler', 'DELETE', () => deleteAdministrationHandler(2001), 'Failed to delete handler'],
-    ['updateAdministrationAll', 'POST', () => updateAdministrationAll(false), 'Failed to queue update'],
 ];
 
 const failWith = (method: Method, error: unknown) =>

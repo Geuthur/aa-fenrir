@@ -6,8 +6,8 @@ import { useQuery } from '@tanstack/react-query';
 import { ErrorLoader, FetchingLoader } from "aa-geuthur-react";
 import { useTranslation } from 'react-i18next';
 
-import { loadContractQueue } from '@/Api/ApiCalls';
-import { queryKeys } from '@/Api/query';
+// AA Fenrir
+import { contractsQueryKeys, loadContractQueue } from '@/Api/calls/contracts';
 import { ContractQueue } from '@/Components/Queue';
 import { ProjectName } from '@/constants';
 
@@ -16,7 +16,7 @@ export default function Queue() {
   const navigate = useNavigate();
 
   const { data: contracts = [], isLoading, error } = useQuery({
-    queryKey: queryKeys.Contracts,
+    queryKey: contractsQueryKeys.queue,
     queryFn: loadContractQueue,
     refetchOnWindowFocus: false,
   });

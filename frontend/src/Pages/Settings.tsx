@@ -6,6 +6,7 @@ import { ErrorLoader, FetchingLoader, useUserSettings } from "aa-geuthur-react";
 import Alert from 'react-bootstrap/Alert';
 import { useTranslation } from 'react-i18next';
 
+// AA Fenrir
 import type { UserSettingsSchema, UserSettingsUpdateRequest } from "@/Api/schema";
 import UserSettingsForm from '@/Components/Forms/UserSettingsForm';
 

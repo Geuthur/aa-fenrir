@@ -37,8 +37,8 @@ export default defineConfig([
             { heading: '// Third Party', pattern: '^@?\\w' },
 
             // 3. AA Fenrir (Eigene Komponenten, Helpers, API)
-            //{ heading: '// AA Fenrir', pattern: '^@/' },
-            //{ heading: '// AA Fenrir', pattern: '^\\.(?!.*\\.s?css$)' },
+            { heading: '// AA Fenrir', pattern: '^@/(?!.*\\.s?css$)' },
+            { heading: '// AA Fenrir', pattern: '^\\.(?!.*\\.s?css$)' },
 
             // 4. Stylesheets & CSS-Module
             { heading: '// Styles', pattern: '\\.s?css$' },

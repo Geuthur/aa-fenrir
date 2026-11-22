@@ -7,6 +7,14 @@ import type { components } from "@/Api/OpenApi";
 import { ProjectName } from "@/constants";
 import type { FreightCorridor } from "@/types";
 
+/** Query keys of the routes area: route presets, their cyno coverage, route systems and contract handlers. */
+export const routesQueryKeys = {
+  presets: ["RoutePresets"] as const,
+  presetCoverage: (presetId: number) => ["RoutePresetCoverage", presetId] as const,
+  systems: ["RouteSystems"] as const,
+  contractHandlers: ["ContractHandlers"] as const,
+};
+
 export async function loadRoutePresets(): Promise<FreightCorridor[]> {
   const { data, error } = await apiClient.GET(`/${ProjectName}/api/contract/presets/`);
   if (error || !data) {
@@ -73,14 +81,6 @@ export async function deleteRoutePreset(
     throw new Error(apiErrorMessage(error, "Failed to delete route preset"));
   }
   return data as { success: boolean; message?: string };
-}
-
-export async function loadContractQueue(): Promise<components["schemas"]["ContractSchema"][]> {
-  const { data, error } = await apiClient.GET(`/${ProjectName}/api/contract/queue/`);
-  if (error || !data) {
-    throw new Error(apiErrorMessage(error, "Failed to load contracts queue"));
-  }
-  return data;
 }
 
 export async function loadRouteSystems(): Promise<components["schemas"]["RouteSystemSchema"][]> {
@@ -150,76 +150,4 @@ export async function loadContractHandlers(): Promise<ContractHandlerItem[]> {
     throw new Error(apiErrorMessage(error, "Failed to load contract handlers"));
   }
   return data as unknown as ContractHandlerItem[];
-}
-
-
-
-
-type AdministrationMessage = { success: boolean; message: string };
-
-export async function loadAdministrationHandlers(): Promise<
-  components["schemas"]["AdministrationHandlerSchema"][]
-> {
-  const { data, error } = await apiClient.GET(`/${ProjectName}/api/administration/handlers/`);
-  if (error || !data) {
-    throw new Error(apiErrorMessage(error, "Failed to load handlers"));
-  }
-  return data;
-}
-
-export async function loadAdministrationHandler(
-  corporationId: number
-): Promise<components["schemas"]["AdministrationHandlerDetailSchema"]> {
-  const { data, error } = await apiClient.GET(
-    `/${ProjectName}/api/administration/handlers/{corporation_id}/`,
-    { params: { path: { corporation_id: corporationId } } }
-  );
-  if (error || !data) {
-    throw new Error(apiErrorMessage(error, "Failed to load handler"));
-  }
-  return data;
-}
-
-export async function updateAdministrationHandler(
-  corporationId: number,
-  forceRefresh: boolean
-): Promise<AdministrationMessage> {
-  const { data, error } = await apiClient.POST(
-    `/${ProjectName}/api/administration/handlers/{corporation_id}/update/`,
-    {
-      params: {
-        path: { corporation_id: corporationId },
-        query: { force_refresh: forceRefresh },
-      },
-    }
-  );
-  if (error || !data) {
-    throw new Error(apiErrorMessage(error, "Failed to queue update"));
-  }
-  return data as AdministrationMessage;
-}
-
-export async function deleteAdministrationHandler(
-  corporationId: number
-): Promise<AdministrationMessage> {
-  const { data, error } = await apiClient.DELETE(
-    `/${ProjectName}/api/administration/handlers/{corporation_id}/`,
-    { params: { path: { corporation_id: corporationId } } }
-  );
-  if (error || !data) {
-    throw new Error(apiErrorMessage(error, "Failed to delete handler"));
-  }
-  return data as AdministrationMessage;
-}
-
-export async function updateAdministrationAll(
-  forceRefresh: boolean
-): Promise<AdministrationMessage> {
-  const { data, error } = await apiClient.POST(`/${ProjectName}/api/administration/update/`, {
-    params: { query: { force_refresh: forceRefresh } },
-  });
-  if (error || !data) {
-    throw new Error(apiErrorMessage(error, "Failed to queue update"));
-  }
-  return data as AdministrationMessage;
 }

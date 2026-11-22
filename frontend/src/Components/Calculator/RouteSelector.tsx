@@ -6,12 +6,13 @@ import { ArrowRightLeft, Compass, Navigation, Radio, ShieldAlert, ShieldCheck, S
 import { Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-// Styles
-import styles from '@/Components/Calculator/RouteSelector.module.css';
-
+// AA Fenrir
 import { getSecurityColor } from '@/Components/Calculator/calculator';
 import { ServiceBadge } from '@/Components/Calculator/ServiceBadge';
 import type { EveSolarSystem, FreightCorridor } from '@/types';
+
+// Styles
+import styles from '@/Components/Calculator/RouteSelector.module.css';
 
 interface RouteSelectorProps {
   origin: EveSolarSystem;

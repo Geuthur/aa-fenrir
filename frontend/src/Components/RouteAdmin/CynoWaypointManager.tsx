@@ -13,7 +13,8 @@ import {
 import { Badge, Button, Form, InputGroup, ListGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { searchSolarSystems } from '@/Api/ApiCalls';
+// AA Fenrir
+import { searchSolarSystems } from '@/Api/calls/routes';
 import type { components } from '@/Api/OpenApi';
 import { getSecurityVariant } from '@/Components/Calculator/calculator';
 import type { EveSolarSystem } from '@/types';

@@ -2,6 +2,7 @@
 import { Badge } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
+// AA Fenrir
 import { getServiceBadge } from '@/Components/Calculator/calculator';
 
 export interface ServiceBadgeProps {

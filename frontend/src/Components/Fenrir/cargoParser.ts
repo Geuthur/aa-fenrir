@@ -1,3 +1,4 @@
+// AA Fenrir
 import type { CargoAppraisalItem } from '@/types';
 
 export function parseEveNumber(str: string): number {

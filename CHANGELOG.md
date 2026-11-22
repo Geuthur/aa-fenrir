@@ -33,6 +33,7 @@ Section Order:
 
 ### Added
 
+- **Tests**: Added tests for `is_retryable_esi_error` and `ESI_RETRY_STATUS_CODES` (`tests/test_providers.py`) and for the image helpers incl. the `display_name` branches (`tests/test_helpers/test_eveonline.py`), taken from the aa-example template. No change for users.
 - **Cyno Coverage in the Transit Routing Chain** (optional, requires [allianceauth-corptools](https://github.com/Solar-Helix-Independent-Transport/allianceauth-corp-tools)):
   - For users with `aafenrir.manage_access` or `aafenrir.full_access`, every waypoint system of the selected route in which a character of a route admin (user with `manage_access` or `full_access`) is currently located, according to corptools, is highlighted in green.
   - Users with `manage_access` only see their own characters. Users with `full_access` see the characters of all route admins, with their own characters listed separately.
@@ -63,6 +64,9 @@ Section Order:
 
 ### Fixed
 
+- **Discord webhook**: A `ValueError` or `TypeError` of `dhooks_lite` (e.g. content over 2000 characters) is no longer retried, because it is raised before any request is sent; `RequestException` and a rejected response are still retried
+- **Discord webhook**: A message that `dhooks_lite` rejects (`ValueError`, e.g. content over 2000 characters, or `TypeError`) no longer fails the Celery task; only the type of the exception is logged, so the webhook URL stays out of the log record.
+- **Frontend**: React Query no longer retries 403, 404 and other 4xx answers three times, so the error shows at once instead of after about seven seconds: `Routing.tsx` uses `createQueryClient` of `aa-geuthur-react` (`^1.7.0`), which retries only network errors and 502/503/504.
 - **API**: Every URL of the API now requires `aafenrir.basic_access`, checked centrally by `basic_access_required` (`aafenrir/api/auth.py`) around the API URLs; without it the answer is `403` `{"error": "Permission Denied"}`. Before, the route admin and Administration endpoints checked only `manage_access` or `full_access`, and `menu/` checked nothing.
 - **Add Company** (`handler/add/`) now requires `aafenrir.basic_access` in addition to `manage_access` or `full_access`; the higher permissions do not include the basic access.
 - The app page (`react_base`) now requires `aafenrir.basic_access` like the repository template. Before, every logged-in user got the page. The unused `character_id` route and context value are removed.
@@ -100,9 +104,13 @@ Section Order:
 
 ### Changed
 
+- **NPC stations**: Solar system and type of an NPC station come from the SDE (`eve_sde`), only its name still comes from ESI (`/universe/names`), as CCP removes the static ESI station route. A station missing in the SDE is not stored, the contract update fails until the SDE is up to date.
+
 - **API error format**: Every error answer of the API (4xx) now has the body `{"error": "<message>"}` and is listed as `ErrorSchema` in the OpenAPI schema, every endpoint lists the `403` of the basic access check. The 404 answers of the route preset, route system and solar system endpoints used `detail` before. The interface shows the message of the API in front of its fixed text.
 
 - The endpoints no longer check `basic_access` themselves, the API checks it centrally for all URLs.
+
+- Internal: The frontend API calls are split by area into `Api/calls/{routes,contracts,administration}.ts`, each with its own query keys, replacing `Api/ApiCalls.ts` and `Api/query.ts`.
 
 - **Frontend on aa-geuthur-react 1.5.0**: `Main.tsx` calls `initI18n`, the settings (Settings page and the quick-select routes of the Calculator) use `useUserSettings` and read and save `settings/` instead of `user/`, `FilterButtonGroup` comes from the package, and `Styles/index.css` keeps only the tokens and values that differ from the package. Unused `validation.ts` and `getExampleColumns` are removed. No visible change.
 
@@ -168,9 +176,17 @@ Section Order:
 
 - **Contract Manager Tests**: `test_contract_manager.py` now runs through `update_corporation_contract` and the real ESI client with `pookx`, instead of a rebuilt ESI response and patched `_identify_*` helpers.
 
+- Enforce the frontend import order (React, third party, `@/`, styles) via eslint.
+
+- Node 24 to Node 26 (CI and pre-commit) and npm package updates (minor and patch, jsdom 31, jest-dom 8).
+
+- i18next 27, react-i18next 18 and stylelint 18 (pre-commit hook with `--config-basedir`). A plural form left empty in a language (e.g. `_few` in pl, ru, uk) now shows that language's `_other` form instead of English.
+
 ### Removed
 
 - Unused Django templates `aafenrir/base.html`, `aafenrir/navigation/navigation.html` and `aafenrir/navigation/administration.html`. No view rendered them, and the last one linked to the missing route `aafenrir:admin`.
+- Unused `aafenrir/forms.py` (`UserSettingsForm`); nothing imported it.
+- Unused `AccessQuerySet` and `AccessManager` (copied from Belt Radar); no model used them.
 - **Python 3.10**: End of life. Removed from the CI matrix, the tox environments and the classifiers; `requires-python` is now `>=3.11`.
 - **Tailwind**: Tailwind CSS (`tailwindcss`, `@tailwindcss/vite`) was removed from the frontend. The styles use Bootstrap utilities and CSS modules and look as before; the shared classes `fenrir-gradient`, `fenrir-border-500`, `fenrir-border-700` and `font-eve` moved to `Styles/index.css`.
 - Endpoint `POST modify/user/settings/` (replaced by `PUT settings/`) and the field `is_superuser` of `user/` (replaced by `is_admin`).
