@@ -173,6 +173,8 @@ Section Order:
 
 - Enforce the frontend import order (React, third party, `@/`, styles) via eslint.
 
+- Node 24 to Node 26 (CI and pre-commit) and npm package updates (minor and patch, jsdom 31, jest-dom 8).
+
 ### Removed
 
 - Unused Django templates `aafenrir/base.html`, `aafenrir/navigation/navigation.html` and `aafenrir/navigation/administration.html`. No view rendered them, and the last one linked to the missing route `aafenrir:admin`.
