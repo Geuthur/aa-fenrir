@@ -175,6 +175,8 @@ Section Order:
 
 - Node 24 to Node 26 (CI and pre-commit) and npm package updates (minor and patch, jsdom 31, jest-dom 8).
 
+- i18next 27, react-i18next 18 and stylelint 18 (pre-commit hook with `--config-basedir`). A plural form left empty in a language (e.g. `_few` in pl, ru, uk) now shows that language's `_other` form instead of English.
+
 ### Removed
 
 - Unused Django templates `aafenrir/base.html`, `aafenrir/navigation/navigation.html` and `aafenrir/navigation/administration.html`. No view rendered them, and the last one linked to the missing route `aafenrir:admin`.
