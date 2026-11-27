@@ -2,11 +2,6 @@
 
 ## [In Development] - Unreleased
 
-> [!IMPORTANT]
-> A new **Administration** page is available for users with the `aafenrir.full_access` permission (no new permission was added). Users with only `manage_access` do not see it. Users with `full_access` now also see the *Route Admin* menu entry, as `full_access` already allowed editing routes.
->
-> **Basic access is only granted by `aafenrir.basic_access`.** Users with `manage_access` or `full_access` but without `basic_access` lose access to the pages and the whole API. Give them `basic_access` as well.
-
 <!--
 > [!NOTE]
 >
@@ -30,6 +25,15 @@ Section Order:
 ### Changed
 ### Removed
 -->
+
+<!-- Your changes go here -->
+
+## [1.0.0] - 2026-11-28
+
+> [!IMPORTANT]
+> A new **Administration** page is available for users with the `aafenrir.full_access` permission (no new permission was added). Users with only `manage_access` do not see it. Users with `full_access` now also see the *Route Admin* menu entry, as `full_access` already allowed editing routes.
+>
+> **Basic access is only granted by `aafenrir.basic_access`.** Users with `manage_access` or `full_access` but without `basic_access` lose access to the pages and the whole API. Give them `basic_access` as well.
 
 ### Added
 
@@ -63,8 +67,7 @@ Section Order:
 
 ### Fixed
 
-- **Discord webhook**: A `ValueError` or `TypeError` of `dhooks_lite` (e.g. content over 2000 characters) is no longer retried, because it is raised before any request is sent; `RequestException` and a rejected response are still retried
-- **Discord webhook**: A message that `dhooks_lite` rejects (`ValueError`, e.g. content over 2000 characters, or `TypeError`) no longer fails the Celery task; only the type of the exception is logged, so the webhook URL stays out of the log record.
+- **Discord webhook**: A message that `dhooks_lite` rejects (`ValueError` or `TypeError`, e.g. content over 2000 characters) is no longer retried and no longer fails the Celery task, because it is raised before any request is sent; only the type of the exception is logged, so the webhook URL stays out of the log record. `RequestException` and a rejected response are still retried.
 - **Frontend**: React Query no longer retries 403, 404 and other 4xx answers three times, so the error shows at once instead of after about seven seconds: `Routing.tsx` uses `createQueryClient` of `aa-geuthur-react` (`^1.7.0`), which retries only network errors and 502/503/504.
 - **API**: Every URL of the API now requires `aafenrir.basic_access`, checked centrally by `basic_access_required` (`aafenrir/api/auth.py`) around the API URLs; without it the answer is `403` `{"error": "Permission Denied"}`. Before, the route admin and Administration endpoints checked only `manage_access` or `full_access`, and `menu/` checked nothing.
 - **Add Company** (`handler/add/`) now requires `aafenrir.basic_access` in addition to `manage_access` or `full_access`; the higher permissions do not include the basic access.
@@ -98,7 +101,7 @@ Section Order:
 - **TypeScript ColumnDef Contravariance**:
   - Fixed TypeScript compiler errors with TanStack Table column definitions by updating `BaseTableProps` to `ColumnDef<TData, TValue = any>[]` and explicitly typing `systemColumns`.
 - Fixed `make coverage` exiting with 0 when tests failed. The reports are still created, and the target now exits with the status of the test run, or with the status of `coverage report` if the tests passed.
-- [FIX] The pulsing menu and tab badges scaled up and down with their number. Only the glow around the badge pulses now.
+- **Menu Badges**: The pulsing menu and tab badges no longer scale with their number. Only the glow around the badge pulses now.
 - **Alliance Auth Template**: AA Fenrir no longer changes the Alliance Auth layout around the app. Tailwind's Preflight reset is no longer loaded, because it changed headings, lists, images, form fields and the sidebar logo of the AA template. The thin scrollbar now applies only inside the app (`.aa-react`), not to the whole page. The app wrapper carries `aa-react` like the other AA apps, the button overrides stay limited to the Administration page and the modals. The look of AA Fenrir itself is unchanged.
 
 ### Changed
@@ -106,8 +109,6 @@ Section Order:
 - **NPC stations**: Solar system and type of an NPC station come from the SDE (`eve_sde`), only its name still comes from ESI (`/universe/names`), as CCP removes the static ESI station route. A station missing in the SDE is not stored, the contract update fails until the SDE is up to date.
 
 - **API error format**: Every error answer of the API (4xx) now has the body `{"error": "<message>"}` and is listed as `ErrorSchema` in the OpenAPI schema, every endpoint lists the `403` of the basic access check. The 404 answers of the route preset, route system and solar system endpoints used `detail` before. The interface shows the message of the API in front of its fixed text.
-
-- The endpoints no longer check `basic_access` themselves, the API checks it centrally for all URLs.
 
 - Internal: The frontend API calls are split by area into `Api/calls/{routes,contracts,administration}.ts`, each with its own query keys, replacing `Api/ApiCalls.ts` and `Api/query.ts`.
 
@@ -119,7 +120,7 @@ Section Order:
 
 - **Frontend Dependencies**: `eslint` `^10.15.0` (root and frontend), `typescript-eslint` `^8.72.2` and `zod` 4.6.7 fix the `minimatch` and `zod` security alerts; `aa-geuthur-react` raised to `^1.4.0`.
 
-- **Permissions**: `General.Meta.permissions` is a plain tuple; `General.Permission` and the wrappers `get_perm`, `has_perm` and `has_any_perm` are removed. Permission rules (`has_basic_access`, `has_management_access`, `has_admin_access`, `users_with_management_access`) live in `GeneralManager` (`aafenrir/managers/general.py`, `General.objects`). `managers.py` became the package `aafenrir/managers/`. Permissions and behavior are unchanged.
+- **Permissions**: All permission checks go through `GeneralManager` (`aafenrir/managers/general.py`, `General.objects`: `has_basic_access`, `has_management_access`, `has_admin_access`, `users_with_management_access`). `General.Meta.permissions` is a plain tuple; `General.Permission`, the wrappers `get_perm`, `has_perm`, `has_any_perm` and the helper `aafenrir.helpers.permission` are removed. `managers.py` became the package `aafenrir/managers/`. The endpoints no longer check `basic_access` themselves, the API checks it centrally. Permissions and behavior are unchanged.
 
 - **AppLogger**: The `AppLogger` is created only once in `aafenrir/providers.py`. `managers.py`, `models/fenrir.py`, `tasks.py` and `thirdparty/discord.py` import it with `from aafenrir.providers import logger` instead of building their own. `views.py` never used its logger, so it no longer creates one. Log records now carry the logger name `aafenrir.providers` instead of the module name; the `[Fenrir]` prefix is unchanged.
 
@@ -127,11 +128,9 @@ Section Order:
 
 - **Bundled Package Translations**: `aa-geuthur-react` raised to `^1.3.0`. The package bundles its own translations and registers them with i18next through `AaReactProvider`, so `Main.tsx` lists only the namespace `translation`, the copies under `aafenrir/static/aafenrir/i18n/<lng>/aa-geuthur-react.json` are removed and `make react-copy-translations` no longer copies them. Untranslated strings in `frontend/i18n/<lng>/translation.json` are empty instead of English (`i18next-scanner` writes the key as value only for `en`); `returnEmptyString: false` shows the English fallback at runtime. Translate on Weblate as before.
 
-- **App Container Width**: The app container (`.aa-react.container`) now has a minimum width of 640px, like the other AA apps. Its maximum width of 1280px is unchanged.
+- **Page Width**: All pages share the width of the Administration page, like aa-ledger and aa-example: at least 640px, at most 1280px and centered (`.aa-react.container`). The Administration page uses the new class `aa-admin` instead of `container` for its button styles, its look is unchanged.
 
-- **Page Width**: All pages now share the width of the Administration page, like aa-ledger and aa-example: at least 640px, at most 1280px and centered. The page wrapper now carries `aa-react container`. The Administration page uses the new class `aa-admin` instead of `container` for its button styles, its look is unchanged.
-
-- **Tests**: The test base classes in `aafenrir/tests/__init__.py` match the aa-example template (docstrings only, no behavior change).
+- **Tests**: The test base classes match the aa-example template, `pookx` replaces `pook`, and `test_contract_manager.py` runs through `update_corporation_contract` and the real ESI client with `pookx` instead of a rebuilt ESI response and patched `_identify_*` helpers. No change for users.
 
 - **Modal Design**: Modals match the calculator view through Bootstrap overrides under `.modal-content.aa-react`, with cards, uppercase labels and a boxed title icon. They follow the Darkly and Flatly themes. The clipboard appraiser moved to `BaseModal`, `FenrirModal` is removed, and `CynoWaypointManager` moved from Tailwind to Bootstrap.
 
@@ -155,8 +154,6 @@ Section Order:
 
 - **Shared `BaseTable`**: Replaced the Fenrir-specific table with the shared `BaseTable` used in the other plugins (moved to `Components/Base/BaseTable`). The tables in *Route Admin* and *Contracts Queue* now use its default look. Formatting helpers moved to `Utils/format`.
 
-- **Central Permissions**: All permission checks use the `General` model (`General.Permission`, `has_perm`, `has_basic_access`, `has_management_access`, `has_admin_access`). The helper `aafenrir.helpers.permission` was removed.
-
 - **Editable Origin & Destination Stations**:
 
   - Made *Origin Station / Structure Name* and *Destination Station / Structure Name* fully editable in both `CreateRouteModal` and `EditRouteModal`.
@@ -169,15 +166,9 @@ Section Order:
 
   - Extracted header action button styling (`Create New Route`, `Add System`) into `RouteAdminHeader.module.css`.
 
-- Replaced `pook` with `pookx` in the test dependencies.
-
 - **ESI Client**: The client now loads its spec from the bundled `aafenrir/openapi_2026-08-18.json` instead of fetching it at runtime. The ESI compatibility date moved from `2025-12-16` to `2026-08-18`. Added the `make update-compatibility-date` target.
 
-- **Contract Manager Tests**: `test_contract_manager.py` now runs through `update_corporation_contract` and the real ESI client with `pookx`, instead of a rebuilt ESI response and patched `_identify_*` helpers.
-
-- Enforce the frontend import order (React, third party, `@/`, styles) via eslint.
-
-- Node 24 to Node 26 (CI and pre-commit) and npm package updates (minor and patch, jsdom 31, jest-dom 8).
+- **Development**: Node 24 to Node 26 (CI and pre-commit), npm package updates (minor and patch, jsdom 31, jest-dom 8), and ESLint enforces the frontend import order (React, third party, `@/`, styles).
 
 - i18next 27, react-i18next 18 and stylelint 18 (pre-commit hook with `--config-basedir`). A plural form left empty in a language (e.g. `_few` in pl, ru, uk) now shows that language's `_other` form instead of English.
 
@@ -193,8 +184,6 @@ Section Order:
 - Unused `BaseModal` component in `Components/Modals` (it was a copy of the table component).
 - Removed the agent rules under `.agents/rules/`. The agent rules for this project now live in the Brain repository.
 
-<!-- Your changes go here -->
-
 ## [0.0.1] - 2024-08-xx
 
 ### Added
@@ -204,4 +193,5 @@ Section Order:
 <!-- Links -->
 
 [0.0.1]: https://github.com/Geuthur/aa-fenrir/compare/v0.0.1...v0.0.1 "0.0.1"
-[in development]: https://github.com/Geuthur/aa-fenrir/compare/v0.0.1...HEAD "In Development"
+[1.0.0]: https://github.com/Geuthur/aa-fenrir/compare/v0.0.1...v1.0.0 "v1.0.0"
+[in development]: https://github.com/Geuthur/aa-fenrir/compare/v1.0.0...HEAD "In Development"
