@@ -32,7 +32,7 @@ class AdministrationApiEndpoints:
             tags=self.tags,
         )
         def list_administration_handlers(request: WSGIRequest):
-            if not GeneralManager.has_admin_access(request.user):
+            if not GeneralManager.has_full_access(request.user):
                 return HTTPStatus.FORBIDDEN, {"error": _("Permission Denied.")}
 
             return HTTPStatus.OK, list_handlers()
@@ -47,7 +47,7 @@ class AdministrationApiEndpoints:
             tags=self.tags,
         )
         def get_administration_handler(request: WSGIRequest, corporation_id: int):
-            if not GeneralManager.has_admin_access(request.user):
+            if not GeneralManager.has_full_access(request.user):
                 return HTTPStatus.FORBIDDEN, {"error": _("Permission Denied.")}
 
             handler = get_handler(corporation_id)
@@ -68,7 +68,7 @@ class AdministrationApiEndpoints:
         def update_administration_handler(
             request: WSGIRequest, corporation_id: int, force_refresh: bool = False
         ):
-            if not GeneralManager.has_admin_access(request.user):
+            if not GeneralManager.has_full_access(request.user):
                 return HTTPStatus.FORBIDDEN, {"error": _("Permission Denied.")}
 
             if force_refresh and not request.user.is_superuser:
@@ -98,7 +98,7 @@ class AdministrationApiEndpoints:
             tags=self.tags,
         )
         def delete_administration_handler(request: WSGIRequest, corporation_id: int):
-            if not GeneralManager.has_admin_access(request.user):
+            if not GeneralManager.has_full_access(request.user):
                 return HTTPStatus.FORBIDDEN, {"error": _("Permission Denied.")}
 
             handler = get_handler(corporation_id)

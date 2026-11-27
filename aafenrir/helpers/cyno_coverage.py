@@ -52,7 +52,7 @@ def get_cyno_coverage(system_ids: list[int], viewer: User) -> dict[int, list]:
     # pylint: disable=import-outside-toplevel
     from corptools.models import CharacterLocation
 
-    if GeneralManager.has_admin_access(viewer):
+    if GeneralManager.has_full_access(viewer):
         owners = GeneralManager.users_with_management_access()
     else:
         owners = User.objects.filter(pk=viewer.pk)

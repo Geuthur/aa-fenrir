@@ -32,7 +32,7 @@ class GeneralManager(models.Manager):
         )
 
     @staticmethod
-    def has_admin_access(user) -> bool:
+    def has_full_access(user) -> bool:
         """Users with `full_access` may use the Administration."""
         return bool(user.has_perm("aafenrir.full_access"))
 

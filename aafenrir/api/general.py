@@ -49,7 +49,7 @@ class GeneralApiEndpoints:
                     )
                 )
 
-            if GeneralManager.has_admin_access(request.user):
+            if GeneralManager.has_full_access(request.user):
                 right_menu.append(
                     schema.MenuLink(name=_("Administration"), link="/administration/")
                 )
@@ -108,7 +108,7 @@ class GeneralApiEndpoints:
                 notification=settings.disable_notifications,
                 quick_select_presets=settings.quick_select_presets or [],
                 has_manage_access=GeneralManager.has_management_access(request.user),
-                has_admin_access=GeneralManager.has_admin_access(request.user),
+                has_admin_access=GeneralManager.has_full_access(request.user),
                 calculator_max_volume=AA_FENRIR_MAX_VOLUME,
                 calculator_max_collateral=AA_FENRIR_MAX_COLLATERAL,
             )
