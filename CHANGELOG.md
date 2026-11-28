@@ -26,6 +26,10 @@ Section Order:
 ### Removed
 -->
 
+### Changed
+
+- **Permissions**: `GeneralManager.has_admin_access` is renamed to `has_full_access`, as in the app template. The API field `has_admin_access` of `user/`, permissions and behavior are unchanged.
+
 <!-- Your changes go here -->
 
 ## [1.0.0] - 2026-11-28

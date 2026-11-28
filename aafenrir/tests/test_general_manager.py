@@ -56,16 +56,16 @@ class TestGeneralManager(AuthTestCase):
         self.assertIn(member, result)
         self.assertNotIn(self.user, result)
 
-    def test_has_admin_access_should_require_full_access(self):
+    def test_has_full_access_should_require_full_access(self):
         # Test Data
         manager = UserMainFactory(permissions__=["aafenrir.manage_access"])
         admin = UserMainFactory(permissions__=["aafenrir.full_access"])
 
         # Test Action / Expected Result
-        self.assertTrue(GeneralManager.has_admin_access(admin))
-        self.assertTrue(GeneralManager.has_admin_access(self.superuser))
-        self.assertFalse(GeneralManager.has_admin_access(manager))
-        self.assertFalse(GeneralManager.has_admin_access(self.user))
+        self.assertTrue(GeneralManager.has_full_access(admin))
+        self.assertTrue(GeneralManager.has_full_access(self.superuser))
+        self.assertFalse(GeneralManager.has_full_access(manager))
+        self.assertFalse(GeneralManager.has_full_access(self.user))
 
     def test_users_with_any_perm_should_exclude_inactive_users(self):
         # Test Data

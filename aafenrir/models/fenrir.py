@@ -648,7 +648,7 @@ class Contract(models.Model):
 
             if self.date_notified is None:
                 for manager in managers:
-                    if GeneralManager.has_admin_access(manager):
+                    if GeneralManager.has_full_access(manager):
                         message = (
                             f"There is a new courier contract from {self.issuer} "
                             "looking to be picked up "
